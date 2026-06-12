@@ -17,7 +17,7 @@ export default function AboutServices() {
   style={{
     backgroundImage: `url(${patinhas})`,
     backgroundRepeat: "repeat",
-    backgroundSize: "900px",
+    backgroundSize: "1000px",
   }}
 />
 
