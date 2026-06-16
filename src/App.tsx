@@ -1,7 +1,9 @@
-import Home from "./pages/Home";
+import AppRoutes from "./routes/AppRoutes.tsx";
 
 function App() {
-  return <Home />;
+  return (
+      <AppRoutes/>
+  )
 }
 
 export default App;

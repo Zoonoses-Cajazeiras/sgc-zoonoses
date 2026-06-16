@@ -1,4 +1,5 @@
 import logo from "../assets/icons/pata-grande-icon.png";
+import {Link} from "react-router-dom"
 
 export default function Navbar() {
   return (
@@ -55,6 +56,10 @@ export default function Navbar() {
               <a href="#contato" className="hover:text-slate-200 transition">
                 Contato
               </a>
+            </li>
+
+            <li>
+              <Link to="/login" className="hover:text-slate-200 transition">Login</Link>
             </li>
           </ul>
         </nav>
