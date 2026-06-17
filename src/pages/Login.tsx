@@ -36,7 +36,7 @@ function Login(){
                         <button className="login-form-btn w-28 h-10 font-bold bg-amber-50 rounded-4xl text-[#05ABAD]">Entrar</button>
                     </div>
 
-                    <Link className="text-white" to="/">voltar</Link>
+                    <Link className="text-white" to="/">voltar para home</Link>
                 </form>
             </main>
         </>
