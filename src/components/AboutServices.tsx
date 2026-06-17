@@ -1,5 +1,6 @@
 import cachorroCard from "../assets/images/cachorro1.png";
 import patinhas from "../assets/patterns/patinhas.png";
+import gato from "../assets/images/gato.png";
 
 export default function AboutServices() {
   return (
@@ -122,6 +123,57 @@ export default function AboutServices() {
         </div>
 
       </div>
+
+      {/* CAMPANHAS */}
+    <div 
+      id="campanhas"
+      className="relative bg-[#F4F4F4] py-24 overflow-visible">
+
+      <div className="max-w-6xl mx-auto px-8">
+
+        <h2 className="text-center text-4xl font-bold text-[#026B6D] mb-16">
+        Campanhas em Andamento
+        </h2>
+
+        <div className="grid md:grid-cols-2 gap-8">
+
+        <div className="bg-white rounded-3xl shadow-lg p-8">
+          <h3 className="text-2xl font-bold text-[#026B6D] mb-4">
+          Campanha Antirrábica 2026
+          </h3>
+
+          <p className="text-gray-600">
+          Vacinação gratuita para cães e gatos.
+          </p>
+        </div>
+
+        <div className="bg-white rounded-3xl shadow-lg p-8">
+          <h3 className="text-2xl font-bold text-[#026B6D] mb-4">
+          Controle de Leishmaniose
+          </h3>
+
+          <p className="text-gray-600">
+          Testagem e monitoramento epidemiológico.
+          </p>
+        </div>
+
+        <img
+             src={gato}
+              alt="Gato"
+              className="
+                   absolute
+                    right-[-60px]
+                    bottom-[-10px]
+                    w-60
+                    z-20
+                  "
+        />
+
+      </div>
+
+    </div>
+
+  </div>
 
     </section>
   );
