@@ -30,7 +30,7 @@ bem-estar animal.
       </div>
 
       {/* Cachorro */}
-      <div className="absolute top-0 right-0 h-full w-[55%] z-10">
+      <div className="absolute top-0 right-0 h-full w-[66%] z-10">
 
         <img
           src={cachorroHero}
@@ -45,7 +45,7 @@ bem-estar animal.
             inset-0
             bg-gradient-to-r
             from-white
-            via-white/30
+            via-white/4
             to-transparent
           "
         />
