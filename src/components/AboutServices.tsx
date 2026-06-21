@@ -1,8 +1,12 @@
 import cachorro from "../assets/images/cachorro1.png";
-import gato from "../assets/images/gato.png";
 import patinhas from "../assets/patterns/patinhas.png";
 import castracao from "../assets/icons/castracao.svg";
 import seringa from "../assets/icons/seringa.svg";
+import teste from "../assets/icons/teste.svg";
+import ServiceItem from "./ServiceItem";
+import medicacao from "../assets/icons/medicacao.svg";
+import vigilancia from "../assets/icons/vigilancia.svg";
+import procedimentos from "../assets/icons/procedimentos.svg";
 
 export default function AboutServices() {
   return (
@@ -46,7 +50,7 @@ export default function AboutServices() {
         }}
       >
 
-        <div className="max-w-7xl mx-auto px-8">
+        <div className="max-w-6xl mx-auto px-8">
 
           <h2 className="text-center text-4xl font-bold text-white mb-14">
             Serviços Prestados
@@ -94,11 +98,14 @@ export default function AboutServices() {
                   </h3>
                 </div>
 
-                <p className="text-lg text-gray-600 leading-relaxed">
-                  Programa de castração voltado ao controle populacional
-                  de cães e gatos, promovendo saúde, bem-estar e
-                  responsabilidade com os animais.
-                </p>
+                <ul className="space-y-3 text-[#026B6D]">
+
+                  <ServiceItem text="Controle populacional de cães e gatos." />
+                  <ServiceItem text="Prevenção de doenças reprodutivas." />
+                  <ServiceItem text="Promoção do bem-estar animal." />
+                  <ServiceItem text="Agendamento realizado pelo Núcleo." />
+
+                </ul>
 
               </div>
 
@@ -128,69 +135,197 @@ export default function AboutServices() {
                 </h3>
               </div>
 
-              <p className="text-lg text-white/90 leading-relaxed">
-                Campanhas periódicas de vacinação para prevenção da
-                raiva, protegendo animais e a população contra uma das
-                zoonoses mais importantes.
-              </p>
+              <ul className="space-y-3">
+
+                <ServiceItem
+                  text="Vacinação gratuita contra a raiva."
+                  textColor="text-white/90"
+                />
+
+                <ServiceItem
+                  text="Campanhas periódicas em toda a cidade."
+                  textColor="text-white/90"
+                />
+
+                <ServiceItem
+                  text="Proteção para cães, gatos e população."
+                  textColor="text-white/90"
+                />
+
+                <ServiceItem
+                  text="Monitoramento da doença no município."
+                  textColor="text-white/90"
+                />
+
+              </ul>
 
             </div>
 
-          </div>
-
-        </div>
-
-      </div>
-
-      {/* CAMPANHAS */}
-      <div
-        id="campanhas"
-        className="relative bg-[#F4F4F4] py-24 overflow-visible">
-
-        <div className="max-w-6xl mx-auto px-8">
-
-          <h2 className="text-center text-4xl font-bold text-[#026B6D] mb-16">
-            Campanhas em Andamento
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-8">
-
-            <div className="bg-white rounded-3xl shadow-lg p-8">
-              <h3 className="text-2xl font-bold text-[#026B6D] mb-4">
-                Campanha Antirrábica 2026
-              </h3>
-
-              <p className="text-gray-600">
-                Vacinação gratuita para cães e gatos.
-              </p>
-            </div>
-
-            <div className="bg-white rounded-3xl shadow-lg p-8">
-              <h3 className="text-2xl font-bold text-[#026B6D] mb-4">
-                Controle de Leishmaniose
-              </h3>
-
-              <p className="text-gray-600">
-                Testagem e monitoramento epidemiológico.
-              </p>
-            </div>
-
-          </div>
-        </div>
-        <img
-              src={gato}
-              alt="Gato"
+            {/* CARD TESTE LEISHMANIOSE */}
+            <div
               className="
-              absolute
-              right-0
-              bottom-0
-              translate-x-1/3
-              w-[360px]
-              z-20
-              pointer-events-none
-              select-none
-            "
-            />
+              bg-[#026B6D]/80
+              backdrop-blur-sm
+              rounded-3xl
+              shadow-xl
+              p-8
+              min-h-[270px]
+              "
+            >
+
+              <div className="flex items-center gap-4 mb-5">
+                <img
+                  src={teste}
+                  alt="Seringa"
+                  className="w-12 h-12 object-contain"
+                />
+
+                <h3 className="text-2xl font-bold text-white">
+                  Testes de Leishmaniase
+                </h3>
+              </div>
+
+              <ul className="space-y-3">
+
+                <ServiceItem
+                  text="Diagnóstico rápido em cães."
+                  textColor="text-white/90"
+                />
+
+                <ServiceItem
+                  text="Controle e monitoramento epidemiológico."
+                  textColor="text-white/90"
+                />
+
+              </ul>
+
+            </div>
+
+            {/* CARD AVALIACAO E MEDICACAO */}
+
+            <div className="relative">
+
+              <div
+                className="
+              bg-white
+              rounded-3xl
+              shadow-xl
+              p-8
+              min-h-[270px]
+              relative
+              z-10
+              "
+              >
+                <div className="flex items-center gap-4 mb-5">
+                  <img
+                    src={medicacao}
+                    alt="Medicação"
+                    className="w-11 h-11 object-contain flex-shrink-0"
+                  />
+
+                  <h3 className="text-2xl font-bold text-[#026B6D]">
+                    Avaliação e Medicação
+                  </h3>
+                </div>
+
+                <ul className="space-y-3 text-[#026B6D]">
+
+                  <ServiceItem text="Atendimento veterinário." />
+                  <ServiceItem text="Prescrição de medicações." />
+
+                </ul>
+
+              </div>
+
+            </div>
+
+            {/* VIGILANCIA DE ZOONOSES */}
+
+            <div className="relative">
+
+              <div
+                className="
+              bg-white
+              rounded-3xl
+              shadow-xl
+              p-8
+              min-h-[270px]
+              relative
+              z-10
+              "
+              >
+                <div className="flex items-center gap-4 mb-5">
+                  <img
+                    src={vigilancia}
+                    alt="Medicação"
+                    className="w-11 h-11 object-contain flex-shrink-0"
+                  />
+
+                  <h3 className="text-2xl font-bold text-[#026B6D]">
+                    Vigilância de Zoonoses
+                  </h3>
+                </div>
+
+                <ul className="space-y-3 text-[#026B6D]">
+
+                  <ServiceItem text="Controle de doenças." />
+                  <ServiceItem text="Ações preventivas." />
+                  <ServiceItem text="Educação em saúde." />
+
+                </ul>
+
+              </div>
+
+            </div>
+
+            {/* CARD PROCEDIMENTOS ESPECIFICOS */}
+            <div
+              className="
+              bg-[#026B6D]/80
+              backdrop-blur-sm
+              rounded-3xl
+              shadow-xl
+              p-8
+              min-h-[270px]
+              "
+            >
+
+              <div className="flex items-center gap-4 mb-5">
+                <img
+                  src={procedimentos}
+                  alt="Seringa"
+                  className="w-12 h-12 object-contain"
+                />
+
+                <h3 className="text-2xl font-bold text-white">
+                  Procedimentos Específicos
+                </h3>
+              </div>
+
+              <ul className="space-y-3">
+
+                <ServiceItem
+                  text="Eutanásia."
+                  textColor="text-white/90"
+                />
+
+                <ServiceItem
+                  text="Recolhimento de animais."
+                  textColor="text-white/90"
+                />
+                <ServiceItem
+                  text="Atendimento a animais vítimas de maus-tratos."
+                  textColor="text-white/90"
+                />
+
+              </ul>
+
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
 
     </section>

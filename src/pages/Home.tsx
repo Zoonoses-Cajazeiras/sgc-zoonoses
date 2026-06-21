@@ -4,7 +4,7 @@ import AboutServices from "../components/AboutServices";
 import Castramovel from "../components/Castramovel";
 import Faq from "../components/Faq";
 import Footer from "../components/Footer";
-
+import Campaigns from "../components/Campaigns";
 
 
 export default function Home() {
@@ -15,6 +15,7 @@ export default function Home() {
       <main className="overflow-x-hidden pt-20">
         <Hero />
         <AboutServices />
+        <Campaigns />
         <Castramovel />
         <Faq />
         <Footer />

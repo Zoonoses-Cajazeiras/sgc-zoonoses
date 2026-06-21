@@ -17,7 +17,7 @@ export default function Hero() {
             Protegendo a saúde animal e humana em Cajazeiras
           </h1>
 
-          <p className="mt-6 text-xl text-gray-600 leading-relaxed">
+          <p className="mt-6 lg:text-2xl font-normal text-xl text-[#026B6D] leading-relaxed">
            Controle de zoonoses, castração, vacinação, prevenção e
 bem-estar animal.
           </p>

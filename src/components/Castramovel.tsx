@@ -6,7 +6,7 @@ export default function Castramovel() {
     >
       <div className="max-w-5xl mx-auto px-8">
 
-        <h2 className="text-center text-3xl font-bold text-[#05ABAD] mb-6">
+        <h2 className="text-center text-4xl font-bold text-[#05ABAD] mb-5">
           Castramóvel
         </h2>
 
