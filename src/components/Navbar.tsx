@@ -1,17 +1,17 @@
 import logo from "../assets/icons/pata-grande-icon.png";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom"
 
 export default function Navbar() {
   return (
-    <header className="fixed top-0 left-0 w-full bg-[#05ABAD] shadow-lg z-50">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-8 py-4">
+    <header className="fixed top-0 left-0 w-full h-20 bg-[#05ABAD] shadow-lg z-50">
+      <div className="max-w-7xl mx-auto h-full flex items-center justify-between px-8">
 
         <div className="flex items-center gap-4">
 
           <img
             src={logo}
             alt="Logo Núcleo de Zoonoses"
-            className="h-14 w-auto"
+            className="h-12 w-auto"
           />
 
           <div>
@@ -37,6 +37,12 @@ export default function Navbar() {
             <li>
               <a href="#servicos" className="hover:text-slate-200 transition">
                 Serviços
+              </a>
+            </li>
+
+            <li>
+              <a href="#campanhas" className="hover:text-slate-200 transition">
+                Campanhas
               </a>
             </li>
 

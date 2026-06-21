@@ -45,7 +45,7 @@ bem-estar animal.
             inset-0
             bg-gradient-to-r
             from-white
-            via-white/4
+            via-white/2
             to-transparent
           "
         />
