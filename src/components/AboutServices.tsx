@@ -10,12 +10,10 @@ import procedimentos from "../assets/icons/procedimentos.svg";
 
 export default function AboutServices() {
   return (
-    <section className="relative">
+    <section id="sobre" className="scroll-mt-20">
 
       {/* SOBRE NÓS */}
-      <div
-        id="sobre"
-        className="relative bg-white py-24 overflow-hidden"
+      <div className="relative bg-white py-16 overflow-hidden"
       >
         {/* Fundo de patinhas */}
         <div
@@ -41,9 +39,9 @@ export default function AboutServices() {
       </div>
 
       {/* SERVIÇOS */}
-      <div
+      <section
         id="servicos"
-        className="relative pt-20 pb-24 overflow-visible"
+        className="relative pt-20 pb-24 overflow-visible scroll-mt-34"
         style={{
           background:
             "linear-gradient(135deg, #17C7CC 0%, #026B6D 100%)",
@@ -79,11 +77,15 @@ export default function AboutServices() {
                 className="
               bg-white
               rounded-3xl
-              shadow-xl
+              shadow-lg
               p-8
               min-h-[270px]
               relative
               z-10
+              transition-all
+              duration-300
+              hover:-translate-y-2
+              hover:shadow-2xl
               "
               >
                 <div className="flex items-center gap-4 mb-5">
@@ -326,7 +328,7 @@ export default function AboutServices() {
 
         </div>
 
-      </div>
+      </section>
 
     </section>
   );

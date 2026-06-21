@@ -2,7 +2,7 @@ export default function Footer() {
   return (
     <footer
       id="contato"
-      className="bg-white py-8"
+      className="bg-white py-8 scroll-mt-20"
     >
       <div className="max-w-5xl mx-auto px-8">
 

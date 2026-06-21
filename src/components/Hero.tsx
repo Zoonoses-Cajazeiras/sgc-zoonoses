@@ -2,7 +2,7 @@ import cachorroHero from "../assets/images/cachorro2.png";
 
 export default function Hero() {
   return (
-    <section className="relative h-[calc(100vh-88px)] overflow-hidden bg-white">
+    <section id="hero" className="relative h-[calc(100vh-88px)] overflow-hidden bg-white scroll-mt-20">
 
       {/* Conteúdo */}
       <div className="max-w-7xl mx-auto px-8 h-full flex items-center relative z-20">
@@ -13,13 +13,14 @@ export default function Hero() {
             Saúde Pública e Bem-Estar Animal
           </span>
 
-          <h1 className="text-5xl lg:text-6xl font-bold text-[#026B6D] leading-tight">
+          <h1 className="text-5xl lg:text-6xl font-bold text-[#026B6D] leading-[1.20] tracking-[-0.02em]">
             Protegendo a saúde animal e humana em Cajazeiras
           </h1>
 
-          <p className="mt-6 lg:text-2xl font-normal text-xl text-[#026B6D] leading-relaxed">
-           Controle de zoonoses, castração, vacinação, prevenção e
-bem-estar animal.
+          <p className="mt-6 lg:text-2xl font-normal text-xl text-[#026B6D] leading-[1.4]">
+           Controle de zoonoses, castração, vacinação, prevenção
+           <br/>
+           e bem-estar animal.
           </p>
 
           <button className="mt-8 bg-[#05ABAD] hover:bg-[#026B6D] transition text-white px-8 py-4 rounded-xl font-semibold shadow-lg">

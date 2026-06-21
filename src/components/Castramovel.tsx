@@ -2,7 +2,7 @@ export default function Castramovel() {
   return (
     <section
       id="castramovel"
-      className="bg-white py-16"
+      className="bg-white py-16 scroll-mt-20"
     >
       <div className="max-w-5xl mx-auto px-8">
 

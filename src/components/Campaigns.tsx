@@ -3,7 +3,7 @@ import gato from "../assets/images/gato.png";
 export default function Campaigns() {
     return (
         <section id="campanhas"
-            className="relative bg-[#F4F4F4] py-20 overflow-visible">
+            className="relative bg-[#F4F4F4] py-20 overflow-visible scroll-mt-20">
 
             <div className="max-w-6xl mx-auto px-8">
 
@@ -42,7 +42,7 @@ export default function Campaigns() {
               right-0
               bottom-0
               translate-x-1/3
-              w-[360px]
+              w-[380px]
               z-20
               pointer-events-none
               select-none

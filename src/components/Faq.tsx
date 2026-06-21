@@ -2,7 +2,7 @@ export default function Faq() {
   return (
     <section
       id="faq"
-      className="bg-[#05ABAD] py-12"
+      className="bg-[#05ABAD] py-12 scroll-mt-20"
     >
       <div className="max-w-6xl mx-auto px-8">
 
