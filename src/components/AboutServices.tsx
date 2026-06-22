@@ -7,6 +7,8 @@ import ServiceItem from "./ServiceItem";
 import medicacao from "../assets/icons/medicacao.svg";
 import vigilancia from "../assets/icons/vigilancia.svg";
 import procedimentos from "../assets/icons/procedimentos.svg";
+import cruzD from "../assets/icons/cruzD.svg";
+import cruzE from "../assets/icons/cruzE.svg";
 
 export default function AboutServices() {
   return (
@@ -48,6 +50,34 @@ export default function AboutServices() {
         }}
       >
 
+        {/* Cruz Superior Direita (cuzD) */}
+        <img
+          src={cruzD}
+          alt="Cruz Decorativa Direita"
+          className="absolute -top-14 -right-25 w-[320px] h-auto opacity-20 pointer-events-none z-0"
+        />
+
+        {/* Cruz Inferior Esquerda (cuzE) */}
+        <img
+          src={cruzE}
+          alt="Cruz Decorativa Esquerda"
+          className="absolute -bottom-12 -left-16 w-[280px] h-auto opacity-20 pointer-events-none z-0"
+        />
+
+        {/* NOVA: Cruz Superior Esquerda (cuzE) */}
+        <img
+          src={cruzE}
+          alt="Cruz Decorativa Superior Esquerda"
+          className="absolute -top -1 -left-24 w-[280px] h-auto opacity-20 pointer-events-none z-0"
+        />
+
+        {/* NOVA: Cruz Inferior Direita (cuzD) */}
+        <img
+          src={cruzD}
+          alt="Cruz Decorativa Inferior Direita"
+          className="absolute -bottom-25 -right-40 w-[500px] h-auto opacity-20 pointer-events-none z-0"
+        />
+
         <div className="max-w-6xl mx-auto px-8">
 
           <h2 className="text-center text-4xl font-bold text-white mb-14">
@@ -82,10 +112,6 @@ export default function AboutServices() {
               min-h-[270px]
               relative
               z-10
-              transition-all
-              duration-300
-              hover:-translate-y-2
-              hover:shadow-2xl
               "
               >
                 <div className="flex items-center gap-4 mb-5">

@@ -31,7 +31,7 @@ export default function Hero() {
       </div>
 
       {/* Cachorro */}
-      <div className="absolute top-0 right-0 h-full w-[66%] z-10">
+      <div className="absolute top-0 right-0 h-full w-[%85] z-10">
 
         <img
           src={cachorroHero}
@@ -46,7 +46,7 @@ export default function Hero() {
             inset-0
             bg-gradient-to-r
             from-white
-            via-white/2
+            via-white/20
             to-transparent
           "
         />

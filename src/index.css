@@ -41,3 +41,24 @@ body,
 .nav-link:hover::after {
   width: 100%;
 }
+
+.login-button {
+  padding: 6px 24px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #026B6D;
+
+  font-weight: 600;
+
+  transition: all .3s ease;
+
+  box-shadow:
+    0 8px 20px rgba(0,0,0,.08);
+}
+
+.login-button:hover {
+  background: #026B6D;
+  color: white;
+  transition: background 0.3s ease, color 0.3s ease;
+
+}

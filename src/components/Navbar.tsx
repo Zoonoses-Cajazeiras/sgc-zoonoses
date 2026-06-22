@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 
 export default function Navbar() {
   return (
-    <header className="fixed top-0 left-0 w-full h-20 bg-[#05ABAD] shadow-lg z-50">
+    <header className="fixed top-0 left-0 w-full h-24 bg-[#05ABAD] shadow-lg z-50">
       <div className="max-w-7xl mx-auto h-full flex items-center justify-between px-8">
         <a href="#hero" className="hover:text-slate-200 transition">
           <div className="flex items-center gap-4">
@@ -28,10 +28,10 @@ export default function Navbar() {
           </div>
         </a>
 
-        <nav>
-          <ul className="flex gap-8 text-white font-medium">
+        <nav className="flex items-center gap-12">
+          <ul className="flex items-center gap-8 text-white font-medium">
             <li>
-              <a href="#sobre" className="nav-link" >
+              <a href="#sobre" className="nav-link">
                 Sobre
               </a>
             </li>
@@ -65,13 +65,11 @@ export default function Navbar() {
                 Contato
               </a>
             </li>
-
-            <li>
-              <Link to="/login" className="nav-link">
-                Login
-              </Link>
-            </li>
           </ul>
+
+          <Link to="/login" className="login-button" ml-auto>
+            Login
+          </Link>
         </nav>
 
       </div>
