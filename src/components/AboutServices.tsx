@@ -15,7 +15,7 @@ export default function AboutServices() {
     <section id="sobre" className="scroll-mt-20">
 
       {/* SOBRE NÓS */}
-      <div className="relative bg-white py-16 overflow-hidden"
+      <div className="relative bg-white py-14 overflow-hidden"
       >
         {/* Fundo de patinhas */}
         <div
@@ -43,7 +43,7 @@ export default function AboutServices() {
       {/* SERVIÇOS */}
       <section
         id="servicos"
-        className="relative pt-20 pb-24 overflow-visible scroll-mt-34"
+        className="relative pt-18 pb-24 overflow-visible scroll-mt-34"
         style={{
           background:
             "linear-gradient(135deg, #17C7CC 0%, #026B6D 100%)",

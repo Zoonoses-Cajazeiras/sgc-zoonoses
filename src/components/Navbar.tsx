@@ -1,5 +1,6 @@
 import logo from "../assets/icons/pata-grande-icon.png";
 import { Link } from "react-router-dom"
+import { FiLogIn } from "react-icons/fi";
 
 export default function Navbar() {
   return (
@@ -67,8 +68,12 @@ export default function Navbar() {
             </li>
           </ul>
 
-          <Link to="/login" className="login-button" ml-auto>
-            Login
+          <Link
+            to="/login"
+            className="login-button flex items-center gap-2"
+          >
+            <FiLogIn size={18} />
+            <span>Login</span>
           </Link>
         </nav>
 

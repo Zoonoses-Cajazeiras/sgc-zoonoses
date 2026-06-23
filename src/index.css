@@ -20,7 +20,7 @@ body,
   position: relative;
   color: white;
   transition: color .3s ease;
-  
+
 }
 
 .nav-link::after {
@@ -43,17 +43,21 @@ body,
 }
 
 .login-button {
-  padding: 6px 24px;
+  padding: 5.5px 22px;
   border-radius: 999px;
   background: #ffffff;
   color: #026B6D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 
   font-weight: 600;
 
   transition: all .3s ease;
 
   box-shadow:
-    0 8px 20px rgba(0,0,0,.08);
+    0 8px 20px rgba(0, 0, 0, .08);
 }
 
 .login-button:hover {
@@ -61,4 +65,12 @@ body,
   color: white;
   transition: background 0.3s ease, color 0.3s ease;
 
+}
+
+.login-button svg {
+  transition: transform .3s ease;
+}
+
+.login-button:hover svg {
+  transform: translateX(3px);
 }

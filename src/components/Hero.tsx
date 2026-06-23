@@ -17,13 +17,13 @@ export default function Hero() {
             Protegendo a saúde animal e humana em Cajazeiras
           </h1>
 
-          <p className="mt-6 lg:text-2xl font-normal text-xl text-[#026B6D] leading-[1.4]">
-           Controle de zoonoses, castração, vacinação, prevenção
-           <br/>
-           e bem-estar animal.
+          <p className="mt-7 lg:text-[1.50rem] font-normal text-md text-[#026B6D] leading-[1.4]">
+            Controle de zoonoses, castração, vacinação, prevenção
+            <br />
+            e bem-estar animal.
           </p>
 
-          <button className="mt-8 bg-[#05ABAD] hover:bg-[#026B6D] transition text-white px-8 py-4 rounded-xl font-semibold shadow-lg">
+          <button className="mt-8 bg-[#05ABAD] text-white px-8 py-4 rounded-xl font-semibold cursor-pointer transition-all duration-300 hover:shadow-[0_6px_20px_rgba(5,171,173,0.4)] hover:-translate-y-0.5">
             Fale Conosco
           </button>
 
@@ -46,7 +46,7 @@ export default function Hero() {
             inset-0
             bg-gradient-to-r
             from-white
-            via-white/20
+            via-white/18
             to-transparent
           "
         />
