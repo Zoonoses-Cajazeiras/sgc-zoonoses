@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
 
@@ -9,6 +9,32 @@ function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      const response = await fetch("http://localhost:3001/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        localStorage.setItem("admin_token", data.token);
+        navigate("/admin");
+      } else {
+        setError(data.message || "Credenciais inválidas.");
+      }
+    } catch (err) {
+      setError("Erro ao conectar com o servidor.");
+    }
+  };
 
     return (
         <main className="min-h-screen relative overflow-hidden flex items-center justify-center bg-[#026B6D]">
@@ -30,6 +56,7 @@ function Login() {
 
                 {/* Card */}
                 <form
+                    onSubmit={handleLogin}
                     className="w-96 rounded-[30px] bg-[#05ABAD] shadow-2xl px-8 py-10 flex flex-col items-center"
                     noValidate
                 >
@@ -40,6 +67,12 @@ function Login() {
                     <p className="text-white/80 text-sm mt-2 mb-8 text-center">
                         Área restrita aos servidores autorizados.
                     </p>
+
+                    {error && (
+                      <div className="w-full bg-red-500/20 border border-red-200 text-white text-xs text-center p-2 rounded-xl mb-4">
+                        {error}
+                      </div>
+                    )}
 
                     {/* Email */}
                     <div
