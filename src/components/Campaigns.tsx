@@ -5,6 +5,10 @@ interface Campaign {
   id: string;
   title: string;
   description: string;
+  status?: string;
+  schedule?: string;
+  location?: string;
+  buttonText?: string;
 }
 
 export default function Campaigns() {
@@ -41,11 +45,32 @@ export default function Campaigns() {
           <div className="grid md:grid-cols-2 gap-8">
             {campaigns.map((camp) => (
               <div key={camp.id} className="bg-white rounded-3xl shadow-lg p-8">
+              <div>
                 <h3 className="text-2xl font-bold text-[#026B6D] mb-4">
                   {camp.title}
                 </h3>
                 <p className="text-gray-600">{camp.description}</p>
-              </div>
+
+                {/* Badges e Informações do Figma */}
+                  <div className="bg-[#EAEFEF] rounded-xl px-4 py-2 inline-block text-xs font-semibold text-[#026B6D] mb-4">
+                    <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>
+                    {camp.status || "Em andamento"}
+                  </div>
+
+                  <div className="space-y-1 text-xs text-gray-500">
+                    <p>📅 {camp.schedule || "Todo sábado - 08h às 12h"}</p>
+                    <p>📍 {camp.location || "Ponto de vacinação do seu bairro"}</p>
+                  </div>
+                </div>
+
+                {camp.buttonText && (
+                  <div className="mt-4 text-right">
+                    <button className="bg-[#05ABAD] hover:bg-[#026B6D] text-white text-xs font-bold px-5 py-2 rounded-full transition">
+                      {camp.buttonText}
+                    </button>
+                  </div>
+                )}
+                </div>
             ))}
           </div>
         )}
@@ -65,6 +90,6 @@ export default function Campaigns() {
           "
         />
       </div>
-    </section>
+   </section>
   );
 }

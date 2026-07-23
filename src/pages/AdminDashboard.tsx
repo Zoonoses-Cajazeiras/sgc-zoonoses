@@ -98,16 +98,8 @@ export default function AdminDashboard() {
   };
 
   return (
-    <main className="min-h-screen relative overflow-y-auto bg-[#026B6D] py-10 px-4">
+    <main className="min-h-screen bg-[#F4F4F4] py-10 px-4">
       {/* Fundo de patinhas */}
-      <div
-        className="absolute inset-0 opacity-10 pointer-events-none"
-        style={{
-          backgroundImage: `url(${patinhas})`,
-          backgroundRepeat: "repeat",
-          backgroundSize: "450px",
-        }}
-      />
 
       <div className="relative z-10 max-w-4xl mx-auto space-y-8">
         {/* Cabeçalho */}

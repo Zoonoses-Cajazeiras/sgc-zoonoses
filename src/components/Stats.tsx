@@ -10,11 +10,11 @@ interface ImpactStats {
 
 export default function Stats() {
   const [stats, setStats] = useState<ImpactStats>({
-    vaccinated: 0,
-    castrations: 0,
-    tests: 0,
-    sheltered: 0,
-    citizens: 0,
+    vaccinated: 4280,
+    castrations: 1130,
+    tests: 870,
+    sheltered: 340,
+    citizens: 2600,
   });
 
   useEffect(() => {
@@ -25,49 +25,84 @@ export default function Stats() {
   }, []);
 
   return (
-    <section className="bg-[#F4F4F4] py-10">
+    <section className="bg-[#F4F4F4] pt-4 pb-16">
       <div className="max-w-6xl mx-auto px-8">
-        <p className="text-xs font-bold tracking-wider text-gray-500 uppercase mb-1">
-          Nosso Impacto
+        <p className="text-xs font-bold tracking-wider text-gray-400 uppercase mb-1">
+          NOSSO IMPACTO
         </p>
         <h3 className="text-2xl font-bold text-[#026B6D] mb-8">
           Números que representam cuidado
         </h3>
 
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
-          <div className="bg-[#EAF4F4] p-6 rounded-2xl">
-            <span className="text-3xl font-extrabold text-[#026B6D]">
-              {stats.vaccinated.toLocaleString("pt-BR")}+
-            </span>
-            <p className="text-xs text-gray-600 mt-2">Animals vacinados contra raiva</p>
+ <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          {/* Vacinações */}
+          <div className="bg-[#EAEFEF] p-5 rounded-2xl flex flex-col justify-between border border-emerald-50">
+            <span className="text-2xl mb-2">💉</span>
+            <div>
+              <span className="text-2xl font-extrabold text-[#026B6D]">
+                {stats.vaccinated.toLocaleString("pt-BR")}
+              </span>
+              <span className="text-2xl font-bold text-orange-500 ml-1">+</span>
+            </div>
+            <p className="text-[11px] text-gray-500 mt-1 leading-tight">
+              Animais vacinados contra raiva
+            </p>
           </div>
 
-          <div className="bg-[#EAF4F4] p-6 rounded-2xl">
-            <span className="text-3xl font-extrabold text-[#026B6D]">
-              {stats.castrations.toLocaleString("pt-BR")}+
-            </span>
-            <p className="text-xs text-gray-600 mt-2">Castrações realizadas</p>
+          {/* Castrações */}
+          <div className="bg-[#EAEFEF] p-5 rounded-2xl flex flex-col justify-between border border-emerald-50">
+            <span className="text-2xl mb-2">🐾</span>
+            <div>
+              <span className="text-2xl font-extrabold text-[#026B6D]">
+                {stats.castrations.toLocaleString("pt-BR")}
+              </span>
+              <span className="text-2xl font-bold text-orange-500 ml-1">+</span>
+            </div>
+            <p className="text-[11px] text-gray-500 mt-1 leading-tight">
+              Castrações realizadas
+            </p>
           </div>
 
-          <div className="bg-[#EAF4F4] p-6 rounded-2xl">
-            <span className="text-3xl font-extrabold text-[#026B6D]">
-              {stats.tests.toLocaleString("pt-BR")}+
-            </span>
-            <p className="text-xs text-gray-600 mt-2">Testes de leishmaniose</p>
+          {/* Testes */}
+          <div className="bg-[#EAEFEF] p-5 rounded-2xl flex flex-col justify-between border border-emerald-50">
+            <span className="text-2xl mb-2">🧬</span>
+            <div>
+              <span className="text-2xl font-extrabold text-[#026B6D]">
+                {stats.tests.toLocaleString("pt-BR")}
+              </span>
+              <span className="text-2xl font-bold text-orange-500 ml-1">+</span>
+            </div>
+            <p className="text-[11px] text-gray-500 mt-1 leading-tight">
+              Testes de leishmaniose
+            </p>
           </div>
 
-          <div className="bg-[#EAF4F4] p-6 rounded-2xl">
-            <span className="text-3xl font-extrabold text-[#026B6D]">
-              {stats.sheltered.toLocaleString("pt-BR")}+
-            </span>
-            <p className="text-xs text-gray-600 mt-2">Animais acolhidos</p>
+          {/* Acolhidos */}
+          <div className="bg-[#EAEFEF] p-5 rounded-2xl flex flex-col justify-between border border-emerald-50">
+            <span className="text-2xl mb-2">🏠</span>
+            <div>
+              <span className="text-2xl font-extrabold text-[#026B6D]">
+                {stats.sheltered.toLocaleString("pt-BR")}
+              </span>
+              <span className="text-2xl font-bold text-orange-500 ml-1">+</span>
+            </div>
+            <p className="text-[11px] text-gray-500 mt-1 leading-tight">
+              Animais acolhidos e encaminhados
+            </p>
           </div>
 
-          <div className="bg-[#EAF4F4] p-6 rounded-2xl">
-            <span className="text-3xl font-extrabold text-[#026B6D]">
-              {stats.citizens.toLocaleString("pt-BR")}+
-            </span>
-            <p className="text-xs text-gray-600 mt-2">Cidadãos atendidos</p>
+          {/* Cidadãos */}
+          <div className="bg-[#EAEFEF] p-5 rounded-2xl flex flex-col justify-between border border-emerald-50">
+            <span className="text-2xl mb-2">👥</span>
+            <div>
+              <span className="text-2xl font-extrabold text-[#026B6D]">
+                {stats.citizens.toLocaleString("pt-BR")}
+              </span>
+              <span className="text-2xl font-bold text-orange-500 ml-1">+</span>
+            </div>
+            <p className="text-[11px] text-gray-500 mt-1 leading-tight">
+              Cidadãos atendidos
+            </p>
           </div>
         </div>
       </div>
