@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import patinhas from "../assets/patterns/patinhas.png";
 
 interface Campaign {
   id: string;
   title: string;
   description: string;
+  status: string;
+  schedule: string;
+  location: string;
+  buttonText?: string;
 }
 
 interface ImpactStats {
@@ -20,8 +23,14 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
 
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+
+  // Campos do formulário de campanha
   const [newTitle, setNewTitle] = useState("");
   const [newDesc, setNewDesc] = useState("");
+  const [newStatus, setNewStatus] = useState("");
+  const [newSchedule, setNewSchedule] = useState("");
+  const [newLocation, setNewLocation] = useState("");
+  const [newButtonText, setNewButtonText] = useState("");
 
   const [stats, setStats] = useState<ImpactStats>({
     vaccinated: 0,
@@ -56,7 +65,14 @@ export default function AdminDashboard() {
     const res = await fetch("http://localhost:3001/api/campaigns", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: newTitle, description: newDesc }),
+      body: JSON.stringify({
+         title: newTitle, 
+         description: newDesc,
+         status: newStatus,
+         schedule: newSchedule,
+         location: newLocation,
+         buttonText: newButtonText || null,
+      }),
     });
 
     if (res.ok) {
@@ -64,6 +80,10 @@ export default function AdminDashboard() {
       setCampaigns([...campaigns, added]);
       setNewTitle("");
       setNewDesc("");
+      setNewStatus("");
+      setNewSchedule("");
+      setNewLocation("");
+      setNewButtonText("");
       setMessage("Campanha adicionada com sucesso!");
     }
   };
@@ -99,7 +119,6 @@ export default function AdminDashboard() {
 
   return (
     <main className="min-h-screen bg-[#F4F4F4] py-10 px-4">
-      {/* Fundo de patinhas */}
 
       <div className="relative z-10 max-w-4xl mx-auto space-y-8">
         {/* Cabeçalho */}
@@ -133,23 +152,79 @@ export default function AdminDashboard() {
 
           <form onSubmit={handleAddCampaign} className="space-y-4 mb-6">
             <div className="grid md:grid-cols-2 gap-4">
-              <input
-                type="text"
-                placeholder="Título da Campanha"
-                value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
-                className="w-full h-12 bg-white rounded-full px-5 text-gray-700 outline-none placeholder:text-gray-400"
-                required
-              />
-              <input
-                type="text"
-                placeholder="Descrição resumida"
-                value={newDesc}
-                onChange={(e) => setNewDesc(e.target.value)}
-                className="w-full h-12 bg-white rounded-full px-5 text-gray-700 outline-none placeholder:text-gray-400"
-                required
-              />
+              <div>
+                <label className="block text-xs font-bold text-white/90 mb-1">Título</label>
+                <input
+                  type="text"
+                  placeholder="Ex: Campanha Antirrábica 2026"
+                  value={newTitle}
+                  onChange={(e) => setNewTitle(e.target.value)}
+                  className="w-full h-11 bg-white rounded-full px-5 text-gray-700 outline-none placeholder:text-gray-400 text-sm"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-white/90 mb-1">Status da Campanha</label>
+                <select
+                  value={newStatus}
+                  onChange={(e) => setNewStatus(e.target.value)}
+                  className="w-full h-11 bg-white rounded-full px-5 text-gray-700 outline-none text-sm cursor-pointer"
+                >
+                  <option value="Em andamento">Em andamento</option>
+                  <option value="Agendamento prévio">Agendamento prévio</option>
+                  <option value="Encerrada">Encerrada</option>
+                </select>
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-xs font-bold text-white/90 mb-1">Descrição</label>
+                <input
+                  type="text"
+                  placeholder="Ex: Vacinação gratuita para cães e gatos em todos os bairros."
+                  value={newDesc}
+                  onChange={(e) => setNewDesc(e.target.value)}
+                  className="w-full h-11 bg-white rounded-full px-5 text-gray-700 outline-none placeholder:text-gray-400 text-sm"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-white/90 mb-1">Data / Horário</label>
+                <input
+                  type="text"
+                  placeholder="Ex: Todo sábado - 08h às 12h"
+                  value={newSchedule}
+                  onChange={(e) => setNewSchedule(e.target.value)}
+                  className="w-full h-11 bg-white rounded-full px-5 text-gray-700 outline-none placeholder:text-gray-400 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-white/90 mb-1">Local</label>
+                <input
+                  type="text"
+                  placeholder="Ex: Ponto de vacinação do seu bairro"
+                  value={newLocation}
+                  onChange={(e) => setNewLocation(e.target.value)}
+                  className="w-full h-11 bg-white rounded-full px-5 text-gray-700 outline-none placeholder:text-gray-400 text-sm"
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-xs font-bold text-white/90 mb-1">
+                  Texto do Botão de Ação (Opcional)
+                </label>
+                <input
+                  type="text"
+                  placeholder="Ex: Agendar (deixe em branco para não exibir botão)"
+                  value={newButtonText}
+                  onChange={(e) => setNewButtonText(e.target.value)}
+                  className="w-full h-11 bg-white rounded-full px-5 text-gray-700 outline-none placeholder:text-gray-400 text-sm"
+                />
+              </div>
             </div>
+
             <button
               type="submit"
               className="h-11 px-6 rounded-full bg-white text-[#026B6D] font-bold hover:bg-gray-100 transition"
@@ -158,24 +233,46 @@ export default function AdminDashboard() {
             </button>
           </form>
 
+          {/* Lista de Campanhas */}
+          <h3 className="text-md font-bold text-white mb-4">Campanhas Ativas</h3>
           <div className="space-y-3">
-            {campaigns.map((camp) => (
-              <div
-                key={camp.id}
-                className="flex justify-between items-center bg-white/10 p-4 rounded-2xl border border-white/20"
-              >
-                <div>
-                  <h4 className="font-bold text-white">{camp.title}</h4>
-                  <p className="text-sm text-white/80">{camp.description}</p>
-                </div>
-                <button
-                  onClick={() => handleDeleteCampaign(camp.id)}
-                  className="bg-red-500/80 hover:bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold transition"
+            {campaigns.map((camp) => {
+              const isAgendamento = camp.status === "Agendamento prévio";
+              const isEncerrada = camp.status === "Encerrada";
+
+              // Define as cores do badge dinamicamente
+              const badgeClass = isAgendamento
+                ? "bg-amber-100 text-amber-800"
+                : isEncerrada
+                ? "bg-red-100 text-red-700"
+                : "bg-[#EAEFEF] text-[#026B6D]";
+
+              return (
+                <div
+                  key={camp.id}
+                  className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-2xl text-gray-800 gap-4 shadow"
                 >
-                  Excluir
-                </button>
-              </div>
-            ))}
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h4 className="font-bold text-[#026B6D] text-base">{camp.title}</h4>
+                      <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${badgeClass}`}>
+                        {camp.status}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-600 mb-1">{camp.description}</p>
+                    <p className="text-[11px] text-gray-400">
+                      📅 {camp.schedule} | 📍 {camp.location}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleDeleteCampaign(camp.id)}
+                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-full text-xs font-bold transition self-end md:self-auto"
+                  >
+                    Excluir
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
 
