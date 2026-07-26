@@ -7,7 +7,6 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-// Tabela de Campanhas
 model Campaign {
   id          String   @id @default(uuid())
   title       String
@@ -19,12 +18,11 @@ model Campaign {
   createdAt   DateTime @default(now())
 }
 
-// Tabela de Estatísticas (Stats)
 model ImpactStats {
-  id         Int @id @default(1)
-  vaccinated Int @default(4280)
+  id          Int @id @default(autoincrement())
+  vaccinated  Int @default(4280)
   castrations Int @default(1130)
-  tests      Int @default(870)
-  sheltered  Int @default(340)
-  citizens   Int @default(2600)
+  tests       Int @default(870)
+  sheltered   Int @default(340)
+  citizens    Int @default(2600)
 }
