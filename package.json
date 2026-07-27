@@ -11,6 +11,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.110.8",
+    "axios": "^1.18.1",
     "@prisma/client": "^5.22.0",
     "cors": "^2.8.6",
     "express": "^5.2.1",
