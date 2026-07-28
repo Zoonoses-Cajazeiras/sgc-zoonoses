@@ -1,27 +1,26 @@
 import { useEffect, useState } from "react";
-
-interface ImpactStats {
-  vaccinated: number;
-  castrations: number;
-  tests: number;
-  sheltered: number;
-  citizens: number;
-}
+import {
+  getImpactStats,
+  type ImpactStats,
+} from "../services/stats";
 
 export default function Stats() {
-  const [stats, setStats] = useState<ImpactStats>({
-    vaccinated: 4280,
-    castrations: 1130,
-    tests: 870,
-    sheltered: 340,
-    citizens: 2600,
-  });
+  const [stats, setStats] = useState<ImpactStats | null>(null);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/stats")
-      .then((res) => res.json())
-      .then((data) => setStats(data))
-      .catch((err) => console.error("Erro ao buscar estatísticas:", err));
+    async function carregarEstatisticas() {
+      try {
+        const data = await getImpactStats();
+        setStats(data);
+      } catch (error) {
+        console.error(
+          "Erro ao carregar estatísticas do Supabase:",
+          error
+        );
+      }
+    }
+
+    carregarEstatisticas();
   }, []);
 
   return (
@@ -40,7 +39,7 @@ export default function Stats() {
             <span className="text-2xl mb-2">💉</span>
             <div>
               <span className="text-2xl font-extrabold text-[#026B6D]">
-                {stats.vaccinated.toLocaleString("pt-BR")}
+                {(stats?.vaccinated ?? 0).toLocaleString("pt-BR")}
               </span>
               <span className="text-2xl font-bold text-orange-500 ml-1">+</span>
             </div>
@@ -54,7 +53,7 @@ export default function Stats() {
             <span className="text-2xl mb-2">🐾</span>
             <div>
               <span className="text-2xl font-extrabold text-[#026B6D]">
-                {stats.castrations.toLocaleString("pt-BR")}
+                {(stats?.castrations ?? 0).toLocaleString("pt-BR")}
               </span>
               <span className="text-2xl font-bold text-orange-500 ml-1">+</span>
             </div>
@@ -68,7 +67,7 @@ export default function Stats() {
             <span className="text-2xl mb-2">🧬</span>
             <div>
               <span className="text-2xl font-extrabold text-[#026B6D]">
-                {stats.tests.toLocaleString("pt-BR")}
+                {(stats?.tests ?? 0).toLocaleString("pt-BR")}
               </span>
               <span className="text-2xl font-bold text-orange-500 ml-1">+</span>
             </div>
@@ -82,7 +81,7 @@ export default function Stats() {
             <span className="text-2xl mb-2">🏠</span>
             <div>
               <span className="text-2xl font-extrabold text-[#026B6D]">
-                {stats.sheltered.toLocaleString("pt-BR")}
+                {(stats?.sheltered ?? 0).toLocaleString("pt-BR")}
               </span>
               <span className="text-2xl font-bold text-orange-500 ml-1">+</span>
             </div>
@@ -96,7 +95,7 @@ export default function Stats() {
             <span className="text-2xl mb-2">👥</span>
             <div>
               <span className="text-2xl font-extrabold text-[#026B6D]">
-                {stats.citizens.toLocaleString("pt-BR")}
+                {(stats?.citizens ?? 0).toLocaleString("pt-BR")}
               </span>
               <span className="text-2xl font-bold text-orange-500 ml-1">+</span>
             </div>

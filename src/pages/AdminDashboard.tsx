@@ -8,14 +8,11 @@ import {
   type Campaign,
   type CampaignStatus,
 } from "../services/campaigns";
-
-interface ImpactStats {
-  vaccinated: number;
-  castrations: number;
-  tests: number;
-  sheltered: number;
-  citizens: number;
-}
+import {
+  getImpactStats,
+  updateImpactStats,
+  type ImpactStats,
+} from "../services/stats";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -31,13 +28,7 @@ export default function AdminDashboard() {
   const [newLocation, setNewLocation] = useState("");
   const [newButtonText, setNewButtonText] = useState("");
 
-  const [stats, setStats] = useState<ImpactStats>({
-    vaccinated: 0,
-    castrations: 0,
-    tests: 0,
-    sheltered: 0,
-    citizens: 0,
-  });
+  const [stats, setStats] = useState<ImpactStats | null>(null);
 
   const [message, setMessage] = useState("");
 
@@ -58,19 +49,14 @@ export default function AdminDashboard() {
         setMessage("Não foi possível carregar as campanhas.");
       }
 
-      // As estatísticas ainda continuam temporariamente no servidor antigo.
-      fetch("http://localhost:3001/api/stats")
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error("Erro ao buscar estatísticas");
-          }
-
-          return res.json();
-        })
-        .then((data: ImpactStats) => setStats(data))
-        .catch((error) => {
-          console.error("Erro ao carregar estatísticas:", error);
-        });
+      // Carrega as estatísticas diretamente do Supabase.
+      try {
+        const statsData = await getImpactStats();
+        setStats(statsData);
+      } catch (error) {
+        console.error("Erro ao carregar estatísticas:", error);
+        setMessage("Não foi possível carregar as estatísticas.");
+      }
     }
 
     carregarDashboard();
@@ -140,20 +126,34 @@ export default function AdminDashboard() {
   };
 
   const handleSaveStats = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const res = await fetch("http://localhost:3001/api/stats", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(stats),
+  if (!stats) {
+    setMessage("As estatísticas ainda não foram carregadas.");
+    return;
+  }
+
+  try {
+    const updated = await updateImpactStats(stats.id, {
+      vaccinated: stats.vaccinated,
+      castrations: stats.castrations,
+      tests: stats.tests,
+      sheltered: stats.sheltered,
+      citizens: stats.citizens,
     });
 
-    if (res.ok) {
-      setMessage("Estatísticas atualizadas com sucesso!");
+    setStats(updated);
+    setMessage("Estatísticas atualizadas com sucesso!");
+  } catch (error) {
+    console.error("Erro ao atualizar estatísticas:", error);
+
+    if (error instanceof Error) {
+      setMessage(`Erro ao atualizar: ${error.message}`);
     } else {
       setMessage("Não foi possível atualizar as estatísticas.");
     }
-  };
+  }
+};
 
   const handleLogout = async () => {
     await logout();
@@ -394,104 +394,122 @@ export default function AdminDashboard() {
             Atualizar Números de Impacto
           </h2>
 
-          <form
-            onSubmit={handleSaveStats}
-            className="grid grid-cols-2 md:grid-cols-3 gap-4"
-          >
-            <div>
-              <label className="block text-xs text-white/80 mb-1">
-                Vacinados
-              </label>
-              <input
-                type="number"
-                value={stats.vaccinated}
-                onChange={(e) =>
-                  setStats({
-                    ...stats,
-                    vaccinated: Number(e.target.value),
-                  })
-                }
-                className="w-full h-10 bg-white rounded-full px-4 text-gray-700 outline-none"
-              />
-            </div>
+          {stats ? (
+            <form
+              onSubmit={handleSaveStats}
+              className="grid grid-cols-2 md:grid-cols-3 gap-4"
+            >
+              <div>
+                <label className="block text-xs text-white/80 mb-1">
+                  Vacinados
+                </label>
 
-            <div>
-              <label className="block text-xs text-white/80 mb-1">
-                Castrações
-              </label>
-              <input
-                type="number"
-                value={stats.castrations}
-                onChange={(e) =>
-                  setStats({
-                    ...stats,
-                    castrations: Number(e.target.value),
-                  })
-                }
-                className="w-full h-10 bg-white rounded-full px-4 text-gray-700 outline-none"
-              />
-            </div>
+                <input
+                  type="number"
+                  min="0"
+                  value={stats.vaccinated}
+                  onChange={(e) =>
+                    setStats({
+                      ...stats,
+                      vaccinated: Number(e.target.value),
+                    })
+                  }
+                  className="w-full h-10 bg-white rounded-full px-4 text-gray-700 outline-none"
+                />
+              </div>
 
-            <div>
-              <label className="block text-xs text-white/80 mb-1">
-                Testes
-              </label>
-              <input
-                type="number"
-                value={stats.tests}
-                onChange={(e) =>
-                  setStats({
-                    ...stats,
-                    tests: Number(e.target.value),
-                  })
-                }
-                className="w-full h-10 bg-white rounded-full px-4 text-gray-700 outline-none"
-              />
-            </div>
+              <div>
+                <label className="block text-xs text-white/80 mb-1">
+                  Castrações
+                </label>
 
-            <div>
-              <label className="block text-xs text-white/80 mb-1">
-                Acolhidos
-              </label>
-              <input
-                type="number"
-                value={stats.sheltered}
-                onChange={(e) =>
-                  setStats({
-                    ...stats,
-                    sheltered: Number(e.target.value),
-                  })
-                }
-                className="w-full h-10 bg-white rounded-full px-4 text-gray-700 outline-none"
-              />
-            </div>
+                <input
+                  type="number"
+                  min="0"
+                  value={stats.castrations}
+                  onChange={(e) =>
+                    setStats({
+                      ...stats,
+                      castrations: Number(e.target.value),
+                    })
+                  }
+                  className="w-full h-10 bg-white rounded-full px-4 text-gray-700 outline-none"
+                />
+              </div>
 
-            <div>
-              <label className="block text-xs text-white/80 mb-1">
-                Cidadãos Atendidos
-              </label>
-              <input
-                type="number"
-                value={stats.citizens}
-                onChange={(e) =>
-                  setStats({
-                    ...stats,
-                    citizens: Number(e.target.value),
-                  })
-                }
-                className="w-full h-10 bg-white rounded-full px-4 text-gray-700 outline-none"
-              />
-            </div>
+              <div>
+                <label className="block text-xs text-white/80 mb-1">
+                  Testes
+                </label>
 
-            <div className="col-span-2 md:col-span-3 mt-4">
-              <button
-                type="submit"
-                className="h-11 px-8 rounded-full bg-white text-[#026B6D] font-bold hover:bg-gray-100 transition"
-              >
-                Salvar Alterações
-              </button>
+                <input
+                  type="number"
+                  min="0"
+                  value={stats.tests}
+                  onChange={(e) =>
+                    setStats({
+                      ...stats,
+                      tests: Number(e.target.value),
+                    })
+                  }
+                  className="w-full h-10 bg-white rounded-full px-4 text-gray-700 outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs text-white/80 mb-1">
+                  Acolhidos
+                </label>
+
+                <input
+                  type="number"
+                  min="0"
+                  value={stats.sheltered}
+                  onChange={(e) =>
+                    setStats({
+                      ...stats,
+                      sheltered: Number(e.target.value),
+                    })
+                  }
+                  className="w-full h-10 bg-white rounded-full px-4 text-gray-700 outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs text-white/80 mb-1">
+                  Cidadãos Atendidos
+                </label>
+
+                <input
+                  type="number"
+                  min="0"
+                  value={stats.citizens}
+                  onChange={(e) =>
+                    setStats({
+                      ...stats,
+                      citizens: Number(e.target.value),
+                    })
+                  }
+                  className="w-full h-10 bg-white rounded-full px-4 text-gray-700 outline-none"
+                />
+              </div>
+
+              <div className="col-span-2 md:col-span-3 mt-4">
+                <button
+                  type="submit"
+                  className="h-11 px-8 rounded-full bg-white text-[#026B6D] font-bold hover:bg-gray-100 transition"
+                >
+                  Salvar Alterações
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div className="bg-white/15 rounded-2xl p-5 text-center">
+              <p className="text-white/90 text-sm">
+                Carregando estatísticas...
+              </p>
             </div>
-          </form>
+          )}
         </div>
       </div>
     </main>
