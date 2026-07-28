@@ -1,52 +1,63 @@
 import { useEffect, useState } from "react";
 import gato from "../assets/images/gato.png";
-
-interface Campaign {
-  id: string;
-  title: string;
-  description: string;
-  status?: string;
-  schedule?: string;
-  location?: string;
-  buttonText?: string;
-}
+import {
+  listCampaigns,
+  type Campaign,
+} from "../services/campaigns";
 
 export default function Campaigns() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/campaigns")
-      .then((res) => res.json())
-      .then((data) => {
+  async function carregarCampanhas() {
+      try {
+        const data = await listCampaigns();
         setCampaigns(data);
+      } catch (error) {
+        console.error(
+          "Erro ao carregar campanhas do Supabase:",
+          error
+        );
+      } finally {
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Erro ao buscar campanhas:", err);
-        setLoading(false);
-      });
+      }
+    }
+
+    carregarCampanhas();
   }, []);
 
   // Função que define as cores da pílula e da bolinha na Home
   const getStatusStyles = (status?: string) => {
     switch (status) {
-      case "Agendamento prévio":
+      case "rascunho":
         return {
           badgeBg: "bg-amber-100 text-amber-800",
           dotBg: "bg-amber-500",
         };
-      case "Encerrada":
+      case "encerrada":
         return {
           badgeBg: "bg-red-100 text-red-700",
           dotBg: "bg-red-500",
         };
-      case "Em andamento":
+      case "ativa":
       default:
         return {
           badgeBg: "bg-[#EAEFEF] text-[#026B6D]",
           dotBg: "bg-emerald-500",
         };
+    }
+  };
+
+  const getStatusLabel = (status?: string) => {
+    switch (status) {
+      case "rascunho":
+        return "Agendar";
+      case "encerrada":
+        return "Encerrada";
+      case "ativa":
+      default:
+        return "Ativa";
     }
   };
 
@@ -89,7 +100,7 @@ export default function Campaigns() {
                       <span
                         className={`inline-block w-2 h-2 rounded-full ${styles.dotBg} mr-2`}
                       ></span>
-                      {camp.status || "Em andamento"}
+                      {getStatusLabel(camp.status)}
                     </div>
 
                     <div className="space-y-1 text-xs text-gray-500">

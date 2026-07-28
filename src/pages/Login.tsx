@@ -11,38 +11,21 @@ function Login() {
     const [password,setPassword] = useState("");
     const [loading,setLoading] = useState(false);
 
-    async function handleLogin(e: React.FormEvent){
-
+    async function handleLogin(e: React.FormEvent) {
         e.preventDefault();
 
-        try{
-
+        try {
             setLoading(true);
 
-            const data = await login(email,password);
+            await login(email, password);
 
-            // salva o JWT
-            localStorage.setItem(
-                "token",
-                data.session?.access_token || ""
-            );
-
-            localStorage.setItem(
-                "refreshToken",
-                data.session?.refresh_token || ""
-            );
-
-            navigate("/dashboard");
-
-        }catch(err){
-
-            console.error(err);
-            alert("Email ou senha inválidos");
-
-        }finally{
+            navigate("/admin");
+        } catch (err) {
+            console.error("Erro ao realizar login:", err);
+            alert("E-mail ou senha inválidos");
+        } finally {
             setLoading(false);
         }
-
     }
 
     return (

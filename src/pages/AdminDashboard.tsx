@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-
-interface Campaign {
-  id: string;
-  title: string;
-  description: string;
-  status: string;
-  schedule: string;
-  location: string;
-  buttonText?: string;
-}
+import { Link, useNavigate } from "react-router-dom";
+import { getSession, logout } from "../services/auth";
+import {
+  createCampaign,
+  deleteCampaign,
+  listCampaigns,
+  type Campaign,
+  type CampaignStatus,
+} from "../services/campaigns";
 
 interface ImpactStats {
   vaccinated: number;
@@ -27,7 +25,8 @@ export default function AdminDashboard() {
   // Campos do formulário de campanha
   const [newTitle, setNewTitle] = useState("");
   const [newDesc, setNewDesc] = useState("");
-  const [newStatus, setNewStatus] = useState("");
+  const [newStatus, setNewStatus] =
+    useState<CampaignStatus>("ativa");
   const [newSchedule, setNewSchedule] = useState("");
   const [newLocation, setNewLocation] = useState("");
   const [newButtonText, setNewButtonText] = useState("");
@@ -43,64 +42,106 @@ export default function AdminDashboard() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("admin_token");
-    if (!token) {
-      navigate("/login");
-      return;
+    async function carregarDashboard() {
+      const session = await getSession();
+
+      if (!session) {
+        navigate("/login");
+        return;
+      }
+
+      try {
+        const campaignData = await listCampaigns();
+        setCampaigns(campaignData);
+      } catch (error) {
+        console.error("Erro ao carregar campanhas:", error);
+        setMessage("Não foi possível carregar as campanhas.");
+      }
+
+      // As estatísticas ainda continuam temporariamente no servidor antigo.
+      fetch("http://localhost:3001/api/stats")
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("Erro ao buscar estatísticas");
+          }
+
+          return res.json();
+        })
+        .then((data: ImpactStats) => setStats(data))
+        .catch((error) => {
+          console.error("Erro ao carregar estatísticas:", error);
+        });
     }
 
-    fetch("http://localhost:3001/api/campaigns")
-      .then((res) => res.json())
-      .then((data) => setCampaigns(data));
-
-    fetch("http://localhost:3001/api/stats")
-      .then((res) => res.json())
-      .then((data) => setStats(data));
+    carregarDashboard();
   }, [navigate]);
 
   const handleAddCampaign = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newTitle || !newDesc) return;
 
-    const res = await fetch("http://localhost:3001/api/campaigns", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-         title: newTitle, 
-         description: newDesc,
-         status: newStatus,
-         schedule: newSchedule,
-         location: newLocation,
-         buttonText: newButtonText || null,
-      }),
-    });
+    if (!newTitle.trim() || !newDesc.trim()) {
+      setMessage("Preencha o título e a descrição.");
+      return;
+    }
 
-    if (res.ok) {
-      const added = await res.json();
-      setCampaigns([...campaigns, added]);
+    try {
+      const scheduleIso = newSchedule
+        ? new Date(newSchedule).toISOString()
+        : null;
+
+      const added = await createCampaign({
+        title: newTitle.trim(),
+        description: newDesc.trim(),
+        status: newStatus,
+        schedule: scheduleIso,
+        location: newLocation.trim() || null,
+        buttonText: newButtonText.trim() || "Saiba mais",
+      });
+
+      setCampaigns((currentCampaigns) => [
+        added,
+        ...currentCampaigns,
+      ]);
+
       setNewTitle("");
       setNewDesc("");
-      setNewStatus("");
+      setNewStatus("ativa");
       setNewSchedule("");
       setNewLocation("");
       setNewButtonText("");
+
       setMessage("Campanha adicionada com sucesso!");
+    } catch (error) {
+      console.error("Erro ao criar campanha:", error);
+
+      if (error instanceof Error) {
+        setMessage(`Erro ao adicionar: ${error.message}`);
+      } else {
+        setMessage("Erro ao adicionar a campanha.");
+      }
     }
   };
 
   const handleDeleteCampaign = async (id: string) => {
-    const res = await fetch(`http://localhost:3001/api/campaigns/${id}`, {
-      method: "DELETE",
-    });
+    try {
+      await deleteCampaign(id);
 
-    if (res.ok) {
-      setCampaigns(campaigns.filter((c) => c.id !== id));
-      setMessage("Campanha removida!");
+      setCampaigns((currentCampaigns) =>
+        currentCampaigns.filter(
+          (campaign) => campaign.id !== id,
+        ),
+      );
+
+      setMessage("Campanha removida com sucesso!");
+    } catch (error) {
+      console.error("Erro ao remover campanha:", error);
+      setMessage("Não foi possível remover a campanha.");
     }
   };
 
   const handleSaveStats = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const res = await fetch("http://localhost:3001/api/stats", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -109,28 +150,38 @@ export default function AdminDashboard() {
 
     if (res.ok) {
       setMessage("Estatísticas atualizadas com sucesso!");
+    } else {
+      setMessage("Não foi possível atualizar as estatísticas.");
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("admin_token");
+  const handleLogout = async () => {
+    await logout();
     navigate("/login");
   };
 
   return (
     <main className="min-h-screen bg-[#F4F4F4] py-10 px-4">
-
       <div className="relative z-10 max-w-4xl mx-auto space-y-8">
         {/* Cabeçalho */}
         <div className="flex justify-between items-center bg-[#05ABAD] p-6 rounded-[30px] shadow-xl">
           <div>
-            <h1 className="text-2xl font-bold text-white">Painel do Administrador</h1>
-            <p className="text-white/80 text-sm">Gerencie o conteúdo do portal Zoonoses</p>
+            <h1 className="text-2xl font-bold text-white">
+              Painel do Administrador
+            </h1>
+            <p className="text-white/80 text-sm">
+              Gerencie o conteúdo do portal Zoonoses
+            </p>
           </div>
+
           <div className="flex gap-4 items-center">
-            <Link to="/" className="text-white text-sm hover:underline">
+            <Link
+              to="/"
+              className="text-white text-sm hover:underline"
+            >
               Ver Site
             </Link>
+
             <button
               onClick={handleLogout}
               className="bg-white text-[#026B6D] px-4 py-2 rounded-full font-bold text-sm hover:bg-gray-100 transition"
@@ -148,12 +199,19 @@ export default function AdminDashboard() {
 
         {/* Gerenciar Campanhas */}
         <div className="bg-[#05ABAD] p-8 rounded-[30px] shadow-xl text-white">
-          <h2 className="text-xl font-bold mb-4">Gerenciar Campanhas</h2>
+          <h2 className="text-xl font-bold mb-4">
+            Gerenciar Campanhas
+          </h2>
 
-          <form onSubmit={handleAddCampaign} className="space-y-4 mb-6">
+          <form
+            onSubmit={handleAddCampaign}
+            className="space-y-4 mb-6"
+          >
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-white/90 mb-1">Título</label>
+                <label className="block text-xs font-bold text-white/90 mb-1">
+                  Título
+                </label>
                 <input
                   type="text"
                   placeholder="Ex: Campanha Antirrábica 2026"
@@ -165,20 +223,28 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-white/90 mb-1">Status da Campanha</label>
+                <label className="block text-xs font-bold text-white/90 mb-1">
+                  Status da Campanha
+                </label>
                 <select
                   value={newStatus}
-                  onChange={(e) => setNewStatus(e.target.value)}
+                  onChange={(e) =>
+                    setNewStatus(
+                      e.target.value as CampaignStatus,
+                    )
+                  }
                   className="w-full h-11 bg-white rounded-full px-5 text-gray-700 outline-none text-sm cursor-pointer"
                 >
-                  <option value="Em andamento">Em andamento</option>
-                  <option value="Agendamento prévio">Agendamento prévio</option>
-                  <option value="Encerrada">Encerrada</option>
+                  <option value="ativa">Ativa</option>
+                  <option value="rascunho">Rascunho</option>
+                  <option value="encerrada">Encerrada</option>
                 </select>
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-xs font-bold text-white/90 mb-1">Descrição</label>
+                <label className="block text-xs font-bold text-white/90 mb-1">
+                  Descrição
+                </label>
                 <input
                   type="text"
                   placeholder="Ex: Vacinação gratuita para cães e gatos em todos os bairros."
@@ -190,23 +256,30 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-white/90 mb-1">Data / Horário</label>
+                <label className="block text-xs font-bold text-white/90 mb-1">
+                  Data / Horário
+                </label>
                 <input
-                  type="text"
-                  placeholder="Ex: Todo sábado - 08h às 12h"
+                  type="datetime-local"
                   value={newSchedule}
-                  onChange={(e) => setNewSchedule(e.target.value)}
-                  className="w-full h-11 bg-white rounded-full px-5 text-gray-700 outline-none placeholder:text-gray-400 text-sm"
+                  onChange={(e) =>
+                    setNewSchedule(e.target.value)
+                  }
+                  className="w-full h-11 bg-white rounded-full px-5 text-gray-700 outline-none text-sm"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-white/90 mb-1">Local</label>
+                <label className="block text-xs font-bold text-white/90 mb-1">
+                  Local
+                </label>
                 <input
                   type="text"
-                  placeholder="Ex: Ponto de vacinação do seu bairro"
+                  placeholder="Ex: Centro de Zoonoses de Cajazeiras"
                   value={newLocation}
-                  onChange={(e) => setNewLocation(e.target.value)}
+                  onChange={(e) =>
+                    setNewLocation(e.target.value)
+                  }
                   className="w-full h-11 bg-white rounded-full px-5 text-gray-700 outline-none placeholder:text-gray-400 text-sm"
                 />
               </div>
@@ -217,9 +290,11 @@ export default function AdminDashboard() {
                 </label>
                 <input
                   type="text"
-                  placeholder="Ex: Agendar (deixe em branco para não exibir botão)"
+                  placeholder="Ex: Agendar"
                   value={newButtonText}
-                  onChange={(e) => setNewButtonText(e.target.value)}
+                  onChange={(e) =>
+                    setNewButtonText(e.target.value)
+                  }
                   className="w-full h-11 bg-white rounded-full px-5 text-gray-700 outline-none placeholder:text-gray-400 text-sm"
                 />
               </div>
@@ -234,18 +309,42 @@ export default function AdminDashboard() {
           </form>
 
           {/* Lista de Campanhas */}
-          <h3 className="text-md font-bold text-white mb-4">Campanhas Ativas</h3>
-          <div className="space-y-3">
-            {campaigns.map((camp) => {
-              const isAgendamento = camp.status === "Agendamento prévio";
-              const isEncerrada = camp.status === "Encerrada";
+          <h3 className="text-md font-bold text-white mb-4">
+            Campanhas
+          </h3>
 
-              // Define as cores do badge dinamicamente
-              const badgeClass = isAgendamento
+          <div className="space-y-3">
+            {campaigns.length === 0 && (
+              <div className="bg-white/90 text-[#026B6D] p-4 rounded-2xl text-sm">
+                Nenhuma campanha cadastrada.
+              </div>
+            )}
+
+            {campaigns.map((camp) => {
+              const isRascunho = camp.status === "rascunho";
+              const isEncerrada = camp.status === "encerrada";
+
+              const statusLabel = {
+                ativa: "Ativa",
+                encerrada: "Encerrada",
+                rascunho: "Rascunho",
+              }[camp.status];
+
+              const badgeClass = isRascunho
                 ? "bg-amber-100 text-amber-800"
                 : isEncerrada
-                ? "bg-red-100 text-red-700"
-                : "bg-[#EAEFEF] text-[#026B6D]";
+                  ? "bg-red-100 text-red-700"
+                  : "bg-[#EAEFEF] text-[#026B6D]";
+
+              const formattedSchedule = camp.schedule
+                ? new Date(camp.schedule).toLocaleString(
+                    "pt-BR",
+                    {
+                      dateStyle: "short",
+                      timeStyle: "short",
+                    },
+                  )
+                : "Data não informada";
 
               return (
                 <div
@@ -254,18 +353,31 @@ export default function AdminDashboard() {
                 >
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-bold text-[#026B6D] text-base">{camp.title}</h4>
-                      <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${badgeClass}`}>
-                        {camp.status}
+                      <h4 className="font-bold text-[#026B6D] text-base">
+                        {camp.title}
+                      </h4>
+
+                      <span
+                        className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${badgeClass}`}
+                      >
+                        {statusLabel}
                       </span>
                     </div>
-                    <p className="text-xs text-gray-600 mb-1">{camp.description}</p>
+
+                    <p className="text-xs text-gray-600 mb-1">
+                      {camp.description}
+                    </p>
+
                     <p className="text-[11px] text-gray-400">
-                      📅 {camp.schedule} | 📍 {camp.location}
+                      📅 {formattedSchedule} | 📍{" "}
+                      {camp.location ?? "Local não informado"}
                     </p>
                   </div>
+
                   <button
-                    onClick={() => handleDeleteCampaign(camp.id)}
+                    onClick={() =>
+                      handleDeleteCampaign(camp.id)
+                    }
                     className="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-full text-xs font-bold transition self-end md:self-auto"
                   >
                     Excluir
@@ -278,62 +390,94 @@ export default function AdminDashboard() {
 
         {/* Gerenciar Estatísticas */}
         <div className="bg-[#05ABAD] p-8 rounded-[30px] shadow-xl text-white">
-          <h2 className="text-xl font-bold mb-4">Atualizar Números de Impacto</h2>
+          <h2 className="text-xl font-bold mb-4">
+            Atualizar Números de Impacto
+          </h2>
 
-          <form onSubmit={handleSaveStats} className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <form
+            onSubmit={handleSaveStats}
+            className="grid grid-cols-2 md:grid-cols-3 gap-4"
+          >
             <div>
-              <label className="block text-xs text-white/80 mb-1">Vacinados</label>
+              <label className="block text-xs text-white/80 mb-1">
+                Vacinados
+              </label>
               <input
                 type="number"
                 value={stats.vaccinated}
                 onChange={(e) =>
-                  setStats({ ...stats, vaccinated: Number(e.target.value) })
+                  setStats({
+                    ...stats,
+                    vaccinated: Number(e.target.value),
+                  })
                 }
                 className="w-full h-10 bg-white rounded-full px-4 text-gray-700 outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs text-white/80 mb-1">Castrações</label>
+              <label className="block text-xs text-white/80 mb-1">
+                Castrações
+              </label>
               <input
                 type="number"
                 value={stats.castrations}
                 onChange={(e) =>
-                  setStats({ ...stats, castrations: Number(e.target.value) })
+                  setStats({
+                    ...stats,
+                    castrations: Number(e.target.value),
+                  })
                 }
                 className="w-full h-10 bg-white rounded-full px-4 text-gray-700 outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs text-white/80 mb-1">Testes</label>
+              <label className="block text-xs text-white/80 mb-1">
+                Testes
+              </label>
               <input
                 type="number"
                 value={stats.tests}
-                onChange={(e) => setStats({ ...stats, tests: Number(e.target.value) })}
+                onChange={(e) =>
+                  setStats({
+                    ...stats,
+                    tests: Number(e.target.value),
+                  })
+                }
                 className="w-full h-10 bg-white rounded-full px-4 text-gray-700 outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs text-white/80 mb-1">Acolhidos</label>
+              <label className="block text-xs text-white/80 mb-1">
+                Acolhidos
+              </label>
               <input
                 type="number"
                 value={stats.sheltered}
                 onChange={(e) =>
-                  setStats({ ...stats, sheltered: Number(e.target.value) })
+                  setStats({
+                    ...stats,
+                    sheltered: Number(e.target.value),
+                  })
                 }
                 className="w-full h-10 bg-white rounded-full px-4 text-gray-700 outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs text-white/80 mb-1">Cidadãos Atendidos</label>
+              <label className="block text-xs text-white/80 mb-1">
+                Cidadãos Atendidos
+              </label>
               <input
                 type="number"
                 value={stats.citizens}
                 onChange={(e) =>
-                  setStats({ ...stats, citizens: Number(e.target.value) })
+                  setStats({
+                    ...stats,
+                    citizens: Number(e.target.value),
+                  })
                 }
                 className="w-full h-10 bg-white rounded-full px-4 text-gray-700 outline-none"
               />
