@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 
+.env
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -22,3 +24,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Banco de Dados Local SQLite e Variáveis de Ambiente
+prisma/*.db
+prisma/*.db-journal
+.env
+
+# Arquivos de Configuração/Cache de Editores e Ferramentas
+.windsurf/
+.claude/
+.agents/
+
+/src/generated/prisma
