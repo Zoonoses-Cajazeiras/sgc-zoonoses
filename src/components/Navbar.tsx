@@ -73,7 +73,7 @@ export default function Navbar() {
 
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="lg:hidden text-white"
+          className="lg:hidden ml-auto text-white flex-shrink-0"
         >
 
           {menuOpen ? (

@@ -93,7 +93,11 @@ export default function Faq() {
   const toggle = (index: number) => {
     setOpenIndexes((prev) => {
       const next = new Set(prev);
-      next.has(index) ? next.delete(index) : next.add(index);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
       return next;
     });
   };
@@ -105,8 +109,8 @@ export default function Faq() {
           Perguntas Frequentes
         </h2>
 
-        <div className="flex gap-8 text-white">
-          <div className="flex flex-col gap-4 flex-1">
+        <div className="grid gap-8 lg:grid-cols-2 text-white">
+          <div className="flex flex-col gap-4">
             {faqsLeft.map((item) => (
               <FaqCard
                 key={item.index}
@@ -116,7 +120,7 @@ export default function Faq() {
               />
             ))}
           </div>
-          <div className="flex flex-col gap-4 flex-1">
+          <div className="flex flex-col gap-4">
             {faqsRight.map((item) => (
               <FaqCard
                 key={item.index}

@@ -86,7 +86,7 @@ html, body {
     height: auto !important;
   }
 
-  input, select, textarea, button {
+  input, select, textarea {
     width: 100% !important;
     box-sizing: border-box;
   }

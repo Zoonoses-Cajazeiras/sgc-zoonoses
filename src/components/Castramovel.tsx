@@ -18,18 +18,10 @@ export default function Castramovel() {
     >
 
       <img
-    src={castramovelBg}
-    alt=""
-    className="
-        absolute
-        right-10
-        bottom-10
-        w-[380px]
-        opacity-10
-        pointer-events-none
-        select-none
-    "
-/>
+        src={castramovelBg}
+        alt=""
+        className="hidden xl:block absolute right-10 bottom-10 w-[380px] opacity-10 pointer-events-none select-none"
+      />
       <div className="max-w-6xl mx-auto px-8">
 
         {/* Título */}
@@ -47,7 +39,7 @@ export default function Castramovel() {
 
         {/* Cards */}
 
-        <div className="grid md:grid-cols-2 gap-15 mt-14">
+        <div className="grid gap-8 md:grid-cols-2 mt-14">
 
           <div className="
                     bg-white
@@ -72,7 +64,7 @@ export default function Castramovel() {
               Como funciona?
             </h3>
 
-            <p className="text-[#0D6C73] leading-7 text-medium">
+            <p className="text-[#0D6C73] leading-7 text-base">
               O atendimento é realizado mediante agendamento prévio, de acordo
               com a programação divulgada pelo Núcleo de Zoonoses.
 
@@ -109,7 +101,7 @@ export default function Castramovel() {
               Quem pode participar?
             </h3>
 
-            <p className="text-[#0D6C73] leading-7 text-medium">
+            <p className="text-[#0D6C73] leading-7 text-base">
               O programa é destinado a tutores residentes em Cajazeiras,
               protetores independentes e responsáveis por animais em situação de
               vulnerabilidade.
@@ -124,7 +116,7 @@ export default function Castramovel() {
 
         {/* Segunda linha */}
 
-        <div className="grid md:grid-cols-2 gap-14 mt-14">
+        <div className="grid gap-8 md:grid-cols-2 mt-14">
 
           {/* Documentação */}
 
@@ -212,7 +204,7 @@ export default function Castramovel() {
       text-base
       text-[#0D6C73]
       leading-7
-      ml-11
+      lg:ml-11
     "
             >
               A programação do Castramóvel é divulgada periodicamente pelos canais
@@ -228,7 +220,7 @@ export default function Castramovel() {
       text-base
       text-[#0D6C73]
       leading-7
-      ml-11
+      lg:ml-11
     "
             >
               Acompanhe nossas redes sociais e canais de comunicação para consultar a

@@ -78,7 +78,7 @@ export default function Campaigns() {
             Nenhuma campanha ativa no momento.
           </p>
         ) : (
-          <div className="grid md:grid-cols-2 gap-8 relative z-10">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 relative z-10">
             {campaigns.map((camp) => {
               const styles = getStatusStyles(camp.status);
 
@@ -126,11 +126,13 @@ export default function Campaigns() {
           src={gato}
           alt="Gato"
           className="
+            hidden md:block
             absolute
             right-0
             bottom-0
             translate-x-1/3
-            w-[380px]
+            w-[300px]
+            lg:w-[380px]
             z-20
             pointer-events-none
             select-none

@@ -12,7 +12,7 @@ export default function Home() {
     <>
       <Navbar />
 
-      <main className="overflow-x-hidden pt-20">
+      <main className="overflow-x-hidden pt-24">
         <Hero />
         <AboutServices />
         <Campaigns />

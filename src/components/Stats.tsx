@@ -25,7 +25,7 @@ export default function Stats() {
 
   return (
     <section className="bg-[#F4F4F4] pt-4 pb-16">
-      <div className="max-w-6xl mx-auto px-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <p className="text-xs font-bold tracking-wider text-gray-400 uppercase mb-1">
           NOSSO IMPACTO
         </p>
@@ -33,7 +33,7 @@ export default function Stats() {
           Números que representam cuidado
         </h3>
 
- <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+ <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
           {/* Vacinações */}
           <div className="bg-[#EAEFEF] p-5 rounded-2xl flex flex-col justify-between border border-emerald-50">
             <span className="text-2xl mb-2">💉</span>
