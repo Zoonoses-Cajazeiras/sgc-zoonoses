@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import patinhas from "../assets/patterns/patinhas.png";
 import { getSession, logout } from "../services/auth";
 import {
   createCampaign,
@@ -13,6 +14,7 @@ import {
   updateImpactStats,
   type ImpactStats,
 } from "../services/stats";
+
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -126,34 +128,34 @@ export default function AdminDashboard() {
   };
 
   const handleSaveStats = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!stats) {
-    setMessage("As estatísticas ainda não foram carregadas.");
-    return;
-  }
-
-  try {
-    const updated = await updateImpactStats(stats.id, {
-      vaccinated: stats.vaccinated,
-      castrations: stats.castrations,
-      tests: stats.tests,
-      sheltered: stats.sheltered,
-      citizens: stats.citizens,
-    });
-
-    setStats(updated);
-    setMessage("Estatísticas atualizadas com sucesso!");
-  } catch (error) {
-    console.error("Erro ao atualizar estatísticas:", error);
-
-    if (error instanceof Error) {
-      setMessage(`Erro ao atualizar: ${error.message}`);
-    } else {
-      setMessage("Não foi possível atualizar as estatísticas.");
+    if (!stats) {
+      setMessage("As estatísticas ainda não foram carregadas.");
+      return;
     }
-  }
-};
+
+    try {
+      const updated = await updateImpactStats(stats.id, {
+        vaccinated: stats.vaccinated,
+        castrations: stats.castrations,
+        tests: stats.tests,
+        sheltered: stats.sheltered,
+        citizens: stats.citizens,
+      });
+
+      setStats(updated);
+      setMessage("Estatísticas atualizadas com sucesso!");
+    } catch (error) {
+      console.error("Erro ao atualizar estatísticas:", error);
+
+      if (error instanceof Error) {
+        setMessage(`Erro ao atualizar: ${error.message}`);
+      } else {
+        setMessage("Não foi possível atualizar as estatísticas.");
+      }
+    }
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -161,7 +163,18 @@ export default function AdminDashboard() {
   };
 
   return (
-    <main className="min-h-screen bg-[#F4F4F4] py-10 px-4">
+    <main className="min-h-screen bg-[#026B6D] py-10 px-4">
+
+      {/* Fundo de patinhas */}
+      <div
+        className="absolute inset-0 opacity-10"
+        style={{
+          backgroundImage: `url(${patinhas})`,
+          backgroundRepeat: "repeat",
+          backgroundSize: "450px",
+        }}
+      />
+
       <div className="relative z-10 max-w-4xl mx-auto space-y-8">
         {/* Cabeçalho */}
         <div className="flex justify-between items-center bg-[#05ABAD] p-6 rounded-[30px] shadow-xl">
@@ -338,12 +351,12 @@ export default function AdminDashboard() {
 
               const formattedSchedule = camp.schedule
                 ? new Date(camp.schedule).toLocaleString(
-                    "pt-BR",
-                    {
-                      dateStyle: "short",
-                      timeStyle: "short",
-                    },
-                  )
+                  "pt-BR",
+                  {
+                    dateStyle: "short",
+                    timeStyle: "short",
+                  },
+                )
                 : "Data não informada";
 
               return (
