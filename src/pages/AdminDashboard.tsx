@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import patinhas from "../assets/patterns/patinhas.png";
 import { getSession, logout } from "../services/auth";
+import { formatCampaignDateTime } from "../utils/formatDate";
 import {
   createCampaign,
   deleteCampaign,
-  listCampaigns,
+  listAdminCampaigns,
+  updateCampaign,
   type Campaign,
   type CampaignStatus,
 } from "../services/campaigns";
@@ -15,13 +17,25 @@ import {
   type ImpactStats,
 } from "../services/stats";
 
+function toDateTimeLocal(value: string | null): string {
+  if (!value) return "";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+
+  const localDate = new Date(
+    date.getTime() - date.getTimezoneOffset() * 60_000,
+  );
+
+  return localDate.toISOString().slice(0, 16);
+}
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
 
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
 
-  // Campos do formulário de campanha
+  // Campos do formulário de nova campanha.
   const [newTitle, setNewTitle] = useState("");
   const [newDesc, setNewDesc] = useState("");
   const [newStatus, setNewStatus] =
@@ -30,28 +44,40 @@ export default function AdminDashboard() {
   const [newLocation, setNewLocation] = useState("");
   const [newButtonText, setNewButtonText] = useState("");
 
-  const [stats, setStats] = useState<ImpactStats | null>(null);
+  // Campos do formulário de edição de campanha.
+  const [editingCampaignId, setEditingCampaignId] =
+    useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editDesc, setEditDesc] = useState("");
+  const [editStatus, setEditStatus] =
+    useState<CampaignStatus>("ativa");
+  const [editSchedule, setEditSchedule] = useState("");
+  const [editLocation, setEditLocation] = useState("");
+  const [editButtonText, setEditButtonText] = useState("");
+  const [savingCampaign, setSavingCampaign] = useState(false);
 
+  const [stats, setStats] = useState<ImpactStats | null>(null);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
     async function carregarDashboard() {
       const session = await getSession();
 
-      if (!session) {
+      if (!session || session.user.papel !== "ADMIN") {
+        await logout();
         navigate("/login");
         return;
       }
 
       try {
-        const campaignData = await listCampaigns();
+        const campaignData = await listAdminCampaigns();
         setCampaigns(campaignData);
       } catch (error) {
         console.error("Erro ao carregar campanhas:", error);
         setMessage("Não foi possível carregar as campanhas.");
       }
 
-      // Carrega as estatísticas diretamente do Supabase.
+      // Carrega os indicadores pela API NestJS.
       try {
         const statsData = await getImpactStats();
         setStats(statsData);
@@ -110,6 +136,74 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleStartEdit = (campaign: Campaign) => {
+    setEditingCampaignId(campaign.id);
+    setEditTitle(campaign.title);
+    setEditDesc(campaign.description);
+    setEditStatus(campaign.status);
+    setEditSchedule(toDateTimeLocal(campaign.schedule));
+    setEditLocation(campaign.location ?? "");
+    setEditButtonText(campaign.buttonText ?? "Saiba mais");
+    setMessage("");
+  };
+
+  const handleCancelEdit = () => {
+    setEditingCampaignId(null);
+    setEditTitle("");
+    setEditDesc("");
+    setEditStatus("ativa");
+    setEditSchedule("");
+    setEditLocation("");
+    setEditButtonText("");
+  };
+
+  const handleSaveCampaignEdit = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ) => {
+    e.preventDefault();
+
+    if (!editingCampaignId) return;
+
+    if (!editTitle.trim() || !editDesc.trim()) {
+      setMessage("Preencha o título e a descrição.");
+      return;
+    }
+
+    try {
+      setSavingCampaign(true);
+
+      const updated = await updateCampaign(editingCampaignId, {
+        title: editTitle.trim(),
+        description: editDesc.trim(),
+        status: editStatus,
+        schedule: editSchedule
+          ? new Date(editSchedule).toISOString()
+          : null,
+        location: editLocation.trim() || null,
+        buttonText: editButtonText.trim() || "Saiba mais",
+      });
+
+      setCampaigns((currentCampaigns) =>
+        currentCampaigns.map((campaign) =>
+          campaign.id === updated.id ? updated : campaign,
+        ),
+      );
+
+      handleCancelEdit();
+      setMessage("Campanha atualizada com sucesso!");
+    } catch (error) {
+      console.error("Erro ao editar campanha:", error);
+
+      if (error instanceof Error) {
+        setMessage(`Erro ao atualizar campanha: ${error.message}`);
+      } else {
+        setMessage("Não foi possível atualizar a campanha.");
+      }
+    } finally {
+      setSavingCampaign(false);
+    }
+  };
+
   const handleDeleteCampaign = async (id: string) => {
     try {
       await deleteCampaign(id);
@@ -119,6 +213,10 @@ export default function AdminDashboard() {
           (campaign) => campaign.id !== id,
         ),
       );
+
+      if (editingCampaignId === id) {
+        handleCancelEdit();
+      }
 
       setMessage("Campanha removida com sucesso!");
     } catch (error) {
@@ -164,7 +262,6 @@ export default function AdminDashboard() {
 
   return (
     <main className="min-h-screen bg-[#026B6D] py-10 px-4">
-
       {/* Fundo de patinhas */}
       <div
         className="absolute inset-0 opacity-10"
@@ -190,14 +287,15 @@ export default function AdminDashboard() {
           <div className="flex gap-4 items-center">
             <Link
               to="/"
-              className="text-white text-sm hover:underline"
+              className="text-white text-sm hover:underline cursor-pointer"
             >
               Ver Site
             </Link>
 
             <button
+              type="button"
               onClick={handleLogout}
-              className="bg-white text-[#026B6D] px-4 py-2 rounded-full font-bold text-sm hover:bg-gray-100 transition"
+              className="bg-white text-[#026B6D] px-4 py-2 rounded-full font-bold text-sm hover:bg-gray-100 transition cursor-pointer"
             >
               Sair
             </button>
@@ -242,9 +340,7 @@ export default function AdminDashboard() {
                 <select
                   value={newStatus}
                   onChange={(e) =>
-                    setNewStatus(
-                      e.target.value as CampaignStatus,
-                    )
+                    setNewStatus(e.target.value as CampaignStatus)
                   }
                   className="w-full h-11 bg-white rounded-full px-5 text-gray-700 outline-none text-sm cursor-pointer"
                 >
@@ -275,9 +371,7 @@ export default function AdminDashboard() {
                 <input
                   type="datetime-local"
                   value={newSchedule}
-                  onChange={(e) =>
-                    setNewSchedule(e.target.value)
-                  }
+                  onChange={(e) => setNewSchedule(e.target.value)}
                   className="w-full h-11 bg-white rounded-full px-5 text-gray-700 outline-none text-sm"
                 />
               </div>
@@ -290,9 +384,7 @@ export default function AdminDashboard() {
                   type="text"
                   placeholder="Ex: Centro de Zoonoses de Cajazeiras"
                   value={newLocation}
-                  onChange={(e) =>
-                    setNewLocation(e.target.value)
-                  }
+                  onChange={(e) => setNewLocation(e.target.value)}
                   className="w-full h-11 bg-white rounded-full px-5 text-gray-700 outline-none placeholder:text-gray-400 text-sm"
                 />
               </div>
@@ -305,9 +397,7 @@ export default function AdminDashboard() {
                   type="text"
                   placeholder="Ex: Agendar"
                   value={newButtonText}
-                  onChange={(e) =>
-                    setNewButtonText(e.target.value)
-                  }
+                  onChange={(e) => setNewButtonText(e.target.value)}
                   className="w-full h-11 bg-white rounded-full px-5 text-gray-700 outline-none placeholder:text-gray-400 text-sm"
                 />
               </div>
@@ -315,7 +405,7 @@ export default function AdminDashboard() {
 
             <button
               type="submit"
-              className="h-11 px-6 rounded-full bg-white text-[#026B6D] font-bold hover:bg-gray-100 transition"
+              className="h-11 px-6 rounded-full bg-white text-[#026B6D] font-bold hover:bg-gray-100 transition cursor-pointer"
             >
               + Adicionar Campanha
             </button>
@@ -349,52 +439,166 @@ export default function AdminDashboard() {
                   ? "bg-red-100 text-red-700"
                   : "bg-[#EAEFEF] text-[#026B6D]";
 
-              const formattedSchedule = camp.schedule
-                ? new Date(camp.schedule).toLocaleString(
-                  "pt-BR",
-                  {
-                    dateStyle: "short",
-                    timeStyle: "short",
-                  },
-                )
-                : "Data não informada";
+              const formattedSchedule = formatCampaignDateTime(
+                camp.schedule,
+              );
 
               return (
                 <div
                   key={camp.id}
-                  className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-2xl text-gray-800 gap-4 shadow"
+                  className="bg-white p-4 rounded-2xl text-gray-800 shadow"
                 >
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-bold text-[#026B6D] text-base">
-                        {camp.title}
-                      </h4>
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2 mb-1">
+                        <h4 className="font-bold text-[#026B6D] text-base">
+                          {camp.title}
+                        </h4>
 
-                      <span
-                        className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${badgeClass}`}
-                      >
-                        {statusLabel}
-                      </span>
+                        <span
+                          className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${badgeClass}`}
+                        >
+                          {statusLabel}
+                        </span>
+                      </div>
+
+                      <p className="text-xs text-gray-600 mb-1">
+                        {camp.description}
+                      </p>
+
+                      <p className="text-[11px] text-gray-400">
+                        📅 {formattedSchedule} | 📍 {camp.location ?? "Local não informado"}
+                      </p>
                     </div>
 
-                    <p className="text-xs text-gray-600 mb-1">
-                      {camp.description}
-                    </p>
+                    <div className="flex gap-2 self-end md:self-auto shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => handleStartEdit(camp)}
+                        className="bg-[#026B6D] hover:bg-[#014f51] text-white px-4 py-1.5 rounded-full text-xs font-bold transition cursor-pointer"
+                      >
+                        Editar
+                      </button>
 
-                    <p className="text-[11px] text-gray-400">
-                      📅 {formattedSchedule} | 📍{" "}
-                      {camp.location ?? "Local não informado"}
-                    </p>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteCampaign(camp.id)}
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-full text-xs font-bold transition cursor-pointer"
+                      >
+                        Excluir
+                      </button>
+                    </div>
                   </div>
 
-                  <button
-                    onClick={() =>
-                      handleDeleteCampaign(camp.id)
-                    }
-                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-full text-xs font-bold transition self-end md:self-auto"
-                  >
-                    Excluir
-                  </button>
+                  {editingCampaignId === camp.id && (
+                    <form
+                      onSubmit={handleSaveCampaignEdit}
+                      className="mt-5 pt-5 border-t border-gray-200 grid md:grid-cols-2 gap-4"
+                    >
+                      <div>
+                        <label className="block text-xs font-bold mb-1">
+                          Título
+                        </label>
+                        <input
+                          type="text"
+                          value={editTitle}
+                          onChange={(e) => setEditTitle(e.target.value)}
+                          maxLength={180}
+                          required
+                          className="w-full h-11 bg-gray-50 border border-gray-200 rounded-xl px-4 text-gray-700 outline-none focus:border-[#026B6D]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold mb-1">
+                          Status da campanha
+                        </label>
+                        <select
+                          value={editStatus}
+                          onChange={(e) =>
+                            setEditStatus(e.target.value as CampaignStatus)
+                          }
+                          className="w-full h-11 bg-gray-50 border border-gray-200 rounded-xl px-4 text-gray-700 outline-none cursor-pointer"
+                        >
+                          <option value="ativa">Ativa</option>
+                          <option value="rascunho">Rascunho</option>
+                          <option value="encerrada">Encerrada</option>
+                        </select>
+                      </div>
+
+                      <div className="md:col-span-2">
+                        <label className="block text-xs font-bold mb-1">
+                          Descrição
+                        </label>
+                        <textarea
+                          value={editDesc}
+                          onChange={(e) => setEditDesc(e.target.value)}
+                          maxLength={5000}
+                          required
+                          rows={3}
+                          className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-700 outline-none focus:border-[#026B6D] resize-y"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold mb-1">
+                          Data / horário
+                        </label>
+                        <input
+                          type="datetime-local"
+                          value={editSchedule}
+                          onChange={(e) => setEditSchedule(e.target.value)}
+                          className="w-full h-11 bg-gray-50 border border-gray-200 rounded-xl px-4 text-gray-700 outline-none"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold mb-1">
+                          Local
+                        </label>
+                        <input
+                          type="text"
+                          value={editLocation}
+                          onChange={(e) => setEditLocation(e.target.value)}
+                          maxLength={180}
+                          className="w-full h-11 bg-gray-50 border border-gray-200 rounded-xl px-4 text-gray-700 outline-none"
+                        />
+                      </div>
+
+                      <div className="md:col-span-2">
+                        <label className="block text-xs font-bold mb-1">
+                          Texto do botão
+                        </label>
+                        <input
+                          type="text"
+                          value={editButtonText}
+                          onChange={(e) => setEditButtonText(e.target.value)}
+                          maxLength={80}
+                          placeholder="Saiba mais"
+                          className="w-full h-11 bg-gray-50 border border-gray-200 rounded-xl px-4 text-gray-700 outline-none"
+                        />
+                      </div>
+
+                      <div className="md:col-span-2 flex flex-wrap gap-3">
+                        <button
+                          type="submit"
+                          disabled={savingCampaign}
+                          className="h-10 px-6 rounded-full bg-[#026B6D] text-white font-bold text-sm hover:bg-[#014f51] transition cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                        >
+                          {savingCampaign ? "Salvando..." : "Salvar edição"}
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={handleCancelEdit}
+                          disabled={savingCampaign}
+                          className="h-10 px-6 rounded-full border border-gray-300 text-gray-700 font-bold text-sm hover:bg-gray-100 transition cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                        >
+                          Cancelar
+                        </button>
+                      </div>
+                    </form>
+                  )}
                 </div>
               );
             })}
@@ -416,10 +620,10 @@ export default function AdminDashboard() {
                 <label className="block text-xs text-white/80 mb-1">
                   Vacinados
                 </label>
-
                 <input
                   type="number"
                   min="0"
+                  step="1"
                   value={stats.vaccinated}
                   onChange={(e) =>
                     setStats({
@@ -435,10 +639,10 @@ export default function AdminDashboard() {
                 <label className="block text-xs text-white/80 mb-1">
                   Castrações
                 </label>
-
                 <input
                   type="number"
                   min="0"
+                  step="1"
                   value={stats.castrations}
                   onChange={(e) =>
                     setStats({
@@ -454,10 +658,10 @@ export default function AdminDashboard() {
                 <label className="block text-xs text-white/80 mb-1">
                   Testes
                 </label>
-
                 <input
                   type="number"
                   min="0"
+                  step="1"
                   value={stats.tests}
                   onChange={(e) =>
                     setStats({
@@ -473,10 +677,10 @@ export default function AdminDashboard() {
                 <label className="block text-xs text-white/80 mb-1">
                   Acolhidos
                 </label>
-
                 <input
                   type="number"
                   min="0"
+                  step="1"
                   value={stats.sheltered}
                   onChange={(e) =>
                     setStats({
@@ -492,10 +696,10 @@ export default function AdminDashboard() {
                 <label className="block text-xs text-white/80 mb-1">
                   Cidadãos Atendidos
                 </label>
-
                 <input
                   type="number"
                   min="0"
+                  step="1"
                   value={stats.citizens}
                   onChange={(e) =>
                     setStats({
@@ -510,7 +714,7 @@ export default function AdminDashboard() {
               <div className="col-span-2 md:col-span-3 mt-4">
                 <button
                   type="submit"
-                  className="h-11 px-8 rounded-full bg-white text-[#026B6D] font-bold hover:bg-gray-100 transition"
+                  className="h-11 px-8 rounded-full bg-white text-[#026B6D] font-bold hover:bg-gray-100 transition cursor-pointer"
                 >
                   Salvar Alterações
                 </button>

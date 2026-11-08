@@ -1,30 +1,61 @@
-import { supabase } from "./supabase";
-import { removeTokens } from "../utils/token";
 
-export async function login(email: string, password: string) {
+import { api } from "./api";
+import { getToken, setToken, removeTokens } from "../utils/token";
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-    });
-
-    if (error) {
-        throw error;
-    }
-
-    return data;
+export interface AuthUser {
+  id: string;
+  nome: string;
+  email: string;
+  papel: string;
 }
 
-export async function logout() {
+interface LoginResponse {
+  accessToken: string;
+  tokenType: string;
+  expiresIn: number;
+  user: AuthUser;
+}
 
-    await supabase.auth.signOut();
+export async function login(
+  email: string,
+  password: string,
+): Promise<LoginResponse> {
+  const { data } = await api.post<LoginResponse>("/auth/login", {
+    email: email.trim().toLowerCase(),
+    password,
+  });
 
-    removeTokens();
+  // Guarda o token retornado pelo backend.
+  setToken(data.accessToken);
+
+  return data;
+}
+
+export async function logout(): Promise<void> {
+  // O backend ainda não possui uma rota de logout.
+  // Removemos o token local para encerrar o acesso nesta sessão.
+  removeTokens();
 }
 
 export async function getSession() {
+  const token = getToken();
 
-    const { data } = await supabase.auth.getSession();
+  if (!token) {
+    return null;
+  }
 
-    return data.session;
+  try {
+    // Confirma que o token continua válido no backend.
+    const { data: user } = await api.get<AuthUser>("/auth/me");
+
+    return {
+      access_token: token,
+      token_type: "Bearer",
+      user,
+    };
+  } catch {
+    // Se o token expirou ou não é mais válido, remove-o.
+    removeTokens();
+    return null;
+  }
 }

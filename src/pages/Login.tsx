@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
-import { login } from "../services/auth";
+import { login, logout } from "../services/auth";
 import patinhas from "../assets/patterns/patinhas.png";
 
 function Login() {
@@ -13,22 +13,31 @@ function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
 
+
     async function handleLogin(e: React.FormEvent) {
         e.preventDefault();
 
         try {
             setLoading(true);
 
-            await login(email, password);
+            const response = await login(email, password);
+
+            // Esta tela é exclusiva para administradores.
+            if (response.user.papel !== "ADMIN") {
+                await logout();
+                alert("Esta área é restrita a administradores.");
+                return;
+            }
 
             navigate("/admin");
         } catch (err) {
             console.error("Erro ao realizar login:", err);
-            alert("E-mail ou senha inválidos");
+            alert("Não foi possível entrar. Verifique seu e-mail e senha.");
         } finally {
             setLoading(false);
         }
     }
+
 
     return (
         <main className="min-h-screen relative overflow-hidden flex items-center justify-center bg-[#026B6D]">

@@ -1,4 +1,5 @@
-import { supabase } from "./supabase";
+
+import { api } from "./api";
 
 export interface ImpactStats {
   id: string;
@@ -11,17 +12,6 @@ export interface ImpactStats {
   updatedAt: string;
 }
 
-interface ImpactStatsRow {
-  id: string;
-  vaccinated: number;
-  castrations: number;
-  tests: number;
-  sheltered: number;
-  citizens: number;
-  created_at: string;
-  updated_at: string;
-}
-
 export interface UpdateImpactStatsInput {
   vaccinated: number;
   castrations: number;
@@ -30,65 +20,21 @@ export interface UpdateImpactStatsInput {
   citizens: number;
 }
 
-function mapImpactStats(row: ImpactStatsRow): ImpactStats {
-  return {
-    id: row.id,
-    vaccinated: row.vaccinated,
-    castrations: row.castrations,
-    tests: row.tests,
-    sheltered: row.sheltered,
-    citizens: row.citizens,
-    createdAt: row.created_at,
-    updatedAt: row.updated_at,
-  };
-}
-
+// Consulta os indicadores públicos.
 export async function getImpactStats(): Promise<ImpactStats> {
-  const { data, error } = await supabase
-    .from("impact_stats")
-    .select(`
-      id,
-      vaccinated,
-      castrations,
-      tests,
-      sheltered,
-      citizens,
-      created_at,
-      updated_at
-    `)
-    .limit(1)
-    .single();
-
-  if (error) {
-    console.error("Erro ao buscar estatísticas:", error);
-    throw error;
-  }
-
-  return mapImpactStats(data as ImpactStatsRow);
+  const { data } = await api.get<ImpactStats>("/stats");
+  return data;
 }
 
+// Atualiza os indicadores como administrador.
 export async function updateImpactStats(
   id: string,
-  input: UpdateImpactStatsInput
+  input: UpdateImpactStatsInput,
 ): Promise<ImpactStats> {
-  const { data, error } = await supabase
-    .from("impact_stats")
-    .update({
-      vaccinated: input.vaccinated,
-      castrations: input.castrations,
-      tests: input.tests,
-      sheltered: input.sheltered,
-      citizens: input.citizens,
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", id)
-    .select()
-    .single();
+  const { data } = await api.patch<ImpactStats>(
+    `/stats/${id}`,
+    input,
+  );
 
-  if (error) {
-    console.error("Erro ao atualizar estatísticas:", error);
-    throw error;
-  }
-
-  return mapImpactStats(data as ImpactStatsRow);
+  return data;
 }
