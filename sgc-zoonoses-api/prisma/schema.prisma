@@ -19,6 +19,11 @@ enum PapelUsuario {
   TUTOR
 }
 
+enum FinalidadeCodigoVerificacao {
+  VERIFICACAO_EMAIL
+  RECUPERACAO_SENHA
+}
+
 enum StatusCadastroTutor {
   PENDENTE
   APROVADO
@@ -104,19 +109,23 @@ model Organizacao {
 }
 
 model Usuario {
-  id             String       @id @default(uuid()) @db.Uuid
-  organizacaoId  String       @db.Uuid
-  nome           String       @db.VarChar(160)
-  email          String       @db.VarChar(254)
-  senhaHash      String       @db.VarChar(255)
-  papel          PapelUsuario @default(TUTOR)
-  ativo          Boolean      @default(true)
-  ultimoAcessoEm DateTime?    @db.Timestamptz(6)
-  createdAt      DateTime     @default(now()) @db.Timestamptz(6)
-  updatedAt      DateTime     @updatedAt @db.Timestamptz(6)
+  id                String       @id @default(uuid()) @db.Uuid
+  organizacaoId     String       @db.Uuid
+  nome              String       @db.VarChar(160)
+  email             String       @db.VarChar(254)
+  senhaHash         String       @db.VarChar(255)
+  // Preenchido somente após a confirmação do endereço de e-mail.
+  emailVerificadoEm DateTime?    @db.Timestamptz(6)
+  papel             PapelUsuario @default(TUTOR)
+  ativo             Boolean      @default(true)
+  ultimoAcessoEm    DateTime?    @db.Timestamptz(6)
+  createdAt         DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime     @updatedAt @db.Timestamptz(6)
 
   organizacao             Organizacao            @relation(fields: [organizacaoId], references: [id], onDelete: Restrict)
   tutor                   Tutor?
+  codigosVerificacao      CodigoVerificacao[]
+  // Relação mantida temporariamente para preservar o modelo legado de avaliação.
   tutoresAvaliados        Tutor[]                @relation("AvaliadorTutor")
   solicitacoesAnalisadas  Solicitacao[]          @relation("AnalistaSolicitacao")
   historicosSolicitacoes  HistoricoSolicitacao[] @relation("AutorHistoricoSolicitacao")
@@ -128,6 +137,24 @@ model Usuario {
   @@unique([organizacaoId, email])
   @@index([organizacaoId, papel, ativo])
   @@map("usuarios")
+}
+
+model CodigoVerificacao {
+  id           String                      @id @default(uuid()) @db.Uuid
+  usuarioId    String                      @db.Uuid
+  finalidade   FinalidadeCodigoVerificacao
+  codigoHash   String                      @db.VarChar(255)
+  expiraEm     DateTime                    @db.Timestamptz(6)
+  tentativas   Int                         @default(0)
+  utilizadoEm  DateTime?                   @db.Timestamptz(6)
+  invalidadoEm DateTime?                   @db.Timestamptz(6)
+  createdAt    DateTime                    @default(now()) @db.Timestamptz(6)
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, finalidade, createdAt])
+  @@index([expiraEm])
+  @@map("codigos_verificacao")
 }
 
 model Tutor {
@@ -142,6 +169,8 @@ model Tutor {
   bairro         String              @db.VarChar(100)
   cidade         String              @db.VarChar(100)
   cep            String              @db.VarChar(8)
+  // Campos legados: o novo fluxo não dependerá de aprovação administrativa.
+  // Serão removidos em migração futura após confirmar que não há dados históricos necessários.
   statusCadastro StatusCadastroTutor @default(PENDENTE)
   motivoRecusa   String?             @db.VarChar(500)
   avaliadoPorId  String?             @db.Uuid

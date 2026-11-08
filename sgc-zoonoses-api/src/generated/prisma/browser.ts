@@ -28,6 +28,11 @@ export type Organizacao = Prisma.OrganizacaoModel
  */
 export type Usuario = Prisma.UsuarioModel
 /**
+ * Model CodigoVerificacao
+ * 
+ */
+export type CodigoVerificacao = Prisma.CodigoVerificacaoModel
+/**
  * Model Tutor
  * 
  */

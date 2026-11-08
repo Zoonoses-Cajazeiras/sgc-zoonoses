@@ -27,6 +27,14 @@ export const PapelUsuario = {
 export type PapelUsuario = (typeof PapelUsuario)[keyof typeof PapelUsuario]
 
 
+export const FinalidadeCodigoVerificacao = {
+  VERIFICACAO_EMAIL: 'VERIFICACAO_EMAIL',
+  RECUPERACAO_SENHA: 'RECUPERACAO_SENHA'
+} as const
+
+export type FinalidadeCodigoVerificacao = (typeof FinalidadeCodigoVerificacao)[keyof typeof FinalidadeCodigoVerificacao]
+
+
 export const StatusCadastroTutor = {
   PENDENTE: 'PENDENTE',
   APROVADO: 'APROVADO',

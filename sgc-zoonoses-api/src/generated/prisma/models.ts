@@ -10,6 +10,7 @@
  */
 export type * from './models/Organizacao.js'
 export type * from './models/Usuario.js'
+export type * from './models/CodigoVerificacao.js'
 export type * from './models/Tutor.js'
 export type * from './models/Animal.js'
 export type * from './models/Servico.js'

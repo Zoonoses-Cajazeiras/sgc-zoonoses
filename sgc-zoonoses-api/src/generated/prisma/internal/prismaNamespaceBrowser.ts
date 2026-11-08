@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Organizacao: 'Organizacao',
   Usuario: 'Usuario',
+  CodigoVerificacao: 'CodigoVerificacao',
   Tutor: 'Tutor',
   Animal: 'Animal',
   Servico: 'Servico',
@@ -103,6 +104,7 @@ export const UsuarioScalarFieldEnum = {
   nome: 'nome',
   email: 'email',
   senhaHash: 'senhaHash',
+  emailVerificadoEm: 'emailVerificadoEm',
   papel: 'papel',
   ativo: 'ativo',
   ultimoAcessoEm: 'ultimoAcessoEm',
@@ -111,6 +113,21 @@ export const UsuarioScalarFieldEnum = {
 } as const
 
 export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
+
+
+export const CodigoVerificacaoScalarFieldEnum = {
+  id: 'id',
+  usuarioId: 'usuarioId',
+  finalidade: 'finalidade',
+  codigoHash: 'codigoHash',
+  expiraEm: 'expiraEm',
+  tentativas: 'tentativas',
+  utilizadoEm: 'utilizadoEm',
+  invalidadoEm: 'invalidadoEm',
+  createdAt: 'createdAt'
+} as const
+
+export type CodigoVerificacaoScalarFieldEnum = (typeof CodigoVerificacaoScalarFieldEnum)[keyof typeof CodigoVerificacaoScalarFieldEnum]
 
 
 export const TutorScalarFieldEnum = {

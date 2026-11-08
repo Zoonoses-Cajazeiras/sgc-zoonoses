@@ -30,6 +30,7 @@ export type UsuarioMinAggregateOutputType = {
   nome: string | null
   email: string | null
   senhaHash: string | null
+  emailVerificadoEm: Date | null
   papel: $Enums.PapelUsuario | null
   ativo: boolean | null
   ultimoAcessoEm: Date | null
@@ -43,6 +44,7 @@ export type UsuarioMaxAggregateOutputType = {
   nome: string | null
   email: string | null
   senhaHash: string | null
+  emailVerificadoEm: Date | null
   papel: $Enums.PapelUsuario | null
   ativo: boolean | null
   ultimoAcessoEm: Date | null
@@ -56,6 +58,7 @@ export type UsuarioCountAggregateOutputType = {
   nome: number
   email: number
   senhaHash: number
+  emailVerificadoEm: number
   papel: number
   ativo: number
   ultimoAcessoEm: number
@@ -71,6 +74,7 @@ export type UsuarioMinAggregateInputType = {
   nome?: true
   email?: true
   senhaHash?: true
+  emailVerificadoEm?: true
   papel?: true
   ativo?: true
   ultimoAcessoEm?: true
@@ -84,6 +88,7 @@ export type UsuarioMaxAggregateInputType = {
   nome?: true
   email?: true
   senhaHash?: true
+  emailVerificadoEm?: true
   papel?: true
   ativo?: true
   ultimoAcessoEm?: true
@@ -97,6 +102,7 @@ export type UsuarioCountAggregateInputType = {
   nome?: true
   email?: true
   senhaHash?: true
+  emailVerificadoEm?: true
   papel?: true
   ativo?: true
   ultimoAcessoEm?: true
@@ -183,6 +189,7 @@ export type UsuarioGroupByOutputType = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm: Date | null
   papel: $Enums.PapelUsuario
   ativo: boolean
   ultimoAcessoEm: Date | null
@@ -217,6 +224,7 @@ export type UsuarioWhereInput = {
   nome?: Prisma.StringFilter<"Usuario"> | string
   email?: Prisma.StringFilter<"Usuario"> | string
   senhaHash?: Prisma.StringFilter<"Usuario"> | string
+  emailVerificadoEm?: Prisma.DateTimeNullableFilter<"Usuario"> | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFilter<"Usuario"> | $Enums.PapelUsuario
   ativo?: Prisma.BoolFilter<"Usuario"> | boolean
   ultimoAcessoEm?: Prisma.DateTimeNullableFilter<"Usuario"> | Date | string | null
@@ -224,6 +232,7 @@ export type UsuarioWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Usuario"> | Date | string
   organizacao?: Prisma.XOR<Prisma.OrganizacaoScalarRelationFilter, Prisma.OrganizacaoWhereInput>
   tutor?: Prisma.XOR<Prisma.TutorNullableScalarRelationFilter, Prisma.TutorWhereInput> | null
+  codigosVerificacao?: Prisma.CodigoVerificacaoListRelationFilter
   tutoresAvaliados?: Prisma.TutorListRelationFilter
   solicitacoesAnalisadas?: Prisma.SolicitacaoListRelationFilter
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoListRelationFilter
@@ -239,6 +248,7 @@ export type UsuarioOrderByWithRelationInput = {
   nome?: Prisma.SortOrder
   email?: Prisma.SortOrder
   senhaHash?: Prisma.SortOrder
+  emailVerificadoEm?: Prisma.SortOrderInput | Prisma.SortOrder
   papel?: Prisma.SortOrder
   ativo?: Prisma.SortOrder
   ultimoAcessoEm?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -246,6 +256,7 @@ export type UsuarioOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   organizacao?: Prisma.OrganizacaoOrderByWithRelationInput
   tutor?: Prisma.TutorOrderByWithRelationInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoOrderByRelationAggregateInput
   tutoresAvaliados?: Prisma.TutorOrderByRelationAggregateInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoOrderByRelationAggregateInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoOrderByRelationAggregateInput
@@ -265,6 +276,7 @@ export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
   nome?: Prisma.StringFilter<"Usuario"> | string
   email?: Prisma.StringFilter<"Usuario"> | string
   senhaHash?: Prisma.StringFilter<"Usuario"> | string
+  emailVerificadoEm?: Prisma.DateTimeNullableFilter<"Usuario"> | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFilter<"Usuario"> | $Enums.PapelUsuario
   ativo?: Prisma.BoolFilter<"Usuario"> | boolean
   ultimoAcessoEm?: Prisma.DateTimeNullableFilter<"Usuario"> | Date | string | null
@@ -272,6 +284,7 @@ export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Usuario"> | Date | string
   organizacao?: Prisma.XOR<Prisma.OrganizacaoScalarRelationFilter, Prisma.OrganizacaoWhereInput>
   tutor?: Prisma.XOR<Prisma.TutorNullableScalarRelationFilter, Prisma.TutorWhereInput> | null
+  codigosVerificacao?: Prisma.CodigoVerificacaoListRelationFilter
   tutoresAvaliados?: Prisma.TutorListRelationFilter
   solicitacoesAnalisadas?: Prisma.SolicitacaoListRelationFilter
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoListRelationFilter
@@ -287,6 +300,7 @@ export type UsuarioOrderByWithAggregationInput = {
   nome?: Prisma.SortOrder
   email?: Prisma.SortOrder
   senhaHash?: Prisma.SortOrder
+  emailVerificadoEm?: Prisma.SortOrderInput | Prisma.SortOrder
   papel?: Prisma.SortOrder
   ativo?: Prisma.SortOrder
   ultimoAcessoEm?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -306,6 +320,7 @@ export type UsuarioScalarWhereWithAggregatesInput = {
   nome?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
   email?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
   senhaHash?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
+  emailVerificadoEm?: Prisma.DateTimeNullableWithAggregatesFilter<"Usuario"> | Date | string | null
   papel?: Prisma.EnumPapelUsuarioWithAggregatesFilter<"Usuario"> | $Enums.PapelUsuario
   ativo?: Prisma.BoolWithAggregatesFilter<"Usuario"> | boolean
   ultimoAcessoEm?: Prisma.DateTimeNullableWithAggregatesFilter<"Usuario"> | Date | string | null
@@ -318,6 +333,7 @@ export type UsuarioCreateInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
@@ -325,6 +341,7 @@ export type UsuarioCreateInput = {
   updatedAt?: Date | string
   organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
   tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorCreateNestedManyWithoutAvaliadoPorInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoCreateNestedManyWithoutAnalisadoPorInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoCreateNestedManyWithoutAlteradoPorInput
@@ -340,12 +357,14 @@ export type UsuarioUncheckedCreateInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutAnalisadoPorInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedCreateNestedManyWithoutAlteradoPorInput
@@ -360,6 +379,7 @@ export type UsuarioUpdateInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -367,6 +387,7 @@ export type UsuarioUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
   tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUpdateManyWithoutAvaliadoPorNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUpdateManyWithoutAnalisadoPorNestedInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUpdateManyWithoutAlteradoPorNestedInput
@@ -382,12 +403,14 @@ export type UsuarioUncheckedUpdateInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedUpdateManyWithoutAnalisadoPorNestedInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedUpdateManyWithoutAlteradoPorNestedInput
@@ -403,6 +426,7 @@ export type UsuarioCreateManyInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
@@ -415,6 +439,7 @@ export type UsuarioUpdateManyMutationInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -428,6 +453,7 @@ export type UsuarioUncheckedUpdateManyInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -456,6 +482,7 @@ export type UsuarioCountOrderByAggregateInput = {
   nome?: Prisma.SortOrder
   email?: Prisma.SortOrder
   senhaHash?: Prisma.SortOrder
+  emailVerificadoEm?: Prisma.SortOrder
   papel?: Prisma.SortOrder
   ativo?: Prisma.SortOrder
   ultimoAcessoEm?: Prisma.SortOrder
@@ -469,6 +496,7 @@ export type UsuarioMaxOrderByAggregateInput = {
   nome?: Prisma.SortOrder
   email?: Prisma.SortOrder
   senhaHash?: Prisma.SortOrder
+  emailVerificadoEm?: Prisma.SortOrder
   papel?: Prisma.SortOrder
   ativo?: Prisma.SortOrder
   ultimoAcessoEm?: Prisma.SortOrder
@@ -482,6 +510,7 @@ export type UsuarioMinOrderByAggregateInput = {
   nome?: Prisma.SortOrder
   email?: Prisma.SortOrder
   senhaHash?: Prisma.SortOrder
+  emailVerificadoEm?: Prisma.SortOrder
   papel?: Prisma.SortOrder
   ativo?: Prisma.SortOrder
   ultimoAcessoEm?: Prisma.SortOrder
@@ -541,12 +570,26 @@ export type UsuarioUncheckedUpdateManyWithoutOrganizacaoNestedInput = {
   deleteMany?: Prisma.UsuarioScalarWhereInput | Prisma.UsuarioScalarWhereInput[]
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type EnumPapelUsuarioFieldUpdateOperationsInput = {
   set?: $Enums.PapelUsuario
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
+export type UsuarioCreateNestedOneWithoutCodigosVerificacaoInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutCodigosVerificacaoInput, Prisma.UsuarioUncheckedCreateWithoutCodigosVerificacaoInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutCodigosVerificacaoInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+}
+
+export type UsuarioUpdateOneRequiredWithoutCodigosVerificacaoNestedInput = {
+  create?: Prisma.XOR<Prisma.UsuarioCreateWithoutCodigosVerificacaoInput, Prisma.UsuarioUncheckedCreateWithoutCodigosVerificacaoInput>
+  connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutCodigosVerificacaoInput
+  upsert?: Prisma.UsuarioUpsertWithoutCodigosVerificacaoInput
+  connect?: Prisma.UsuarioWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioUpdateToOneWithWhereWithoutCodigosVerificacaoInput, Prisma.UsuarioUpdateWithoutCodigosVerificacaoInput>, Prisma.UsuarioUncheckedUpdateWithoutCodigosVerificacaoInput>
 }
 
 export type UsuarioCreateNestedOneWithoutTutorInput = {
@@ -678,12 +721,14 @@ export type UsuarioCreateWithoutOrganizacaoInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorCreateNestedManyWithoutAvaliadoPorInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoCreateNestedManyWithoutAnalisadoPorInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoCreateNestedManyWithoutAlteradoPorInput
@@ -698,12 +743,14 @@ export type UsuarioUncheckedCreateWithoutOrganizacaoInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutAnalisadoPorInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedCreateNestedManyWithoutAlteradoPorInput
@@ -748,6 +795,7 @@ export type UsuarioScalarWhereInput = {
   nome?: Prisma.StringFilter<"Usuario"> | string
   email?: Prisma.StringFilter<"Usuario"> | string
   senhaHash?: Prisma.StringFilter<"Usuario"> | string
+  emailVerificadoEm?: Prisma.DateTimeNullableFilter<"Usuario"> | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFilter<"Usuario"> | $Enums.PapelUsuario
   ativo?: Prisma.BoolFilter<"Usuario"> | boolean
   ultimoAcessoEm?: Prisma.DateTimeNullableFilter<"Usuario"> | Date | string | null
@@ -755,17 +803,123 @@ export type UsuarioScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Usuario"> | Date | string
 }
 
-export type UsuarioCreateWithoutTutorInput = {
+export type UsuarioCreateWithoutCodigosVerificacaoInput = {
   id?: string
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
+  tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
+  tutoresAvaliados?: Prisma.TutorCreateNestedManyWithoutAvaliadoPorInput
+  solicitacoesAnalisadas?: Prisma.SolicitacaoCreateNestedManyWithoutAnalisadoPorInput
+  historicosSolicitacoes?: Prisma.HistoricoSolicitacaoCreateNestedManyWithoutAlteradoPorInput
+  historicosOcorrencias?: Prisma.HistoricoOcorrenciaCreateNestedManyWithoutAlteradoPorInput
+  agendamentosResponsavel?: Prisma.AgendamentoCreateNestedManyWithoutResponsavelUsuarioInput
+  agendamentosCriados?: Prisma.AgendamentoCreateNestedManyWithoutCriadoPorInput
+  campanhasCriadas?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
+}
+
+export type UsuarioUncheckedCreateWithoutCodigosVerificacaoInput = {
+  id?: string
+  organizacaoId: string
+  nome: string
+  email: string
+  senhaHash: string
+  emailVerificadoEm?: Date | string | null
+  papel?: $Enums.PapelUsuario
+  ativo?: boolean
+  ultimoAcessoEm?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
+  tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
+  solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutAnalisadoPorInput
+  historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedCreateNestedManyWithoutAlteradoPorInput
+  historicosOcorrencias?: Prisma.HistoricoOcorrenciaUncheckedCreateNestedManyWithoutAlteradoPorInput
+  agendamentosResponsavel?: Prisma.AgendamentoUncheckedCreateNestedManyWithoutResponsavelUsuarioInput
+  agendamentosCriados?: Prisma.AgendamentoUncheckedCreateNestedManyWithoutCriadoPorInput
+  campanhasCriadas?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UsuarioCreateOrConnectWithoutCodigosVerificacaoInput = {
+  where: Prisma.UsuarioWhereUniqueInput
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutCodigosVerificacaoInput, Prisma.UsuarioUncheckedCreateWithoutCodigosVerificacaoInput>
+}
+
+export type UsuarioUpsertWithoutCodigosVerificacaoInput = {
+  update: Prisma.XOR<Prisma.UsuarioUpdateWithoutCodigosVerificacaoInput, Prisma.UsuarioUncheckedUpdateWithoutCodigosVerificacaoInput>
+  create: Prisma.XOR<Prisma.UsuarioCreateWithoutCodigosVerificacaoInput, Prisma.UsuarioUncheckedCreateWithoutCodigosVerificacaoInput>
+  where?: Prisma.UsuarioWhereInput
+}
+
+export type UsuarioUpdateToOneWithWhereWithoutCodigosVerificacaoInput = {
+  where?: Prisma.UsuarioWhereInput
+  data: Prisma.XOR<Prisma.UsuarioUpdateWithoutCodigosVerificacaoInput, Prisma.UsuarioUncheckedUpdateWithoutCodigosVerificacaoInput>
+}
+
+export type UsuarioUpdateWithoutCodigosVerificacaoInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
+  ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
+  tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
+  tutoresAvaliados?: Prisma.TutorUpdateManyWithoutAvaliadoPorNestedInput
+  solicitacoesAnalisadas?: Prisma.SolicitacaoUpdateManyWithoutAnalisadoPorNestedInput
+  historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUpdateManyWithoutAlteradoPorNestedInput
+  historicosOcorrencias?: Prisma.HistoricoOcorrenciaUpdateManyWithoutAlteradoPorNestedInput
+  agendamentosResponsavel?: Prisma.AgendamentoUpdateManyWithoutResponsavelUsuarioNestedInput
+  agendamentosCriados?: Prisma.AgendamentoUpdateManyWithoutCriadoPorNestedInput
+  campanhasCriadas?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UsuarioUncheckedUpdateWithoutCodigosVerificacaoInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizacaoId?: Prisma.StringFieldUpdateOperationsInput | string
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
+  ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
+  tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
+  solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedUpdateManyWithoutAnalisadoPorNestedInput
+  historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedUpdateManyWithoutAlteradoPorNestedInput
+  historicosOcorrencias?: Prisma.HistoricoOcorrenciaUncheckedUpdateManyWithoutAlteradoPorNestedInput
+  agendamentosResponsavel?: Prisma.AgendamentoUncheckedUpdateManyWithoutResponsavelUsuarioNestedInput
+  agendamentosCriados?: Prisma.AgendamentoUncheckedUpdateManyWithoutCriadoPorNestedInput
+  campanhasCriadas?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UsuarioCreateWithoutTutorInput = {
+  id?: string
+  nome: string
+  email: string
+  senhaHash: string
+  emailVerificadoEm?: Date | string | null
+  papel?: $Enums.PapelUsuario
+  ativo?: boolean
+  ultimoAcessoEm?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorCreateNestedManyWithoutAvaliadoPorInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoCreateNestedManyWithoutAnalisadoPorInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoCreateNestedManyWithoutAlteradoPorInput
@@ -781,11 +935,13 @@ export type UsuarioUncheckedCreateWithoutTutorInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutAnalisadoPorInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedCreateNestedManyWithoutAlteradoPorInput
@@ -805,6 +961,7 @@ export type UsuarioCreateWithoutTutoresAvaliadosInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
@@ -812,6 +969,7 @@ export type UsuarioCreateWithoutTutoresAvaliadosInput = {
   updatedAt?: Date | string
   organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
   tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoCreateNestedManyWithoutAnalisadoPorInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoCreateNestedManyWithoutAlteradoPorInput
   historicosOcorrencias?: Prisma.HistoricoOcorrenciaCreateNestedManyWithoutAlteradoPorInput
@@ -826,12 +984,14 @@ export type UsuarioUncheckedCreateWithoutTutoresAvaliadosInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutAnalisadoPorInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedCreateNestedManyWithoutAlteradoPorInput
   historicosOcorrencias?: Prisma.HistoricoOcorrenciaUncheckedCreateNestedManyWithoutAlteradoPorInput
@@ -861,12 +1021,14 @@ export type UsuarioUpdateWithoutTutorInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUpdateManyWithoutAvaliadoPorNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUpdateManyWithoutAnalisadoPorNestedInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUpdateManyWithoutAlteradoPorNestedInput
@@ -882,11 +1044,13 @@ export type UsuarioUncheckedUpdateWithoutTutorInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedUpdateManyWithoutAnalisadoPorNestedInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedUpdateManyWithoutAlteradoPorNestedInput
@@ -912,6 +1076,7 @@ export type UsuarioUpdateWithoutTutoresAvaliadosInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -919,6 +1084,7 @@ export type UsuarioUpdateWithoutTutoresAvaliadosInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
   tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUpdateManyWithoutAnalisadoPorNestedInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUpdateManyWithoutAlteradoPorNestedInput
   historicosOcorrencias?: Prisma.HistoricoOcorrenciaUpdateManyWithoutAlteradoPorNestedInput
@@ -933,12 +1099,14 @@ export type UsuarioUncheckedUpdateWithoutTutoresAvaliadosInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedUpdateManyWithoutAnalisadoPorNestedInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedUpdateManyWithoutAlteradoPorNestedInput
   historicosOcorrencias?: Prisma.HistoricoOcorrenciaUncheckedUpdateManyWithoutAlteradoPorNestedInput
@@ -952,6 +1120,7 @@ export type UsuarioCreateWithoutSolicitacoesAnalisadasInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
@@ -959,6 +1128,7 @@ export type UsuarioCreateWithoutSolicitacoesAnalisadasInput = {
   updatedAt?: Date | string
   organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
   tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorCreateNestedManyWithoutAvaliadoPorInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoCreateNestedManyWithoutAlteradoPorInput
   historicosOcorrencias?: Prisma.HistoricoOcorrenciaCreateNestedManyWithoutAlteradoPorInput
@@ -973,12 +1143,14 @@ export type UsuarioUncheckedCreateWithoutSolicitacoesAnalisadasInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedCreateNestedManyWithoutAlteradoPorInput
   historicosOcorrencias?: Prisma.HistoricoOcorrenciaUncheckedCreateNestedManyWithoutAlteradoPorInput
@@ -1008,6 +1180,7 @@ export type UsuarioUpdateWithoutSolicitacoesAnalisadasInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1015,6 +1188,7 @@ export type UsuarioUpdateWithoutSolicitacoesAnalisadasInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
   tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUpdateManyWithoutAvaliadoPorNestedInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUpdateManyWithoutAlteradoPorNestedInput
   historicosOcorrencias?: Prisma.HistoricoOcorrenciaUpdateManyWithoutAlteradoPorNestedInput
@@ -1029,12 +1203,14 @@ export type UsuarioUncheckedUpdateWithoutSolicitacoesAnalisadasInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedUpdateManyWithoutAlteradoPorNestedInput
   historicosOcorrencias?: Prisma.HistoricoOcorrenciaUncheckedUpdateManyWithoutAlteradoPorNestedInput
@@ -1048,6 +1224,7 @@ export type UsuarioCreateWithoutHistoricosSolicitacoesInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
@@ -1055,6 +1232,7 @@ export type UsuarioCreateWithoutHistoricosSolicitacoesInput = {
   updatedAt?: Date | string
   organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
   tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorCreateNestedManyWithoutAvaliadoPorInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoCreateNestedManyWithoutAnalisadoPorInput
   historicosOcorrencias?: Prisma.HistoricoOcorrenciaCreateNestedManyWithoutAlteradoPorInput
@@ -1069,12 +1247,14 @@ export type UsuarioUncheckedCreateWithoutHistoricosSolicitacoesInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutAnalisadoPorInput
   historicosOcorrencias?: Prisma.HistoricoOcorrenciaUncheckedCreateNestedManyWithoutAlteradoPorInput
@@ -1104,6 +1284,7 @@ export type UsuarioUpdateWithoutHistoricosSolicitacoesInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1111,6 +1292,7 @@ export type UsuarioUpdateWithoutHistoricosSolicitacoesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
   tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUpdateManyWithoutAvaliadoPorNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUpdateManyWithoutAnalisadoPorNestedInput
   historicosOcorrencias?: Prisma.HistoricoOcorrenciaUpdateManyWithoutAlteradoPorNestedInput
@@ -1125,12 +1307,14 @@ export type UsuarioUncheckedUpdateWithoutHistoricosSolicitacoesInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedUpdateManyWithoutAnalisadoPorNestedInput
   historicosOcorrencias?: Prisma.HistoricoOcorrenciaUncheckedUpdateManyWithoutAlteradoPorNestedInput
@@ -1144,6 +1328,7 @@ export type UsuarioCreateWithoutHistoricosOcorrenciasInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
@@ -1151,6 +1336,7 @@ export type UsuarioCreateWithoutHistoricosOcorrenciasInput = {
   updatedAt?: Date | string
   organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
   tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorCreateNestedManyWithoutAvaliadoPorInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoCreateNestedManyWithoutAnalisadoPorInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoCreateNestedManyWithoutAlteradoPorInput
@@ -1165,12 +1351,14 @@ export type UsuarioUncheckedCreateWithoutHistoricosOcorrenciasInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutAnalisadoPorInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedCreateNestedManyWithoutAlteradoPorInput
@@ -1200,6 +1388,7 @@ export type UsuarioUpdateWithoutHistoricosOcorrenciasInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1207,6 +1396,7 @@ export type UsuarioUpdateWithoutHistoricosOcorrenciasInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
   tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUpdateManyWithoutAvaliadoPorNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUpdateManyWithoutAnalisadoPorNestedInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUpdateManyWithoutAlteradoPorNestedInput
@@ -1221,12 +1411,14 @@ export type UsuarioUncheckedUpdateWithoutHistoricosOcorrenciasInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedUpdateManyWithoutAnalisadoPorNestedInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedUpdateManyWithoutAlteradoPorNestedInput
@@ -1240,6 +1432,7 @@ export type UsuarioCreateWithoutAgendamentosResponsavelInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
@@ -1247,6 +1440,7 @@ export type UsuarioCreateWithoutAgendamentosResponsavelInput = {
   updatedAt?: Date | string
   organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
   tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorCreateNestedManyWithoutAvaliadoPorInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoCreateNestedManyWithoutAnalisadoPorInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoCreateNestedManyWithoutAlteradoPorInput
@@ -1261,12 +1455,14 @@ export type UsuarioUncheckedCreateWithoutAgendamentosResponsavelInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutAnalisadoPorInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedCreateNestedManyWithoutAlteradoPorInput
@@ -1285,6 +1481,7 @@ export type UsuarioCreateWithoutAgendamentosCriadosInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
@@ -1292,6 +1489,7 @@ export type UsuarioCreateWithoutAgendamentosCriadosInput = {
   updatedAt?: Date | string
   organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
   tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorCreateNestedManyWithoutAvaliadoPorInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoCreateNestedManyWithoutAnalisadoPorInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoCreateNestedManyWithoutAlteradoPorInput
@@ -1306,12 +1504,14 @@ export type UsuarioUncheckedCreateWithoutAgendamentosCriadosInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutAnalisadoPorInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedCreateNestedManyWithoutAlteradoPorInput
@@ -1341,6 +1541,7 @@ export type UsuarioUpdateWithoutAgendamentosResponsavelInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1348,6 +1549,7 @@ export type UsuarioUpdateWithoutAgendamentosResponsavelInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
   tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUpdateManyWithoutAvaliadoPorNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUpdateManyWithoutAnalisadoPorNestedInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUpdateManyWithoutAlteradoPorNestedInput
@@ -1362,12 +1564,14 @@ export type UsuarioUncheckedUpdateWithoutAgendamentosResponsavelInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedUpdateManyWithoutAnalisadoPorNestedInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedUpdateManyWithoutAlteradoPorNestedInput
@@ -1392,6 +1596,7 @@ export type UsuarioUpdateWithoutAgendamentosCriadosInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1399,6 +1604,7 @@ export type UsuarioUpdateWithoutAgendamentosCriadosInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
   tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUpdateManyWithoutAvaliadoPorNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUpdateManyWithoutAnalisadoPorNestedInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUpdateManyWithoutAlteradoPorNestedInput
@@ -1413,12 +1619,14 @@ export type UsuarioUncheckedUpdateWithoutAgendamentosCriadosInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedUpdateManyWithoutAnalisadoPorNestedInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedUpdateManyWithoutAlteradoPorNestedInput
@@ -1432,6 +1640,7 @@ export type UsuarioCreateWithoutCampanhasCriadasInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
@@ -1439,6 +1648,7 @@ export type UsuarioCreateWithoutCampanhasCriadasInput = {
   updatedAt?: Date | string
   organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
   tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorCreateNestedManyWithoutAvaliadoPorInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoCreateNestedManyWithoutAnalisadoPorInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoCreateNestedManyWithoutAlteradoPorInput
@@ -1453,12 +1663,14 @@ export type UsuarioUncheckedCreateWithoutCampanhasCriadasInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutAnalisadoPorInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedCreateNestedManyWithoutAlteradoPorInput
@@ -1488,6 +1700,7 @@ export type UsuarioUpdateWithoutCampanhasCriadasInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1495,6 +1708,7 @@ export type UsuarioUpdateWithoutCampanhasCriadasInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
   tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUpdateManyWithoutAvaliadoPorNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUpdateManyWithoutAnalisadoPorNestedInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUpdateManyWithoutAlteradoPorNestedInput
@@ -1509,12 +1723,14 @@ export type UsuarioUncheckedUpdateWithoutCampanhasCriadasInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedUpdateManyWithoutAnalisadoPorNestedInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedUpdateManyWithoutAlteradoPorNestedInput
@@ -1528,6 +1744,7 @@ export type UsuarioCreateManyOrganizacaoInput = {
   nome: string
   email: string
   senhaHash: string
+  emailVerificadoEm?: Date | string | null
   papel?: $Enums.PapelUsuario
   ativo?: boolean
   ultimoAcessoEm?: Date | string | null
@@ -1540,12 +1757,14 @@ export type UsuarioUpdateWithoutOrganizacaoInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUpdateManyWithoutAvaliadoPorNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUpdateManyWithoutAnalisadoPorNestedInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUpdateManyWithoutAlteradoPorNestedInput
@@ -1560,12 +1779,14 @@ export type UsuarioUncheckedUpdateWithoutOrganizacaoInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
+  codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedUpdateManyWithoutAnalisadoPorNestedInput
   historicosSolicitacoes?: Prisma.HistoricoSolicitacaoUncheckedUpdateManyWithoutAlteradoPorNestedInput
@@ -1580,6 +1801,7 @@ export type UsuarioUncheckedUpdateManyWithoutOrganizacaoInput = {
   nome?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senhaHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificadoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   papel?: Prisma.EnumPapelUsuarioFieldUpdateOperationsInput | $Enums.PapelUsuario
   ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1593,6 +1815,7 @@ export type UsuarioUncheckedUpdateManyWithoutOrganizacaoInput = {
  */
 
 export type UsuarioCountOutputType = {
+  codigosVerificacao: number
   tutoresAvaliados: number
   solicitacoesAnalisadas: number
   historicosSolicitacoes: number
@@ -1603,6 +1826,7 @@ export type UsuarioCountOutputType = {
 }
 
 export type UsuarioCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  codigosVerificacao?: boolean | UsuarioCountOutputTypeCountCodigosVerificacaoArgs
   tutoresAvaliados?: boolean | UsuarioCountOutputTypeCountTutoresAvaliadosArgs
   solicitacoesAnalisadas?: boolean | UsuarioCountOutputTypeCountSolicitacoesAnalisadasArgs
   historicosSolicitacoes?: boolean | UsuarioCountOutputTypeCountHistoricosSolicitacoesArgs
@@ -1620,6 +1844,13 @@ export type UsuarioCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
    * Select specific fields to fetch from the UsuarioCountOutputType
    */
   select?: Prisma.UsuarioCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UsuarioCountOutputType without action
+ */
+export type UsuarioCountOutputTypeCountCodigosVerificacaoArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CodigoVerificacaoWhereInput
 }
 
 /**
@@ -1678,6 +1909,7 @@ export type UsuarioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   nome?: boolean
   email?: boolean
   senhaHash?: boolean
+  emailVerificadoEm?: boolean
   papel?: boolean
   ativo?: boolean
   ultimoAcessoEm?: boolean
@@ -1685,6 +1917,7 @@ export type UsuarioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   updatedAt?: boolean
   organizacao?: boolean | Prisma.OrganizacaoDefaultArgs<ExtArgs>
   tutor?: boolean | Prisma.Usuario$tutorArgs<ExtArgs>
+  codigosVerificacao?: boolean | Prisma.Usuario$codigosVerificacaoArgs<ExtArgs>
   tutoresAvaliados?: boolean | Prisma.Usuario$tutoresAvaliadosArgs<ExtArgs>
   solicitacoesAnalisadas?: boolean | Prisma.Usuario$solicitacoesAnalisadasArgs<ExtArgs>
   historicosSolicitacoes?: boolean | Prisma.Usuario$historicosSolicitacoesArgs<ExtArgs>
@@ -1701,6 +1934,7 @@ export type UsuarioSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   nome?: boolean
   email?: boolean
   senhaHash?: boolean
+  emailVerificadoEm?: boolean
   papel?: boolean
   ativo?: boolean
   ultimoAcessoEm?: boolean
@@ -1715,6 +1949,7 @@ export type UsuarioSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   nome?: boolean
   email?: boolean
   senhaHash?: boolean
+  emailVerificadoEm?: boolean
   papel?: boolean
   ativo?: boolean
   ultimoAcessoEm?: boolean
@@ -1729,6 +1964,7 @@ export type UsuarioSelectScalar = {
   nome?: boolean
   email?: boolean
   senhaHash?: boolean
+  emailVerificadoEm?: boolean
   papel?: boolean
   ativo?: boolean
   ultimoAcessoEm?: boolean
@@ -1736,10 +1972,11 @@ export type UsuarioSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UsuarioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizacaoId" | "nome" | "email" | "senhaHash" | "papel" | "ativo" | "ultimoAcessoEm" | "createdAt" | "updatedAt", ExtArgs["result"]["usuario"]>
+export type UsuarioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizacaoId" | "nome" | "email" | "senhaHash" | "emailVerificadoEm" | "papel" | "ativo" | "ultimoAcessoEm" | "createdAt" | "updatedAt", ExtArgs["result"]["usuario"]>
 export type UsuarioInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organizacao?: boolean | Prisma.OrganizacaoDefaultArgs<ExtArgs>
   tutor?: boolean | Prisma.Usuario$tutorArgs<ExtArgs>
+  codigosVerificacao?: boolean | Prisma.Usuario$codigosVerificacaoArgs<ExtArgs>
   tutoresAvaliados?: boolean | Prisma.Usuario$tutoresAvaliadosArgs<ExtArgs>
   solicitacoesAnalisadas?: boolean | Prisma.Usuario$solicitacoesAnalisadasArgs<ExtArgs>
   historicosSolicitacoes?: boolean | Prisma.Usuario$historicosSolicitacoesArgs<ExtArgs>
@@ -1761,6 +1998,7 @@ export type $UsuarioPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     organizacao: Prisma.$OrganizacaoPayload<ExtArgs>
     tutor: Prisma.$TutorPayload<ExtArgs> | null
+    codigosVerificacao: Prisma.$CodigoVerificacaoPayload<ExtArgs>[]
     tutoresAvaliados: Prisma.$TutorPayload<ExtArgs>[]
     solicitacoesAnalisadas: Prisma.$SolicitacaoPayload<ExtArgs>[]
     historicosSolicitacoes: Prisma.$HistoricoSolicitacaoPayload<ExtArgs>[]
@@ -1775,6 +2013,7 @@ export type $UsuarioPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     nome: string
     email: string
     senhaHash: string
+    emailVerificadoEm: Date | null
     papel: $Enums.PapelUsuario
     ativo: boolean
     ultimoAcessoEm: Date | null
@@ -2176,6 +2415,7 @@ export interface Prisma__UsuarioClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   organizacao<T extends Prisma.OrganizacaoDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizacaoDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizacaoClient<runtime.Types.Result.GetResult<Prisma.$OrganizacaoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   tutor<T extends Prisma.Usuario$tutorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$tutorArgs<ExtArgs>>): Prisma.Prisma__TutorClient<runtime.Types.Result.GetResult<Prisma.$TutorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  codigosVerificacao<T extends Prisma.Usuario$codigosVerificacaoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$codigosVerificacaoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CodigoVerificacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tutoresAvaliados<T extends Prisma.Usuario$tutoresAvaliadosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$tutoresAvaliadosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TutorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   solicitacoesAnalisadas<T extends Prisma.Usuario$solicitacoesAnalisadasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$solicitacoesAnalisadasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SolicitacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   historicosSolicitacoes<T extends Prisma.Usuario$historicosSolicitacoesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Usuario$historicosSolicitacoesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HistoricoSolicitacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2217,6 +2457,7 @@ export interface UsuarioFieldRefs {
   readonly nome: Prisma.FieldRef<"Usuario", 'String'>
   readonly email: Prisma.FieldRef<"Usuario", 'String'>
   readonly senhaHash: Prisma.FieldRef<"Usuario", 'String'>
+  readonly emailVerificadoEm: Prisma.FieldRef<"Usuario", 'DateTime'>
   readonly papel: Prisma.FieldRef<"Usuario", 'PapelUsuario'>
   readonly ativo: Prisma.FieldRef<"Usuario", 'Boolean'>
   readonly ultimoAcessoEm: Prisma.FieldRef<"Usuario", 'DateTime'>
@@ -2639,6 +2880,30 @@ export type Usuario$tutorArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   include?: Prisma.TutorInclude<ExtArgs> | null
   where?: Prisma.TutorWhereInput
+}
+
+/**
+ * Usuario.codigosVerificacao
+ */
+export type Usuario$codigosVerificacaoArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CodigoVerificacao
+   */
+  select?: Prisma.CodigoVerificacaoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CodigoVerificacao
+   */
+  omit?: Prisma.CodigoVerificacaoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CodigoVerificacaoInclude<ExtArgs> | null
+  where?: Prisma.CodigoVerificacaoWhereInput
+  orderBy?: Prisma.CodigoVerificacaoOrderByWithRelationInput | Prisma.CodigoVerificacaoOrderByWithRelationInput[]
+  cursor?: Prisma.CodigoVerificacaoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CodigoVerificacaoScalarFieldEnum | Prisma.CodigoVerificacaoScalarFieldEnum[]
 }
 
 /**

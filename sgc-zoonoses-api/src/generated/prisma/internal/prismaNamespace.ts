@@ -399,6 +399,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   Organizacao: 'Organizacao',
   Usuario: 'Usuario',
+  CodigoVerificacao: 'CodigoVerificacao',
   Tutor: 'Tutor',
   Animal: 'Animal',
   Servico: 'Servico',
@@ -427,7 +428,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "organizacao" | "usuario" | "tutor" | "animal" | "servico" | "solicitacao" | "historicoSolicitacao" | "tipoOcorrencia" | "ocorrencia" | "historicoOcorrencia" | "equipe" | "recurso" | "agendamento" | "campaign" | "impactStats"
+    modelProps: "organizacao" | "usuario" | "codigoVerificacao" | "tutor" | "animal" | "servico" | "solicitacao" | "historicoSolicitacao" | "tipoOcorrencia" | "ocorrencia" | "historicoOcorrencia" | "equipe" | "recurso" | "agendamento" | "campaign" | "impactStats"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -576,6 +577,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UsuarioCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UsuarioCountAggregateOutputType> | number
+        }
+      }
+    }
+    CodigoVerificacao: {
+      payload: Prisma.$CodigoVerificacaoPayload<ExtArgs>
+      fields: Prisma.CodigoVerificacaoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CodigoVerificacaoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodigoVerificacaoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CodigoVerificacaoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodigoVerificacaoPayload>
+        }
+        findFirst: {
+          args: Prisma.CodigoVerificacaoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodigoVerificacaoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CodigoVerificacaoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodigoVerificacaoPayload>
+        }
+        findMany: {
+          args: Prisma.CodigoVerificacaoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodigoVerificacaoPayload>[]
+        }
+        create: {
+          args: Prisma.CodigoVerificacaoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodigoVerificacaoPayload>
+        }
+        createMany: {
+          args: Prisma.CodigoVerificacaoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CodigoVerificacaoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodigoVerificacaoPayload>[]
+        }
+        delete: {
+          args: Prisma.CodigoVerificacaoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodigoVerificacaoPayload>
+        }
+        update: {
+          args: Prisma.CodigoVerificacaoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodigoVerificacaoPayload>
+        }
+        deleteMany: {
+          args: Prisma.CodigoVerificacaoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CodigoVerificacaoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CodigoVerificacaoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodigoVerificacaoPayload>[]
+        }
+        upsert: {
+          args: Prisma.CodigoVerificacaoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CodigoVerificacaoPayload>
+        }
+        aggregate: {
+          args: Prisma.CodigoVerificacaoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCodigoVerificacao>
+        }
+        groupBy: {
+          args: Prisma.CodigoVerificacaoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CodigoVerificacaoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CodigoVerificacaoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CodigoVerificacaoCountAggregateOutputType> | number
         }
       }
     }
@@ -1599,6 +1674,7 @@ export const UsuarioScalarFieldEnum = {
   nome: 'nome',
   email: 'email',
   senhaHash: 'senhaHash',
+  emailVerificadoEm: 'emailVerificadoEm',
   papel: 'papel',
   ativo: 'ativo',
   ultimoAcessoEm: 'ultimoAcessoEm',
@@ -1607,6 +1683,21 @@ export const UsuarioScalarFieldEnum = {
 } as const
 
 export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
+
+
+export const CodigoVerificacaoScalarFieldEnum = {
+  id: 'id',
+  usuarioId: 'usuarioId',
+  finalidade: 'finalidade',
+  codigoHash: 'codigoHash',
+  expiraEm: 'expiraEm',
+  tentativas: 'tentativas',
+  utilizadoEm: 'utilizadoEm',
+  invalidadoEm: 'invalidadoEm',
+  createdAt: 'createdAt'
+} as const
+
+export type CodigoVerificacaoScalarFieldEnum = (typeof CodigoVerificacaoScalarFieldEnum)[keyof typeof CodigoVerificacaoScalarFieldEnum]
 
 
 export const TutorScalarFieldEnum = {
@@ -1920,6 +2011,34 @@ export type ListEnumPapelUsuarioFieldRefInput<$PrismaModel> = FieldRefInputType<
 
 
 /**
+ * Reference to a field of type 'FinalidadeCodigoVerificacao'
+ */
+export type EnumFinalidadeCodigoVerificacaoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinalidadeCodigoVerificacao'>
+    
+
+
+/**
+ * Reference to a field of type 'FinalidadeCodigoVerificacao[]'
+ */
+export type ListEnumFinalidadeCodigoVerificacaoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FinalidadeCodigoVerificacao[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
  * Reference to a field of type 'StatusCadastroTutor'
  */
 export type EnumStatusCadastroTutorFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatusCadastroTutor'>
@@ -1972,20 +2091,6 @@ export type EnumPorteAnimalFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
  * Reference to a field of type 'PorteAnimal[]'
  */
 export type ListEnumPorteAnimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PorteAnimal[]'>
-    
-
-
-/**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -2211,6 +2316,7 @@ export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaC
 export type GlobalOmitConfig = {
   organizacao?: Prisma.OrganizacaoOmit
   usuario?: Prisma.UsuarioOmit
+  codigoVerificacao?: Prisma.CodigoVerificacaoOmit
   tutor?: Prisma.TutorOmit
   animal?: Prisma.AnimalOmit
   servico?: Prisma.ServicoOmit

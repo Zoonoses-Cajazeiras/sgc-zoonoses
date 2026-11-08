@@ -16,6 +16,42 @@ interface LoginResponse {
   user: AuthUser;
 }
 
+export interface RegisterTutorData {
+  nome: string;
+  email: string;
+  password: string;
+  cpf: string;
+  telefone: string;
+  endereco: string;
+  numero: string;
+  bairro: string;
+  cidade: string;
+  cep: string;
+  dataNascimento: string;
+}
+
+export interface RegisterTutorResponse {
+  message: string;
+  email: string;
+  codigoTeste?: string;
+}
+
+export async function registerTutor(
+  tutorData: RegisterTutorData,
+): Promise<RegisterTutorResponse> {
+  const { data } = await api.post<RegisterTutorResponse>(
+    "/auth/register",
+    {
+      ...tutorData,
+      email: tutorData.email.trim().toLowerCase(),
+      cpf: tutorData.cpf.replace(/\D/g, ""),
+      cep: tutorData.cep.replace(/\D/g, ""),
+    },
+  );
+
+  return data;
+}
+
 export async function login(
   email: string,
   password: string,
@@ -25,15 +61,12 @@ export async function login(
     password,
   });
 
-  // Guarda o token retornado pelo backend.
   setToken(data.accessToken);
 
   return data;
 }
 
 export async function logout(): Promise<void> {
-  // O backend ainda não possui uma rota de logout.
-  // Removemos o token local para encerrar o acesso nesta sessão.
   removeTokens();
 }
 
@@ -45,7 +78,6 @@ export async function getSession() {
   }
 
   try {
-    // Confirma que o token continua válido no backend.
     const { data: user } = await api.get<AuthUser>("/auth/me");
 
     return {
@@ -54,7 +86,6 @@ export async function getSession() {
       user,
     };
   } catch {
-    // Se o token expirou ou não é mais válido, remove-o.
     removeTokens();
     return null;
   }

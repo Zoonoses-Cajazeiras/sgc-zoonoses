@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
@@ -13,7 +14,6 @@ function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
 
-
     async function handleLogin(e: React.FormEvent) {
         e.preventDefault();
 
@@ -22,14 +22,19 @@ function Login() {
 
             const response = await login(email, password);
 
-            // Esta tela é exclusiva para administradores.
-            if (response.user.papel !== "ADMIN") {
-                await logout();
-                alert("Esta área é restrita a administradores.");
+            if (response.user.papel === "ADMIN") {
+                navigate("/admin");
                 return;
             }
 
-            navigate("/admin");
+            if (response.user.papel === "TUTOR") {
+                navigate("/perfil");
+                return;
+            }
+
+            await logout();
+            alert("Tipo de usuário não autorizado.");
+
         } catch (err) {
             console.error("Erro ao realizar login:", err);
             alert("Não foi possível entrar. Verifique seu e-mail e senha.");
@@ -37,7 +42,6 @@ function Login() {
             setLoading(false);
         }
     }
-
 
     return (
         <main className="min-h-screen relative overflow-hidden flex items-center justify-center bg-[#026B6D]">
@@ -64,24 +68,16 @@ function Login() {
                     </h1>
 
                     <p className="text-white/80 text-sm mt-2 mb-8 text-center">
-                        Área restrita aos servidores autorizados.
+                        Acesse sua conta para continuar.
                     </p>
 
                     {/* Email */}
                     <div
                         className="
-                            w-full
-                            h-12
-                            bg-white
-                            rounded-full
-                            border-2
-                            border-transparent
-                            flex
-                            items-center
-                            transition-all
-                            duration-300
-                            focus-within:border-white
-                            focus-within:shadow-lg
+                            w-full h-12 bg-white rounded-full
+                            border-2 border-transparent flex items-center
+                            transition-all duration-300
+                            focus-within:border-white focus-within:shadow-lg
                         "
                     >
                         <input
@@ -90,12 +86,8 @@ function Login() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             className="
-                                w-full
-                                bg-transparent
-                                px-5
-                                text-gray-700
-                                placeholder:text-gray-500
-                                outline-none
+                                w-full bg-transparent px-5 text-gray-700
+                                placeholder:text-gray-500 outline-none
                             "
                         />
                     </div>
@@ -103,19 +95,10 @@ function Login() {
                     {/* Senha */}
                     <div
                         className="
-                            w-full
-                            h-12
-                            mt-5
-                            bg-white
-                            rounded-full
-                            border-2
-                            border-transparent
-                            flex
-                            items-center
-                            transition-all
-                            duration-300
-                            focus-within:border-white
-                            focus-within:shadow-lg
+                            w-full h-12 mt-5 bg-white rounded-full
+                            border-2 border-transparent flex items-center
+                            transition-all duration-300
+                            focus-within:border-white focus-within:shadow-lg
                         "
                     >
                         <input
@@ -124,12 +107,8 @@ function Login() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             className="
-                                flex-1
-                                bg-transparent
-                                pl-5
-                                text-gray-700
-                                placeholder:text-gray-500
-                                outline-none
+                                flex-1 bg-transparent pl-5 text-gray-700
+                                placeholder:text-gray-500 outline-none
                             "
                         />
 
@@ -137,11 +116,8 @@ function Login() {
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
                             className="
-                                pr-5
-                                text-gray-500
-                                hover:text-[#026B6D]
-                                transition-colors
-                                duration-300
+                                pr-5 text-gray-500 hover:text-[#026B6D]
+                                transition-colors duration-300
                             "
                         >
                             {showPassword ? (
@@ -157,38 +133,31 @@ function Login() {
                         type="submit"
                         disabled={loading}
                         className="
-                            mt-8
-                            w-36
-                            h-11
-                            rounded-full
-                            bg-white
-                            text-[#026B6D]
-                            font-bold
-                            cursor-pointer
-                            transition-all
-                            duration-300
-                            hover:-translate-y-1
-                            hover:scale-105
-                            hover:shadow-xl
-                            disabled:opacity-60
-                            disabled:cursor-not-allowed
-                            disabled:hover:translate-y-0
-                            disabled:hover:scale-100
+                            mt-8 w-36 h-11 rounded-full bg-white
+                            text-[#026B6D] font-bold cursor-pointer
+                            transition-all duration-300
+                            hover:-translate-y-1 hover:scale-105 hover:shadow-xl
+                            disabled:opacity-60 disabled:cursor-not-allowed
+                            disabled:hover:translate-y-0 disabled:hover:scale-100
                         "
                     >
                         {loading ? "Entrando..." : "Entrar"}
                     </button>
 
-                    {/* Voltar */}
+                    {/* Cadastro */}
+                    <p className="mt-6 text-sm text-white text-center">
+                        Ainda não tem uma conta?{" "}
+                        <Link
+                            to="/cadastro"
+                            className="font-bold hover:underline"
+                        >
+                            Cadastre-se
+                        </Link>
+                    </p>
+
                     <Link
                         to="/"
-                        className="
-                            mt-6
-                            text-sm
-                            text-white
-                            hover:underline
-                            transition
-                        "
+                        className="mt-3 text-xs text-white/80 hover:underline transition"
                     >
                         ← Voltar para o início
                     </Link>
