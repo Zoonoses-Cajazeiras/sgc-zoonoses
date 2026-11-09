@@ -14,13 +14,15 @@ import { LoginDto } from './dto/login.dto.js';
 import { RegisterTutorDto } from './dto/register-tutor.dto.js';
 import { VerifyEmailDto } from './dto/verify-email.dto.js';
 import { ResendVerificationDto } from './dto/resend-verification.dto.js';
+import { EmailService } from './email.service.js';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
-  ) { }
+    private readonly emailService: EmailService,
+  ) {}
 
   async registerTutor(dto: RegisterTutorDto) {
     const email = dto.email.trim().toLowerCase();
@@ -106,8 +108,10 @@ export class AuthService {
 
     const expiraEm = new Date(Date.now() + 10 * 60 * 1000);
 
+    let codigoCriado: { id: string };
+
     try {
-      await this.prisma.$transaction(async (tx) => {
+      codigoCriado = await this.prisma.$transaction(async (tx) => {
         const usuario = await tx.usuario.create({
           data: {
             organizacaoId: organizacao.id,
@@ -134,12 +138,15 @@ export class AuthService {
           },
         });
 
-        await tx.codigoVerificacao.create({
+        return await tx.codigoVerificacao.create({
           data: {
             usuarioId: usuario.id,
             finalidade: 'VERIFICACAO_EMAIL',
             codigoHash,
             expiraEm,
+          },
+          select: {
+            id: true,
           },
         });
       });
@@ -159,16 +166,24 @@ export class AuthService {
       throw error;
     }
 
+    // Envia o código para o e-mail informado.
+    try {
+      await this.emailService.enviarCodigoVerificacao(email, codigo);
+    } catch (error) {
+      await this.prisma.codigoVerificacao.update({
+        where: { id: codigoCriado.id },
+        data: { invalidadoEm: new Date() },
+      });
+
+      throw error;
+    }
+
     return {
       message:
-        'Cadastro realizado. A verificação do e-mail será necessária para acessar a conta.',
+        'Cadastro realizado. Enviamos um código de verificação para seu e-mail.',
       email,
-      ...(process.env.NODE_ENV !== 'production'
-        ? { codigoTeste: codigo }
-        : {}),
     };
   }
-
 
   async verifyEmail(dto: VerifyEmailDto) {
     const email = dto.email.trim().toLowerCase();
@@ -272,7 +287,6 @@ export class AuthService {
     };
   }
 
-
   async resendVerification(dto: ResendVerificationDto) {
     const email = dto.email.trim().toLowerCase();
 
@@ -345,7 +359,7 @@ export class AuthService {
     if (
       ultimoCodigo &&
       agora.getTime() - ultimoCodigo.createdAt.getTime() <
-      60 * 1000
+        60 * 1000
     ) {
       throw new BadRequestException(
         'Aguarde um minuto antes de solicitar outro código.',
@@ -359,7 +373,7 @@ export class AuthService {
       agora.getTime() + 10 * 60 * 1000,
     );
 
-    await this.prisma.$transaction(async (tx) => {
+    const novoCodigo = await this.prisma.$transaction(async (tx) => {
       await tx.codigoVerificacao.updateMany({
         where: {
           usuarioId: usuario.id,
@@ -372,24 +386,35 @@ export class AuthService {
         },
       });
 
-      await tx.codigoVerificacao.create({
+      return await tx.codigoVerificacao.create({
         data: {
           usuarioId: usuario.id,
           finalidade: 'VERIFICACAO_EMAIL',
           codigoHash,
           expiraEm,
         },
+        select: {
+          id: true,
+        },
       });
     });
 
+    // Envia o novo código por e-mail.
+    try {
+      await this.emailService.enviarCodigoVerificacao(email, codigo);
+    } catch (error) {
+      await this.prisma.codigoVerificacao.update({
+        where: { id: novoCodigo.id },
+        data: { invalidadoEm: new Date() },
+      });
+
+      throw error;
+    }
+
     return {
-      message: 'Se os dados forem válidos, um novo código será disponibilizado.',
-      ...(process.env.NODE_ENV !== 'production'
-        ? { codigoTeste: codigo }
-        : {}),
+      message: 'Um novo código de verificação foi enviado para seu e-mail.',
     };
   }
-
 
   async login(dto: LoginDto) {
     const email = dto.email.trim().toLowerCase();
@@ -473,7 +498,6 @@ export class AuthService {
     };
   }
 
-
   async getTutorProfile(usuarioId: string, organizacaoId: string) {
     const tutor = await this.prisma.tutor.findFirst({
       where: {
@@ -501,6 +525,4 @@ export class AuthService {
 
     return tutor;
   }
-
-
 }
