@@ -10,6 +10,7 @@ import { CampaignsModule } from './campaigns/campaigns.module.js';
 import { StatsModule } from './stats/stats.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { PendingTutorsCleanupService } from './cleanup/pending-tutors-cleanup.service.js';
+import { AnimalsModule } from './animals/animals.module.js';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { PendingTutorsCleanupService } from './cleanup/pending-tutors-cleanup.se
     CampaignsModule,
     StatsModule,
     AuthModule,
+    AnimalsModule,
   ],
   controllers: [AppController],
   providers: [

@@ -11,10 +11,18 @@ import {
   FiAlertCircle,
   FiLogOut,
   FiLoader,
+  FiRefreshCw,
+  FiEdit2,
+  FiTrash2,
 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import{api} from "../services/api";
+import { api } from "../services/api";
 import { logout } from "../services/auth";
+import type { Animal } from "../services/animals";
+import {
+  listarMeusAnimais,
+  excluirAnimal as excluirAnimalApi,
+} from "../services/animals";
 
 interface Usuario {
   id: string;
@@ -44,16 +52,28 @@ export default function TutorProfile() {
   const navigate = useNavigate();
 
   const [perfil, setPerfil] = useState<PerfilResponse | null>(null);
+  const [animais, setAnimais] = useState<Animal[]>([]);
   const [carregando, setCarregando] = useState(true);
+  const [carregandoAnimais, setCarregandoAnimais] = useState(true);
   const [erro, setErro] = useState("");
+  const [erroAnimais, setErroAnimais] = useState("");
+
+  const [animalParaExcluir, setAnimalParaExcluir] = useState<Animal | null>(null);
+  const [excluindoAnimalId, setExcluindoAnimalId] = useState<string | null>(null);
+  const [erroExclusao, setErroExclusao] = useState("");
 
   useEffect(() => {
-    async function carregarPerfil() {
+    async function carregarDados() {
       try {
-        const response = await api.get<PerfilResponse>("/auth/profile");
-        setPerfil(response.data);
+        const [perfilResponse, animaisResponse] = await Promise.all([
+          api.get<PerfilResponse>("/auth/profile"),
+          listarMeusAnimais(),
+        ]);
+
+        setPerfil(perfilResponse.data);
+        setAnimais(animaisResponse);
       } catch (error: any) {
-        console.error("Erro ao carregar perfil:", error);
+        console.error("Erro ao carregar dados:", error);
 
         if (error.response?.status === 401) {
           setErro("Sua sessão expirou ou não foi possível acessar seu perfil. Entre novamente.");
@@ -62,11 +82,53 @@ export default function TutorProfile() {
         }
       } finally {
         setCarregando(false);
+        setCarregandoAnimais(false);
       }
     }
 
-    carregarPerfil();
+    carregarDados();
   }, []);
+
+  async function atualizarAnimais() {
+    try {
+      setCarregandoAnimais(true);
+      setErroAnimais("");
+
+      const response = await listarMeusAnimais();
+      setAnimais(response);
+    } catch (error) {
+      console.error("Erro ao carregar animais:", error);
+      setErroAnimais("Não foi possível carregar seus animais.");
+    } finally {
+      setCarregandoAnimais(false);
+    }
+  }
+
+  async function confirmarExclusao() {
+    if (!animalParaExcluir) return;
+
+    try {
+      setExcluindoAnimalId(animalParaExcluir.id);
+      setErroExclusao("");
+
+      await excluirAnimalApi(animalParaExcluir.id);
+
+      setAnimais((animaisAtuais) =>
+        animaisAtuais.filter((animal) => animal.id !== animalParaExcluir.id)
+      );
+
+      setAnimalParaExcluir(null);
+    } catch (error: any) {
+      console.error("Erro ao excluir animal:", error);
+
+      setErroExclusao(
+        error.response?.data?.message ||
+        "Não foi possível excluir o animal. Tente novamente."
+      );
+    } finally {
+      setExcluindoAnimalId(null);
+    }
+  }
 
   function sair() {
     logout();
@@ -93,6 +155,37 @@ export default function TutorProfile() {
     if (!numeros || numeros.length !== 8) return cep || "Não informado";
 
     return numeros.replace(/(\d{5})(\d{3})/, "$1-$2");
+  }
+
+  function nomeEspecie(especie: Animal["especie"]) {
+    const especies = {
+      CAO: "Cachorro",
+      GATO: "Gato",
+      OUTRA: "Outro",
+    };
+
+    return especies[especie];
+  }
+
+  function nomeSexo(sexo: Animal["sexo"]) {
+    const sexos = {
+      MACHO: "Macho",
+      FEMEA: "Fêmea",
+      NAO_INFORMADO: "Não informado",
+    };
+
+    return sexos[sexo];
+  }
+
+  function nomePorte(porte: Animal["porte"]) {
+    const portes = {
+      PEQUENO: "Pequeno",
+      MEDIO: "Médio",
+      GRANDE: "Grande",
+      NAO_INFORMADO: "Não informado",
+    };
+
+    return portes[porte];
   }
 
   if (carregando) {
@@ -128,7 +221,6 @@ export default function TutorProfile() {
 
   return (
     <div className="min-h-screen bg-[#F5F8F8]">
-      {/* Cabeçalho */}
       <header className="bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
           <div>
@@ -149,7 +241,6 @@ export default function TutorProfile() {
       </header>
 
       <main className="max-w-7xl mx-auto px-5 py-8 md:py-10">
-        {/* Saudação */}
         <section className="mb-8">
           <p className="text-sm text-gray-500 mb-1">Área do cidadão</p>
           <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
@@ -160,11 +251,8 @@ export default function TutorProfile() {
           </p>
         </section>
 
-        {/* Conteúdo principal */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Coluna principal */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Animais */}
             <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
@@ -185,22 +273,111 @@ export default function TutorProfile() {
                 </button>
               </div>
 
-              <div className="border-2 border-dashed border-gray-200 rounded-xl py-10 px-5 text-center">
-                <div className="w-14 h-14 rounded-full bg-[#E8F7F7] flex items-center justify-center mx-auto mb-4">
-                  <FiHeart className="text-[#05ABAD] text-2xl" />
+              {carregandoAnimais ? (
+                <div className="py-12 flex flex-col items-center text-[#05ABAD]">
+                  <FiLoader className="animate-spin text-3xl mb-3" />
+                  <p className="text-sm text-gray-500">Carregando seus animais...</p>
                 </div>
+              ) : erroAnimais ? (
+                <div className="text-center py-10">
+                  <FiAlertCircle className="text-red-500 text-3xl mx-auto mb-3" />
+                  <p className="text-sm text-gray-600 mb-4">{erroAnimais}</p>
+                  <button
+                    onClick={atualizarAnimais}
+                    className="inline-flex items-center gap-2 text-[#05ABAD] font-semibold text-sm hover:text-[#026B6D]"
+                  >
+                    <FiRefreshCw />
+                    Tentar novamente
+                  </button>
+                </div>
+              ) : animais.length === 0 ? (
+                <div className="border-2 border-dashed border-gray-200 rounded-xl py-10 px-5 text-center">
+                  <div className="w-14 h-14 rounded-full bg-[#E8F7F7] flex items-center justify-center mx-auto mb-4">
+                    <FiHeart className="text-[#05ABAD] text-2xl" />
+                  </div>
 
-                <h4 className="font-semibold text-gray-700">
-                  Seus animais aparecerão aqui
-                </h4>
-                <p className="text-sm text-gray-500 mt-2 max-w-sm mx-auto">
-                  Cadastre seu primeiro animal para solicitar serviços e acompanhar
-                  o histórico de atendimentos.
-                </p>
-              </div>
+                  <h4 className="font-semibold text-gray-700">
+                    Seus animais aparecerão aqui
+                  </h4>
+                  <p className="text-sm text-gray-500 mt-2 max-w-sm mx-auto">
+                    Cadastre seu primeiro animal para solicitar serviços e acompanhar
+                    o histórico de atendimentos.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {animais.map((animal) => (
+                    <div
+                      key={animal.id}
+                      className="border border-gray-100 rounded-xl p-5 hover:border-[#BCE7E7] transition"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                        <div className="flex items-start gap-4">
+                          <div className="w-12 h-12 shrink-0 rounded-xl bg-[#E8F7F7] flex items-center justify-center">
+                            <FiHeart className="text-[#05ABAD] text-xl" />
+                          </div>
+
+                          <div>
+                            <h4 className="font-bold text-gray-800 text-base">
+                              {animal.nome}
+                            </h4>
+                            <p className="text-sm text-[#05ABAD] font-medium mt-1">
+                              {nomeEspecie(animal.especie)}
+                              {animal.raca ? ` • ${animal.raca}` : ""}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 sm:justify-end">
+                          <button
+                            onClick={() => navigate(`/animais/editar/${animal.id}`)}
+                            title="Editar animal"
+                            className="p-2 rounded-lg bg-[#E8F7F7] text-[#05ABAD] hover:bg-[#D5F0F0] transition"
+                          >
+                            <FiEdit2 />
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setErroExclusao("");
+                              setAnimalParaExcluir(animal);
+                            }}
+                            title="Excluir animal"
+                            className="p-2 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition"
+                          >
+                            <FiTrash2 />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-5 pt-4 border-t border-gray-100">
+                        <div>
+                          <p className="text-xs text-gray-400 mb-1">Sexo</p>
+                          <p className="text-sm font-medium text-gray-700">
+                            {nomeSexo(animal.sexo)}
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-gray-400 mb-1">Porte</p>
+                          <p className="text-sm font-medium text-gray-700">
+                            {nomePorte(animal.porte)}
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-xs text-gray-400 mb-1">Cor</p>
+                          <p className="text-sm font-medium text-gray-700">
+                            {animal.cor || "Não informado"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </section>
 
-            {/* Atalhos */}
             <section>
               <h3 className="text-lg font-bold text-gray-800 mb-4">
                 Acesso rápido
@@ -240,7 +417,6 @@ export default function TutorProfile() {
             </section>
           </div>
 
-          {/* Dados do tutor */}
           <aside>
             <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <div className="flex items-center gap-3 mb-6">
@@ -317,6 +493,64 @@ export default function TutorProfile() {
           Núcleo de Zoonoses — Prefeitura de Cajazeiras
         </footer>
       </main>
+
+      {animalParaExcluir && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+          <div className="bg-white w-full max-w-md rounded-2xl shadow-xl p-6">
+            <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mb-4">
+              <FiTrash2 className="text-red-500 text-xl" />
+            </div>
+
+            <h3 className="text-xl font-bold text-gray-800">
+              Excluir animal?
+            </h3>
+
+            <p className="text-sm text-gray-500 mt-3">
+              Tem certeza de que deseja excluir{" "}
+              <strong>{animalParaExcluir.nome}</strong>?
+              O animal deixará de aparecer na sua lista.
+            </p>
+
+            {erroExclusao && (
+              <div className="mt-4 bg-red-50 text-red-600 text-sm rounded-lg p-3">
+                {erroExclusao}
+              </div>
+            )}
+
+            <div className="flex gap-3 mt-6">
+              <button
+                type="button"
+                onClick={() => {
+                  if (!excluindoAnimalId) {
+                    setAnimalParaExcluir(null);
+                    setErroExclusao("");
+                  }
+                }}
+                disabled={!!excluindoAnimalId}
+                className="flex-1 px-4 py-3 rounded-xl border border-gray-200 text-gray-600 font-semibold hover:bg-gray-50 disabled:opacity-50"
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="button"
+                onClick={confirmarExclusao}
+                disabled={!!excluindoAnimalId}
+                className="flex-1 px-4 py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {excluindoAnimalId ? (
+                  <>
+                    <FiLoader className="animate-spin" />
+                    Excluindo...
+                  </>
+                ) : (
+                  "Sim, excluir"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
