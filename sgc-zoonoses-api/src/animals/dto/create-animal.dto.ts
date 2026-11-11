@@ -53,6 +53,10 @@ export class CreateAnimalDto {
   @IsString()
   @MaxLength(1000)
   fotoUrl?: string;
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  fotoPublicId?: string;
 
   @IsOptional()
   @IsString()

@@ -742,10 +742,6 @@ export type EnumStatusCadastroTutorFieldUpdateOperationsInput = {
   set?: $Enums.StatusCadastroTutor
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type TutorCreateNestedOneWithoutAnimaisInput = {
   create?: Prisma.XOR<Prisma.TutorCreateWithoutAnimaisInput, Prisma.TutorUncheckedCreateWithoutAnimaisInput>
   connectOrCreate?: Prisma.TutorCreateOrConnectWithoutAnimaisInput

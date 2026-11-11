@@ -109,7 +109,9 @@ export const UsuarioScalarFieldEnum = {
   ativo: 'ativo',
   ultimoAcessoEm: 'ultimoAcessoEm',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  fotoPerfilUrl: 'fotoPerfilUrl',
+  fotoPerfilPublicId: 'fotoPerfilPublicId'
 } as const
 
 export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
@@ -166,6 +168,7 @@ export const AnimalScalarFieldEnum = {
   dataNascimento: 'dataNascimento',
   idadeAproximadaMeses: 'idadeAproximadaMeses',
   fotoUrl: 'fotoUrl',
+  fotoPublicId: 'fotoPublicId',
   observacoes: 'observacoes',
   ativo: 'ativo',
   createdAt: 'createdAt',

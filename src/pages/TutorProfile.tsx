@@ -1,5 +1,6 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { ChangeEvent } from "react";
 import {
   FiUser,
   FiMapPin,
@@ -14,21 +15,31 @@ import {
   FiRefreshCw,
   FiEdit2,
   FiTrash2,
+  FiCamera,
+  FiX,
 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
-import { logout } from "../services/auth";
+import {
+  logout,
+  uploadFotoPerfil,
+  excluirFotoPerfil,
+  atualizarPerfilTutor,
+} from "../services/auth";
+import type { UpdateTutorProfileData } from "../services/auth";
 import type { Animal } from "../services/animals";
 import {
   listarMeusAnimais,
   excluirAnimal as excluirAnimalApi,
 } from "../services/animals";
+import EditTutorProfileModal from "../components/EditTutorProfileModal";
 
 interface Usuario {
   id: string;
   nome: string;
   email: string;
   papel: string;
+  fotoPerfilUrl?: string | null;
 }
 
 interface Tutor {
@@ -50,6 +61,7 @@ interface PerfilResponse {
 
 export default function TutorProfile() {
   const navigate = useNavigate();
+  const inputFotoRef = useRef<HTMLInputElement>(null);
 
   const [perfil, setPerfil] = useState<PerfilResponse | null>(null);
   const [animais, setAnimais] = useState<Animal[]>([]);
@@ -61,6 +73,13 @@ export default function TutorProfile() {
   const [animalParaExcluir, setAnimalParaExcluir] = useState<Animal | null>(null);
   const [excluindoAnimalId, setExcluindoAnimalId] = useState<string | null>(null);
   const [erroExclusao, setErroExclusao] = useState("");
+
+  const [enviandoFoto, setEnviandoFoto] = useState(false);
+  const [excluindoFoto, setExcluindoFoto] = useState(false);
+  const [erroFoto, setErroFoto] = useState("");
+  const [sucessoFoto, setSucessoFoto] = useState("");
+
+  const [editandoPerfil, setEditandoPerfil] = useState(false);
 
   useEffect(() => {
     async function carregarDados() {
@@ -104,6 +123,122 @@ export default function TutorProfile() {
     }
   }
 
+  async function selecionarFoto(event: ChangeEvent<HTMLInputElement>) {
+    const arquivo = event.target.files?.[0];
+
+    if (!arquivo) return;
+
+    setErroFoto("");
+    setSucessoFoto("");
+
+    const formatosPermitidos = ["image/jpeg", "image/png", "image/webp"];
+
+    if (!formatosPermitidos.includes(arquivo.type)) {
+      setErroFoto("Formato inválido. Selecione uma imagem JPG, PNG ou WEBP.");
+      event.target.value = "";
+      return;
+    }
+
+    if (arquivo.size > 5 * 1024 * 1024) {
+      setErroFoto("A imagem deve ter no máximo 5 MB.");
+      event.target.value = "";
+      return;
+    }
+
+    try {
+      setEnviandoFoto(true);
+
+      const resposta = await uploadFotoPerfil(arquivo);
+
+      setPerfil((perfilAtual) => {
+        if (!perfilAtual) return perfilAtual;
+
+        return {
+          ...perfilAtual,
+          usuario: {
+            ...perfilAtual.usuario,
+            fotoPerfilUrl: resposta.url,
+          },
+        };
+      });
+
+      setSucessoFoto("Foto de perfil atualizada com sucesso!");
+    } catch (error: any) {
+      console.error("Erro ao enviar foto:", error);
+
+      setErroFoto(
+        error.response?.data?.message ||
+          "Não foi possível enviar a foto. Tente novamente."
+      );
+    } finally {
+      setEnviandoFoto(false);
+
+      if (inputFotoRef.current) {
+        inputFotoRef.current.value = "";
+      }
+    }
+  }
+
+  async function removerFotoPerfil() {
+    try {
+      setExcluindoFoto(true);
+      setErroFoto("");
+      setSucessoFoto("");
+
+      await excluirFotoPerfil();
+
+      setPerfil((perfilAtual) => {
+        if (!perfilAtual) return perfilAtual;
+
+        return {
+          ...perfilAtual,
+          usuario: {
+            ...perfilAtual.usuario,
+            fotoPerfilUrl: null,
+          },
+        };
+      });
+
+      setSucessoFoto("Foto de perfil removida com sucesso!");
+    } catch (error: any) {
+      console.error("Erro ao remover foto:", error);
+
+      setErroFoto(
+        error.response?.data?.message ||
+          "Não foi possível remover a foto. Tente novamente."
+      );
+    } finally {
+      setExcluindoFoto(false);
+    }
+  }
+
+  async function salvarPerfilAtualizado(dados: UpdateTutorProfileData) {
+    try {
+      const resposta = await atualizarPerfilTutor(dados);
+
+      setPerfil((perfilAtual) => {
+        if (!perfilAtual) return perfilAtual;
+
+        return {
+          ...perfilAtual,
+          usuario: {
+            ...perfilAtual.usuario,
+            ...resposta.usuario,
+          },
+          tutor: {
+            ...perfilAtual.tutor,
+            ...resposta.tutor,
+          },
+        };
+      });
+
+      setEditandoPerfil(false);
+    } catch (error) {
+      console.error("Erro ao atualizar perfil:", error);
+      throw error;
+    }
+  }
+
   async function confirmarExclusao() {
     if (!animalParaExcluir) return;
 
@@ -123,7 +258,7 @@ export default function TutorProfile() {
 
       setErroExclusao(
         error.response?.data?.message ||
-        "Não foi possível excluir o animal. Tente novamente."
+          "Não foi possível excluir o animal. Tente novamente."
       );
     } finally {
       setExcluindoAnimalId(null);
@@ -208,7 +343,7 @@ export default function TutorProfile() {
           <p className="text-gray-500 mb-6">{erro}</p>
           <button
             onClick={() => navigate("/login")}
-            className="bg-[#05ABAD] hover:bg-[#026B6D] text-white px-6 py-3 rounded-xl font-semibold transition"
+            className="bg-[#05ABAD] hover:bg-[#026B6D] text-white px-6 py-3 rounded-xl font-semibold transition cursor-pointer"
           >
             Ir para o login
           </button>
@@ -218,6 +353,7 @@ export default function TutorProfile() {
   }
 
   const { usuario, tutor } = perfil;
+  const fotoEmProcessamento = enviandoFoto || excluindoFoto;
 
   return (
     <div className="min-h-screen bg-[#F5F8F8]">
@@ -232,7 +368,7 @@ export default function TutorProfile() {
 
           <button
             onClick={sair}
-            className="flex items-center gap-2 text-gray-500 hover:text-red-500 transition text-sm font-medium"
+            className="flex items-center gap-2 text-gray-500 hover:text-red-500 transition text-sm font-medium cursor-pointer"
           >
             <FiLogOut />
             <span className="hidden sm:inline">Sair</span>
@@ -266,7 +402,7 @@ export default function TutorProfile() {
 
                 <button
                   onClick={() => navigate("/animais/cadastrar")}
-                  className="flex items-center justify-center gap-2 bg-[#05ABAD] hover:bg-[#026B6D] text-white px-5 py-3 rounded-xl font-semibold text-sm transition"
+                  className="flex items-center justify-center gap-2 bg-[#05ABAD] hover:bg-[#026B6D] text-white px-5 py-3 rounded-xl font-semibold text-sm transition cursor-pointer"
                 >
                   <FiPlus />
                   Cadastrar animal
@@ -284,7 +420,7 @@ export default function TutorProfile() {
                   <p className="text-sm text-gray-600 mb-4">{erroAnimais}</p>
                   <button
                     onClick={atualizarAnimais}
-                    className="inline-flex items-center gap-2 text-[#05ABAD] font-semibold text-sm hover:text-[#026B6D]"
+                    className="inline-flex items-center gap-2 text-[#05ABAD] font-semibold text-sm hover:text-[#026B6D] cursor-pointer"
                   >
                     <FiRefreshCw />
                     Tentar novamente
@@ -332,7 +468,7 @@ export default function TutorProfile() {
                           <button
                             onClick={() => navigate(`/animais/editar/${animal.id}`)}
                             title="Editar animal"
-                            className="p-2 rounded-lg bg-[#E8F7F7] text-[#05ABAD] hover:bg-[#D5F0F0] transition"
+                            className="p-2 rounded-lg bg-[#E8F7F7] text-[#05ABAD] hover:bg-[#D5F0F0] transition cursor-pointer"
                           >
                             <FiEdit2 />
                           </button>
@@ -343,7 +479,7 @@ export default function TutorProfile() {
                               setAnimalParaExcluir(animal);
                             }}
                             title="Excluir animal"
-                            className="p-2 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition"
+                            className="p-2 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition cursor-pointer"
                           >
                             <FiTrash2 />
                           </button>
@@ -419,17 +555,115 @@ export default function TutorProfile() {
 
           <aside>
             <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-full bg-[#E8F7F7] flex items-center justify-center">
-                  <FiUser className="text-[#05ABAD] text-xl" />
+              <div className="flex flex-col items-center text-center mb-7">
+                <div className="relative mb-4">
+                  {usuario.fotoPerfilUrl ? (
+                    <img
+                      src={usuario.fotoPerfilUrl}
+                      alt={`Foto de perfil de ${usuario.nome}`}
+                      className="w-24 h-24 rounded-full object-cover border-4 border-[#E8F7F7] shadow-sm"
+                    />
+                  ) : (
+                    <div className="w-24 h-24 rounded-full bg-[#E8F7F7] flex items-center justify-center border-4 border-white shadow-sm">
+                      <FiUser className="text-[#05ABAD] text-4xl" />
+                    </div>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => inputFotoRef.current?.click()}
+                    disabled={fotoEmProcessamento}
+                    title="Alterar foto de perfil"
+                    className="absolute bottom-0 right-0 w-9 h-9 rounded-full bg-[#05ABAD] hover:bg-[#026B6D] text-white flex items-center justify-center border-2 border-white shadow transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {enviandoFoto ? (
+                      <FiLoader className="animate-spin" />
+                    ) : (
+                      <FiCamera />
+                    )}
+                  </button>
+
+                  <input
+                    ref={inputFotoRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    onChange={selecionarFoto}
+                    className="hidden"
+                  />
                 </div>
-                <div>
-                  <h3 className="font-bold text-gray-800">Meu perfil</h3>
-                  <p className="text-xs text-gray-500">Dados cadastrais</p>
+
+                <h3 className="font-bold text-gray-800 text-lg">Meu perfil</h3>
+                <p className="text-xs text-gray-500 mt-1">Dados cadastrais</p>
+
+                <button
+                  type="button"
+                  onClick={() => setEditandoPerfil(true)}
+                  className="mt-4 inline-flex items-center justify-center gap-2 rounded-lg bg-[#05ABAD] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#026B6D] cursor-pointer"
+                >
+                  <FiEdit2 />
+                  Editar dados
+                </button>
+
+                <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
+                  <button
+                    type="button"
+                    onClick={() => inputFotoRef.current?.click()}
+                    disabled={fotoEmProcessamento}
+                    className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-[#E8F7F7] text-[#05ABAD] hover:bg-[#D5F0F0] text-xs font-semibold transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {enviandoFoto ? (
+                      <>
+                        <FiLoader className="animate-spin" />
+                        Enviando...
+                      </>
+                    ) : (
+                      <>
+                        <FiCamera />
+                        {usuario.fotoPerfilUrl ? "Alterar foto" : "Adicionar foto"}
+                      </>
+                    )}
+                  </button>
+
+                  {usuario.fotoPerfilUrl && (
+                    <button
+                      type="button"
+                      onClick={removerFotoPerfil}
+                      disabled={fotoEmProcessamento}
+                      className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 text-xs font-semibold transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {excluindoFoto ? (
+                        <>
+                          <FiLoader className="animate-spin" />
+                          Removendo...
+                        </>
+                      ) : (
+                        <>
+                          <FiX />
+                          Remover foto
+                        </>
+                      )}
+                    </button>
+                  )}
                 </div>
+
+                <p className="text-xs text-gray-400 mt-3">
+                  JPG, PNG ou WEBP. Máximo de 5 MB.
+                </p>
+
+                {erroFoto && (
+                  <div className="w-full mt-4 bg-red-50 text-red-600 text-xs rounded-lg p-3 text-left">
+                    {erroFoto}
+                  </div>
+                )}
+
+                {sucessoFoto && (
+                  <div className="w-full mt-4 bg-green-50 text-green-700 text-xs rounded-lg p-3 text-left">
+                    {sucessoFoto}
+                  </div>
+                )}
               </div>
 
-              <div className="space-y-5">
+              <div className="border-t border-gray-100 pt-6 space-y-5">
                 <div>
                   <p className="text-xs text-gray-400 mb-1">Nome completo</p>
                   <p className="text-sm font-medium text-gray-700">{usuario.nome}</p>
@@ -450,7 +684,7 @@ export default function TutorProfile() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <FiMail className="text-[#05ABAD] mt-1" />
+                  <FiMail className="text-[#05ABAD] mt-1 shrink-0" />
                   <div>
                     <p className="text-xs text-gray-400 mb-1">E-mail</p>
                     <p className="text-sm font-medium text-gray-700 break-all">
@@ -460,7 +694,7 @@ export default function TutorProfile() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <FiPhone className="text-[#05ABAD] mt-1" />
+                  <FiPhone className="text-[#05ABAD] mt-1 shrink-0" />
                   <div>
                     <p className="text-xs text-gray-400 mb-1">Telefone</p>
                     <p className="text-sm font-medium text-gray-700">
@@ -470,7 +704,7 @@ export default function TutorProfile() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <FiMapPin className="text-[#05ABAD] mt-1" />
+                  <FiMapPin className="text-[#05ABAD] mt-1 shrink-0" />
                   <div>
                     <p className="text-xs text-gray-400 mb-1">Endereço</p>
                     <p className="text-sm font-medium text-gray-700">
@@ -527,7 +761,7 @@ export default function TutorProfile() {
                   }
                 }}
                 disabled={!!excluindoAnimalId}
-                className="flex-1 px-4 py-3 rounded-xl border border-gray-200 text-gray-600 font-semibold hover:bg-gray-50 disabled:opacity-50"
+                className="flex-1 px-4 py-3 rounded-xl border border-gray-200 text-gray-600 font-semibold hover:bg-gray-50 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
               >
                 Cancelar
               </button>
@@ -536,7 +770,7 @@ export default function TutorProfile() {
                 type="button"
                 onClick={confirmarExclusao}
                 disabled={!!excluindoAnimalId}
-                className="flex-1 px-4 py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white font-semibold disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed"
               >
                 {excluindoAnimalId ? (
                   <>
@@ -550,6 +784,22 @@ export default function TutorProfile() {
             </div>
           </div>
         </div>
+      )}
+
+      {editandoPerfil && (
+        <EditTutorProfileModal
+          dadosIniciais={{
+            nome: usuario.nome,
+            telefone: tutor.telefone || "",
+            endereco: tutor.endereco || "",
+            numero: tutor.numero || "",
+            bairro: tutor.bairro || "",
+            cidade: tutor.cidade || "",
+            cep: tutor.cep || "",
+          }}
+          onClose={() => setEditandoPerfil(false)}
+          onSave={salvarPerfilAtualizado}
+        />
       )}
     </div>
   );

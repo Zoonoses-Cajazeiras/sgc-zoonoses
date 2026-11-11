@@ -56,6 +56,10 @@ export class UpdateAnimalDto {
   @IsString()
   @MaxLength(1000)
   fotoUrl?: string | null;
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  fotoPublicId?: string | null;
 
   @IsOptional()
   @IsString()

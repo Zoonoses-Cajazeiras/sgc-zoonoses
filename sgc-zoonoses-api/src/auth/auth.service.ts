@@ -15,6 +15,9 @@ import { RegisterTutorDto } from './dto/register-tutor.dto.js';
 import { VerifyEmailDto } from './dto/verify-email.dto.js';
 import { ResendVerificationDto } from './dto/resend-verification.dto.js';
 import { EmailService } from './email.service.js';
+import { UpdateTutorProfileDto } from './dto/update-tutor-profile.dto.js';
+import { CloudinaryService } from '../storage/cloudinary.service.js';
+import type { UploadedImage } from '../storage/cloudinary.service.js';
 
 @Injectable()
 export class AuthService {
@@ -22,7 +25,8 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private readonly emailService: EmailService,
-  ) {}
+    private readonly cloudinaryService: CloudinaryService,
+  ) { }
 
   async registerTutor(dto: RegisterTutorDto) {
     const email = dto.email.trim().toLowerCase();
@@ -359,7 +363,7 @@ export class AuthService {
     if (
       ultimoCodigo &&
       agora.getTime() - ultimoCodigo.createdAt.getTime() <
-        60 * 1000
+      60 * 1000
     ) {
       throw new BadRequestException(
         'Aguarde um minuto antes de solicitar outro código.',
@@ -524,5 +528,274 @@ export class AuthService {
     }
 
     return tutor;
+  }
+
+  async updateTutorProfile(
+    usuarioId: string,
+    organizacaoId: string,
+    dto: UpdateTutorProfileDto,
+  ) {
+    const campos = [
+      dto.nome,
+      dto.telefone,
+      dto.endereco,
+      dto.numero,
+      dto.bairro,
+      dto.cidade,
+      dto.cep,
+    ];
+
+    if (campos.every((campo) => campo === undefined)) {
+      throw new BadRequestException(
+        'Informe pelo menos um campo para atualizar.',
+      );
+    }
+
+    for (const campo of campos) {
+      if (campo !== undefined && campo.trim() === '') {
+        throw new BadRequestException(
+          'Os campos informados não podem ficar vazios.',
+        );
+      }
+    }
+
+    const tutor = await this.prisma.tutor.findFirst({
+      where: {
+        usuarioId,
+        organizacaoId,
+        usuario: {
+          is: {
+            papel: 'TUTOR',
+            ativo: true,
+          },
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!tutor) {
+      throw new UnauthorizedException(
+        'Perfil de tutor não encontrado.',
+      );
+    }
+
+    await this.prisma.$transaction(async (tx) => {
+      if (dto.nome !== undefined) {
+        await tx.usuario.update({
+          where: {
+            id: usuarioId,
+          },
+          data: {
+            nome: dto.nome.trim(),
+          },
+        });
+      }
+
+      await tx.tutor.update({
+        where: {
+          id: tutor.id,
+        },
+        data: {
+          ...(dto.telefone !== undefined && {
+            telefone: dto.telefone.trim(),
+          }),
+          ...(dto.endereco !== undefined && {
+            endereco: dto.endereco.trim(),
+          }),
+          ...(dto.numero !== undefined && {
+            numero: dto.numero.trim(),
+          }),
+          ...(dto.bairro !== undefined && {
+            bairro: dto.bairro.trim(),
+          }),
+          ...(dto.cidade !== undefined && {
+            cidade: dto.cidade.trim(),
+          }),
+          ...(dto.cep !== undefined && {
+            cep: dto.cep.trim(),
+          }),
+        },
+      });
+    });
+
+    const usuario = await this.prisma.usuario.findUnique({
+      where: {
+        id: usuarioId,
+      },
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        papel: true,
+      },
+    });
+
+    const tutorAtualizado = await this.getTutorProfile(
+      usuarioId,
+      organizacaoId,
+    );
+
+    return {
+      usuario,
+      tutor: tutorAtualizado,
+    };
+  }
+
+  async getTutorProfilePhoto(
+    usuarioId: string,
+    organizacaoId: string,
+  ) {
+    const usuario = await this.prisma.usuario.findFirst({
+      where: {
+        id: usuarioId,
+        organizacaoId,
+        papel: 'TUTOR',
+        ativo: true,
+      },
+      select: {
+        fotoPerfilUrl: true,
+      },
+    });
+
+    if (!usuario) {
+      throw new UnauthorizedException('Usuário não encontrado.');
+    }
+
+    return usuario.fotoPerfilUrl;
+  }
+
+  async uploadTutorProfilePhoto(
+    usuarioId: string,
+    organizacaoId: string,
+    file: UploadedImage,
+  ) {
+    if (!file) {
+      throw new BadRequestException('Selecione uma imagem.');
+    }
+
+    const usuario = await this.prisma.usuario.findFirst({
+      where: {
+        id: usuarioId,
+        organizacaoId,
+        papel: 'TUTOR',
+        ativo: true,
+      },
+      select: {
+        id: true,
+        fotoPerfilPublicId: true,
+      },
+    });
+
+    if (!usuario) {
+      throw new UnauthorizedException('Usuário não encontrado.');
+    }
+
+    const resultado = await this.cloudinaryService.uploadImage(
+      file,
+      `sgc-zoonoses/${organizacaoId}/profiles`,
+    );
+
+    try {
+      await this.prisma.usuario.update({
+        where: {
+          id: usuario.id,
+        },
+        data: {
+          fotoPerfilUrl: resultado.secure_url,
+          fotoPerfilPublicId: resultado.public_id,
+        },
+      });
+    } catch (error) {
+      // Se o banco falhar, tenta remover a imagem recém-enviada.
+      try {
+        await this.cloudinaryService.deleteImage(resultado.public_id);
+      } catch (erroExclusao) {
+        console.error(
+          'Não foi possível remover a imagem após falha no banco:',
+          erroExclusao,
+        );
+      }
+
+      throw error;
+    }
+
+    // Após salvar a nova foto, remove a anterior.
+    if (
+      usuario.fotoPerfilPublicId &&
+      usuario.fotoPerfilPublicId !== resultado.public_id
+    ) {
+      try {
+        await this.cloudinaryService.deleteImage(
+          usuario.fotoPerfilPublicId,
+        );
+      } catch (error) {
+        console.error(
+          'Não foi possível excluir a foto de perfil anterior:',
+          error,
+        );
+      }
+    }
+
+    return {
+      message: 'Foto de perfil atualizada com sucesso.',
+      fotoPerfilUrl: resultado.secure_url,
+    };
+  }
+
+  async removeTutorProfilePhoto(
+    usuarioId: string,
+    organizacaoId: string,
+  ) {
+    const usuario = await this.prisma.usuario.findFirst({
+      where: {
+        id: usuarioId,
+        organizacaoId,
+        papel: 'TUTOR',
+        ativo: true,
+      },
+      select: {
+        id: true,
+        fotoPerfilPublicId: true,
+      },
+    });
+
+    if (!usuario) {
+      throw new UnauthorizedException('Usuário não encontrado.');
+    }
+
+    if (!usuario.fotoPerfilPublicId) {
+      return {
+        message: 'O usuário não possui foto de perfil.',
+        fotoPerfilUrl: null,
+      };
+    }
+
+    await this.prisma.usuario.update({
+      where: {
+        id: usuario.id,
+      },
+      data: {
+        fotoPerfilUrl: null,
+        fotoPerfilPublicId: null,
+      },
+    });
+
+    try {
+      await this.cloudinaryService.deleteImage(
+        usuario.fotoPerfilPublicId,
+      );
+    } catch (error) {
+      console.error(
+        'Não foi possível excluir a foto do Cloudinary:',
+        error,
+      );
+    }
+
+    return {
+      message: 'Foto de perfil removida com sucesso.',
+      fotoPerfilUrl: null,
+    };
   }
 }

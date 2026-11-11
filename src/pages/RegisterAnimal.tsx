@@ -7,9 +7,14 @@ import {
   FiLoader,
   FiSave,
   FiAlertCircle,
+  FiCamera,
+  FiX,
 } from "react-icons/fi";
 import { api } from "../services/api";
-import { listarMeusAnimais } from "../services/animals";
+import {
+  listarMeusAnimais,
+  uploadFotoAnimal,
+} from "../services/animals";
 
 type TipoIdade = "aproximada" | "nascimento";
 
@@ -30,9 +35,23 @@ export default function RegisterAnimal() {
   const [idadeAproximada, setIdadeAproximada] = useState("");
   const [observacoes, setObservacoes] = useState("");
 
+  const [fotoUrl, setFotoUrl] = useState<string | null>(null);
+  const [fotoPublicId, setFotoPublicId] = useState<string | null>(null);
+  const [fotoArquivo, setFotoArquivo] = useState<File | null>(null);
+  const [fotoPreview, setFotoPreview] = useState("");
+
   const [carregando, setCarregando] = useState(false);
   const [carregandoDados, setCarregandoDados] = useState(modoEdicao);
   const [erro, setErro] = useState("");
+
+  // Libera a memória utilizada pelas pré-visualizações locais.
+  useEffect(() => {
+    return () => {
+      if (fotoPreview.startsWith("blob:")) {
+        URL.revokeObjectURL(fotoPreview);
+      }
+    };
+  }, [fotoPreview]);
 
   useEffect(() => {
     if (!id) return;
@@ -57,6 +76,10 @@ export default function RegisterAnimal() {
         setCor(animal.cor || "");
         setPorte(animal.porte);
         setObservacoes(animal.observacoes || "");
+
+        setFotoUrl(animal.fotoUrl);
+        setFotoPublicId(animal.fotoPublicId);
+        setFotoPreview(animal.fotoUrl || "");
 
         if (animal.dataNascimento) {
           setTipoIdade("nascimento");
@@ -87,6 +110,44 @@ export default function RegisterAnimal() {
     carregarAnimal();
   }, [id]);
 
+  function selecionarFoto(event: React.ChangeEvent<HTMLInputElement>) {
+    const arquivo = event.target.files?.[0];
+
+    if (!arquivo) return;
+
+    setErro("");
+
+    const formatosPermitidos = [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+    ];
+
+    if (!formatosPermitidos.includes(arquivo.type)) {
+      setErro("Formato inválido. Selecione uma imagem JPG, PNG ou WEBP.");
+      event.target.value = "";
+      return;
+    }
+
+    const tamanhoMaximo = 5 * 1024 * 1024;
+
+    if (arquivo.size > tamanhoMaximo) {
+      setErro("A imagem deve ter no máximo 5 MB.");
+      event.target.value = "";
+      return;
+    }
+
+    setFotoArquivo(arquivo);
+    setFotoPreview(URL.createObjectURL(arquivo));
+  }
+
+  function removerFoto() {
+    setFotoArquivo(null);
+    setFotoUrl(null);
+    setFotoPublicId(null);
+    setFotoPreview("");
+  }
+
   async function salvarAnimal(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setErro("");
@@ -111,37 +172,49 @@ export default function RegisterAnimal() {
       return;
     }
 
-    const dados = {
-      nome: nome.trim(),
-      especie,
-      sexo,
-      raca: raca.trim() || null,
-      cor: cor.trim() || null,
-      porte,
-      observacoes: observacoes.trim() || null,
-
-      // Ao editar, limpamos o campo que não está sendo utilizado.
-      ...(modoEdicao
-        ? {
-            dataNascimento:
-              tipoIdade === "nascimento" ? dataNascimento : null,
-            idadeAproximadaMeses:
-              tipoIdade === "aproximada" && idadeAproximada !== ""
-                ? Number(idadeAproximada)
-                : null,
-          }
-        : {
-            dataNascimento:
-              tipoIdade === "nascimento" ? dataNascimento : undefined,
-            idadeAproximadaMeses:
-              tipoIdade === "aproximada" && idadeAproximada !== ""
-                ? Number(idadeAproximada)
-                : undefined,
-          }),
-    };
-
     try {
       setCarregando(true);
+
+      // Se uma nova foto foi selecionada, primeiro enviamos ao Cloudinary.
+      let novaFotoUrl = fotoUrl;
+      let novoFotoPublicId = fotoPublicId;
+
+      if (fotoArquivo) {
+        const resultadoUpload = await uploadFotoAnimal(fotoArquivo);
+
+        novaFotoUrl = resultadoUpload.url;
+        novoFotoPublicId = resultadoUpload.publicId;
+      }
+
+      const dados = {
+        nome: nome.trim(),
+        especie,
+        sexo,
+        raca: raca.trim() || null,
+        cor: cor.trim() || null,
+        porte,
+        observacoes: observacoes.trim() || null,
+        fotoUrl: novaFotoUrl,
+        fotoPublicId: novoFotoPublicId,
+
+        ...(modoEdicao
+          ? {
+              dataNascimento:
+                tipoIdade === "nascimento" ? dataNascimento : null,
+              idadeAproximadaMeses:
+                tipoIdade === "aproximada" && idadeAproximada !== ""
+                  ? Number(idadeAproximada)
+                  : null,
+            }
+          : {
+              dataNascimento:
+                tipoIdade === "nascimento" ? dataNascimento : undefined,
+              idadeAproximadaMeses:
+                tipoIdade === "aproximada" && idadeAproximada !== ""
+                  ? Number(idadeAproximada)
+                  : undefined,
+            }),
+      };
 
       if (modoEdicao && id) {
         await api.patch(`/animals/${id}`, dados);
@@ -331,6 +404,75 @@ export default function RegisterAnimal() {
                   <option value="MEDIO">Médio</option>
                   <option value="GRANDE">Grande</option>
                 </select>
+              </div>
+            </div>
+          </section>
+
+          {/* Foto do animal */}
+          <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-11 h-11 rounded-xl bg-[#E8F7F7] flex items-center justify-center">
+                <FiCamera className="text-[#05ABAD] text-xl" />
+              </div>
+              <div>
+                <h3 className="font-bold text-gray-800">
+                  Foto do animal
+                </h3>
+                <p className="text-xs text-gray-500">
+                  Adicione uma imagem para facilitar a identificação.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-start gap-6">
+              <div className="w-36 h-36 shrink-0 rounded-2xl border border-gray-200 bg-gray-50 overflow-hidden flex items-center justify-center">
+                {fotoPreview ? (
+                  <img
+                    src={fotoPreview}
+                    alt="Pré-visualização do animal"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="flex flex-col items-center text-gray-400">
+                    <FiHeart className="text-4xl mb-2" />
+                    <span className="text-xs">Sem foto</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex-1">
+                <label
+                  htmlFor="foto-animal"
+                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#E8F7F7] text-[#026B6D] font-semibold text-sm hover:bg-[#D5F0F0] transition cursor-pointer"
+                >
+                  <FiCamera />
+                  {fotoPreview ? "Trocar foto" : "Selecionar foto"}
+                </label>
+
+                <input
+                  id="foto-animal"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={selecionarFoto}
+                  className="hidden"
+                />
+
+                <p className="text-xs text-gray-400 mt-3">
+                  Formatos aceitos: JPG, PNG e WEBP.
+                  <br />
+                  Tamanho máximo: 5 MB.
+                </p>
+
+                {fotoPreview && (
+                  <button
+                    type="button"
+                    onClick={removerFoto}
+                    className="flex items-center gap-2 text-sm text-red-500 hover:text-red-700 font-medium mt-4 transition"
+                  >
+                    <FiX />
+                    Remover foto
+                  </button>
+                )}
               </div>
             </div>
           </section>

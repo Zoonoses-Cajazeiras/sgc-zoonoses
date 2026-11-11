@@ -121,6 +121,9 @@ model Usuario {
   ultimoAcessoEm    DateTime?    @db.Timestamptz(6)
   createdAt         DateTime     @default(now()) @db.Timestamptz(6)
   updatedAt         DateTime     @updatedAt @db.Timestamptz(6)
+  
+  fotoPerfilUrl      String? @db.VarChar(1000)
+  fotoPerfilPublicId String? @db.VarChar(255)
 
   organizacao             Organizacao            @relation(fields: [organizacaoId], references: [id], onDelete: Restrict)
   tutor                   Tutor?
@@ -203,6 +206,7 @@ model Animal {
   dataNascimento       DateTime?     @db.Date
   idadeAproximadaMeses Int?
   fotoUrl              String?       @db.VarChar(1000)
+  fotoPublicId         String?       @db.VarChar(255)
   observacoes          String?       @db.Text
   ativo                Boolean       @default(true)
   createdAt            DateTime      @default(now()) @db.Timestamptz(6)

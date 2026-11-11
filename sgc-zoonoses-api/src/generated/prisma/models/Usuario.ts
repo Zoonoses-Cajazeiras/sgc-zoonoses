@@ -36,6 +36,8 @@ export type UsuarioMinAggregateOutputType = {
   ultimoAcessoEm: Date | null
   createdAt: Date | null
   updatedAt: Date | null
+  fotoPerfilUrl: string | null
+  fotoPerfilPublicId: string | null
 }
 
 export type UsuarioMaxAggregateOutputType = {
@@ -50,6 +52,8 @@ export type UsuarioMaxAggregateOutputType = {
   ultimoAcessoEm: Date | null
   createdAt: Date | null
   updatedAt: Date | null
+  fotoPerfilUrl: string | null
+  fotoPerfilPublicId: string | null
 }
 
 export type UsuarioCountAggregateOutputType = {
@@ -64,6 +68,8 @@ export type UsuarioCountAggregateOutputType = {
   ultimoAcessoEm: number
   createdAt: number
   updatedAt: number
+  fotoPerfilUrl: number
+  fotoPerfilPublicId: number
   _all: number
 }
 
@@ -80,6 +86,8 @@ export type UsuarioMinAggregateInputType = {
   ultimoAcessoEm?: true
   createdAt?: true
   updatedAt?: true
+  fotoPerfilUrl?: true
+  fotoPerfilPublicId?: true
 }
 
 export type UsuarioMaxAggregateInputType = {
@@ -94,6 +102,8 @@ export type UsuarioMaxAggregateInputType = {
   ultimoAcessoEm?: true
   createdAt?: true
   updatedAt?: true
+  fotoPerfilUrl?: true
+  fotoPerfilPublicId?: true
 }
 
 export type UsuarioCountAggregateInputType = {
@@ -108,6 +118,8 @@ export type UsuarioCountAggregateInputType = {
   ultimoAcessoEm?: true
   createdAt?: true
   updatedAt?: true
+  fotoPerfilUrl?: true
+  fotoPerfilPublicId?: true
   _all?: true
 }
 
@@ -195,6 +207,8 @@ export type UsuarioGroupByOutputType = {
   ultimoAcessoEm: Date | null
   createdAt: Date
   updatedAt: Date
+  fotoPerfilUrl: string | null
+  fotoPerfilPublicId: string | null
   _count: UsuarioCountAggregateOutputType | null
   _min: UsuarioMinAggregateOutputType | null
   _max: UsuarioMaxAggregateOutputType | null
@@ -230,6 +244,8 @@ export type UsuarioWhereInput = {
   ultimoAcessoEm?: Prisma.DateTimeNullableFilter<"Usuario"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Usuario"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Usuario"> | Date | string
+  fotoPerfilUrl?: Prisma.StringNullableFilter<"Usuario"> | string | null
+  fotoPerfilPublicId?: Prisma.StringNullableFilter<"Usuario"> | string | null
   organizacao?: Prisma.XOR<Prisma.OrganizacaoScalarRelationFilter, Prisma.OrganizacaoWhereInput>
   tutor?: Prisma.XOR<Prisma.TutorNullableScalarRelationFilter, Prisma.TutorWhereInput> | null
   codigosVerificacao?: Prisma.CodigoVerificacaoListRelationFilter
@@ -254,6 +270,8 @@ export type UsuarioOrderByWithRelationInput = {
   ultimoAcessoEm?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  fotoPerfilUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  fotoPerfilPublicId?: Prisma.SortOrderInput | Prisma.SortOrder
   organizacao?: Prisma.OrganizacaoOrderByWithRelationInput
   tutor?: Prisma.TutorOrderByWithRelationInput
   codigosVerificacao?: Prisma.CodigoVerificacaoOrderByRelationAggregateInput
@@ -282,6 +300,8 @@ export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
   ultimoAcessoEm?: Prisma.DateTimeNullableFilter<"Usuario"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Usuario"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Usuario"> | Date | string
+  fotoPerfilUrl?: Prisma.StringNullableFilter<"Usuario"> | string | null
+  fotoPerfilPublicId?: Prisma.StringNullableFilter<"Usuario"> | string | null
   organizacao?: Prisma.XOR<Prisma.OrganizacaoScalarRelationFilter, Prisma.OrganizacaoWhereInput>
   tutor?: Prisma.XOR<Prisma.TutorNullableScalarRelationFilter, Prisma.TutorWhereInput> | null
   codigosVerificacao?: Prisma.CodigoVerificacaoListRelationFilter
@@ -306,6 +326,8 @@ export type UsuarioOrderByWithAggregationInput = {
   ultimoAcessoEm?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  fotoPerfilUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  fotoPerfilPublicId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UsuarioCountOrderByAggregateInput
   _max?: Prisma.UsuarioMaxOrderByAggregateInput
   _min?: Prisma.UsuarioMinOrderByAggregateInput
@@ -326,6 +348,8 @@ export type UsuarioScalarWhereWithAggregatesInput = {
   ultimoAcessoEm?: Prisma.DateTimeNullableWithAggregatesFilter<"Usuario"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Usuario"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Usuario"> | Date | string
+  fotoPerfilUrl?: Prisma.StringNullableWithAggregatesFilter<"Usuario"> | string | null
+  fotoPerfilPublicId?: Prisma.StringNullableWithAggregatesFilter<"Usuario"> | string | null
 }
 
 export type UsuarioCreateInput = {
@@ -339,6 +363,8 @@ export type UsuarioCreateInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
   tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
   codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
@@ -363,6 +389,8 @@ export type UsuarioUncheckedCreateInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
@@ -385,6 +413,8 @@ export type UsuarioUpdateInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
   tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
@@ -409,6 +439,8 @@ export type UsuarioUncheckedUpdateInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
@@ -432,6 +464,8 @@ export type UsuarioCreateManyInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
 }
 
 export type UsuarioUpdateManyMutationInput = {
@@ -445,6 +479,8 @@ export type UsuarioUpdateManyMutationInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UsuarioUncheckedUpdateManyInput = {
@@ -459,6 +495,8 @@ export type UsuarioUncheckedUpdateManyInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UsuarioListRelationFilter = {
@@ -488,6 +526,8 @@ export type UsuarioCountOrderByAggregateInput = {
   ultimoAcessoEm?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  fotoPerfilUrl?: Prisma.SortOrder
+  fotoPerfilPublicId?: Prisma.SortOrder
 }
 
 export type UsuarioMaxOrderByAggregateInput = {
@@ -502,6 +542,8 @@ export type UsuarioMaxOrderByAggregateInput = {
   ultimoAcessoEm?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  fotoPerfilUrl?: Prisma.SortOrder
+  fotoPerfilPublicId?: Prisma.SortOrder
 }
 
 export type UsuarioMinOrderByAggregateInput = {
@@ -516,6 +558,8 @@ export type UsuarioMinOrderByAggregateInput = {
   ultimoAcessoEm?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  fotoPerfilUrl?: Prisma.SortOrder
+  fotoPerfilPublicId?: Prisma.SortOrder
 }
 
 export type UsuarioScalarRelationFilter = {
@@ -576,6 +620,10 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
 
 export type EnumPapelUsuarioFieldUpdateOperationsInput = {
   set?: $Enums.PapelUsuario
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
 export type UsuarioCreateNestedOneWithoutCodigosVerificacaoInput = {
@@ -727,6 +775,8 @@ export type UsuarioCreateWithoutOrganizacaoInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
   codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorCreateNestedManyWithoutAvaliadoPorInput
@@ -749,6 +799,8 @@ export type UsuarioUncheckedCreateWithoutOrganizacaoInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
@@ -801,6 +853,8 @@ export type UsuarioScalarWhereInput = {
   ultimoAcessoEm?: Prisma.DateTimeNullableFilter<"Usuario"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Usuario"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Usuario"> | Date | string
+  fotoPerfilUrl?: Prisma.StringNullableFilter<"Usuario"> | string | null
+  fotoPerfilPublicId?: Prisma.StringNullableFilter<"Usuario"> | string | null
 }
 
 export type UsuarioCreateWithoutCodigosVerificacaoInput = {
@@ -814,6 +868,8 @@ export type UsuarioCreateWithoutCodigosVerificacaoInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
   tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorCreateNestedManyWithoutAvaliadoPorInput
@@ -837,6 +893,8 @@ export type UsuarioUncheckedCreateWithoutCodigosVerificacaoInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutAnalisadoPorInput
@@ -874,6 +932,8 @@ export type UsuarioUpdateWithoutCodigosVerificacaoInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
   tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUpdateManyWithoutAvaliadoPorNestedInput
@@ -897,6 +957,8 @@ export type UsuarioUncheckedUpdateWithoutCodigosVerificacaoInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedUpdateManyWithoutAnalisadoPorNestedInput
@@ -918,6 +980,8 @@ export type UsuarioCreateWithoutTutorInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
   codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorCreateNestedManyWithoutAvaliadoPorInput
@@ -941,6 +1005,8 @@ export type UsuarioUncheckedCreateWithoutTutorInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutAnalisadoPorInput
@@ -967,6 +1033,8 @@ export type UsuarioCreateWithoutTutoresAvaliadosInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
   tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
   codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
@@ -990,6 +1058,8 @@ export type UsuarioUncheckedCreateWithoutTutoresAvaliadosInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutAnalisadoPorInput
@@ -1027,6 +1097,8 @@ export type UsuarioUpdateWithoutTutorInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUpdateManyWithoutAvaliadoPorNestedInput
@@ -1050,6 +1122,8 @@ export type UsuarioUncheckedUpdateWithoutTutorInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedUpdateManyWithoutAnalisadoPorNestedInput
@@ -1082,6 +1156,8 @@ export type UsuarioUpdateWithoutTutoresAvaliadosInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
   tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
@@ -1105,6 +1181,8 @@ export type UsuarioUncheckedUpdateWithoutTutoresAvaliadosInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   solicitacoesAnalisadas?: Prisma.SolicitacaoUncheckedUpdateManyWithoutAnalisadoPorNestedInput
@@ -1126,6 +1204,8 @@ export type UsuarioCreateWithoutSolicitacoesAnalisadasInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
   tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
   codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
@@ -1149,6 +1229,8 @@ export type UsuarioUncheckedCreateWithoutSolicitacoesAnalisadasInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
@@ -1186,6 +1268,8 @@ export type UsuarioUpdateWithoutSolicitacoesAnalisadasInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
   tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
@@ -1209,6 +1293,8 @@ export type UsuarioUncheckedUpdateWithoutSolicitacoesAnalisadasInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
@@ -1230,6 +1316,8 @@ export type UsuarioCreateWithoutHistoricosSolicitacoesInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
   tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
   codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
@@ -1253,6 +1341,8 @@ export type UsuarioUncheckedCreateWithoutHistoricosSolicitacoesInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
@@ -1290,6 +1380,8 @@ export type UsuarioUpdateWithoutHistoricosSolicitacoesInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
   tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
@@ -1313,6 +1405,8 @@ export type UsuarioUncheckedUpdateWithoutHistoricosSolicitacoesInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
@@ -1334,6 +1428,8 @@ export type UsuarioCreateWithoutHistoricosOcorrenciasInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
   tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
   codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
@@ -1357,6 +1453,8 @@ export type UsuarioUncheckedCreateWithoutHistoricosOcorrenciasInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
@@ -1394,6 +1492,8 @@ export type UsuarioUpdateWithoutHistoricosOcorrenciasInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
   tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
@@ -1417,6 +1517,8 @@ export type UsuarioUncheckedUpdateWithoutHistoricosOcorrenciasInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
@@ -1438,6 +1540,8 @@ export type UsuarioCreateWithoutAgendamentosResponsavelInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
   tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
   codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
@@ -1461,6 +1565,8 @@ export type UsuarioUncheckedCreateWithoutAgendamentosResponsavelInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
@@ -1487,6 +1593,8 @@ export type UsuarioCreateWithoutAgendamentosCriadosInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
   tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
   codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
@@ -1510,6 +1618,8 @@ export type UsuarioUncheckedCreateWithoutAgendamentosCriadosInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
@@ -1547,6 +1657,8 @@ export type UsuarioUpdateWithoutAgendamentosResponsavelInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
   tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
@@ -1570,6 +1682,8 @@ export type UsuarioUncheckedUpdateWithoutAgendamentosResponsavelInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
@@ -1602,6 +1716,8 @@ export type UsuarioUpdateWithoutAgendamentosCriadosInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
   tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
@@ -1625,6 +1741,8 @@ export type UsuarioUncheckedUpdateWithoutAgendamentosCriadosInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
@@ -1646,6 +1764,8 @@ export type UsuarioCreateWithoutCampanhasCriadasInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   organizacao: Prisma.OrganizacaoCreateNestedOneWithoutUsuariosInput
   tutor?: Prisma.TutorCreateNestedOneWithoutUsuarioInput
   codigosVerificacao?: Prisma.CodigoVerificacaoCreateNestedManyWithoutUsuarioInput
@@ -1669,6 +1789,8 @@ export type UsuarioUncheckedCreateWithoutCampanhasCriadasInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
   tutor?: Prisma.TutorUncheckedCreateNestedOneWithoutUsuarioInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedCreateNestedManyWithoutUsuarioInput
   tutoresAvaliados?: Prisma.TutorUncheckedCreateNestedManyWithoutAvaliadoPorInput
@@ -1706,6 +1828,8 @@ export type UsuarioUpdateWithoutCampanhasCriadasInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organizacao?: Prisma.OrganizacaoUpdateOneRequiredWithoutUsuariosNestedInput
   tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
@@ -1729,6 +1853,8 @@ export type UsuarioUncheckedUpdateWithoutCampanhasCriadasInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
@@ -1750,6 +1876,8 @@ export type UsuarioCreateManyOrganizacaoInput = {
   ultimoAcessoEm?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  fotoPerfilUrl?: string | null
+  fotoPerfilPublicId?: string | null
 }
 
 export type UsuarioUpdateWithoutOrganizacaoInput = {
@@ -1763,6 +1891,8 @@ export type UsuarioUpdateWithoutOrganizacaoInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tutor?: Prisma.TutorUpdateOneWithoutUsuarioNestedInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUpdateManyWithoutAvaliadoPorNestedInput
@@ -1785,6 +1915,8 @@ export type UsuarioUncheckedUpdateWithoutOrganizacaoInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tutor?: Prisma.TutorUncheckedUpdateOneWithoutUsuarioNestedInput
   codigosVerificacao?: Prisma.CodigoVerificacaoUncheckedUpdateManyWithoutUsuarioNestedInput
   tutoresAvaliados?: Prisma.TutorUncheckedUpdateManyWithoutAvaliadoPorNestedInput
@@ -1807,6 +1939,8 @@ export type UsuarioUncheckedUpdateManyWithoutOrganizacaoInput = {
   ultimoAcessoEm?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fotoPerfilUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fotoPerfilPublicId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -1915,6 +2049,8 @@ export type UsuarioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   ultimoAcessoEm?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  fotoPerfilUrl?: boolean
+  fotoPerfilPublicId?: boolean
   organizacao?: boolean | Prisma.OrganizacaoDefaultArgs<ExtArgs>
   tutor?: boolean | Prisma.Usuario$tutorArgs<ExtArgs>
   codigosVerificacao?: boolean | Prisma.Usuario$codigosVerificacaoArgs<ExtArgs>
@@ -1940,6 +2076,8 @@ export type UsuarioSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   ultimoAcessoEm?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  fotoPerfilUrl?: boolean
+  fotoPerfilPublicId?: boolean
   organizacao?: boolean | Prisma.OrganizacaoDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["usuario"]>
 
@@ -1955,6 +2093,8 @@ export type UsuarioSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   ultimoAcessoEm?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  fotoPerfilUrl?: boolean
+  fotoPerfilPublicId?: boolean
   organizacao?: boolean | Prisma.OrganizacaoDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["usuario"]>
 
@@ -1970,9 +2110,11 @@ export type UsuarioSelectScalar = {
   ultimoAcessoEm?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  fotoPerfilUrl?: boolean
+  fotoPerfilPublicId?: boolean
 }
 
-export type UsuarioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizacaoId" | "nome" | "email" | "senhaHash" | "emailVerificadoEm" | "papel" | "ativo" | "ultimoAcessoEm" | "createdAt" | "updatedAt", ExtArgs["result"]["usuario"]>
+export type UsuarioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizacaoId" | "nome" | "email" | "senhaHash" | "emailVerificadoEm" | "papel" | "ativo" | "ultimoAcessoEm" | "createdAt" | "updatedAt" | "fotoPerfilUrl" | "fotoPerfilPublicId", ExtArgs["result"]["usuario"]>
 export type UsuarioInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organizacao?: boolean | Prisma.OrganizacaoDefaultArgs<ExtArgs>
   tutor?: boolean | Prisma.Usuario$tutorArgs<ExtArgs>
@@ -2019,6 +2161,8 @@ export type $UsuarioPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     ultimoAcessoEm: Date | null
     createdAt: Date
     updatedAt: Date
+    fotoPerfilUrl: string | null
+    fotoPerfilPublicId: string | null
   }, ExtArgs["result"]["usuario"]>
   composites: {}
 }
@@ -2463,6 +2607,8 @@ export interface UsuarioFieldRefs {
   readonly ultimoAcessoEm: Prisma.FieldRef<"Usuario", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Usuario", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Usuario", 'DateTime'>
+  readonly fotoPerfilUrl: Prisma.FieldRef<"Usuario", 'String'>
+  readonly fotoPerfilPublicId: Prisma.FieldRef<"Usuario", 'String'>
 }
     
 

@@ -10,10 +10,12 @@ import { EmailService } from './email.service.js';
 import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
 import { RolesGuard } from './guards/roles.guard.js';
 import { JwtStrategy } from './strategies/jwt.strategy.js';
+import { StorageModule } from '../storage/storage.module.js';
 
 @Module({
   imports: [
     PrismaModule,
+    StorageModule,
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),

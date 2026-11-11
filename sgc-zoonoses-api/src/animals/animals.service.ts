@@ -1,11 +1,14 @@
 
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 
 import { PrismaService } from '../prisma/prisma.service.js';
+import { CloudinaryService } from '../storage/cloudinary.service.js';
 import { CreateAnimalDto } from './dto/create-animal.dto.js';
 import { UpdateAnimalDto } from './dto/update-animal.dto.js';
 
@@ -17,7 +20,12 @@ interface AuthenticatedUser {
 
 @Injectable()
 export class AnimalsService {
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly logger = new Logger(AnimalsService.name);
+
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly cloudinaryService: CloudinaryService,
+  ) {}
 
   private async buscarTutor(usuario: AuthenticatedUser) {
     if (usuario.papel !== 'TUTOR') {
@@ -41,12 +49,33 @@ export class AnimalsService {
     return tutor;
   }
 
+  // A exclusão no Cloudinary não deve desfazer uma operação
+  // que já foi concluída com sucesso no banco.
+  private async excluirFotoCloudinary(publicId: string | null) {
+    if (!publicId) return;
+
+    try {
+      await this.cloudinaryService.deleteImage(publicId);
+    } catch (error) {
+      this.logger.warn(
+        `Não foi possível excluir a imagem ${publicId} do Cloudinary.`,
+        error instanceof Error ? error.stack : undefined,
+      );
+    }
+  }
+
   async create(dto: CreateAnimalDto, usuario: AuthenticatedUser) {
     const tutor = await this.buscarTutor(usuario);
 
     if (dto.dataNascimento && dto.idadeAproximadaMeses !== undefined) {
-      throw new ForbiddenException(
+      throw new BadRequestException(
         'Informe a data de nascimento ou a idade aproximada, não ambos.',
+      );
+    }
+
+    if (Boolean(dto.fotoUrl) !== Boolean(dto.fotoPublicId)) {
+      throw new BadRequestException(
+        'A URL e o identificador da foto devem ser informados juntos.',
       );
     }
 
@@ -65,6 +94,7 @@ export class AnimalsService {
           : null,
         idadeAproximadaMeses: dto.idadeAproximadaMeses,
         fotoUrl: dto.fotoUrl?.trim() || null,
+        fotoPublicId: dto.fotoPublicId?.trim() || null,
         observacoes: dto.observacoes?.trim() || null,
       },
     });
@@ -103,6 +133,15 @@ export class AnimalsService {
       throw new NotFoundException('Animal não encontrado.');
     }
 
+    const enviouUrl = dto.fotoUrl !== undefined;
+    const enviouPublicId = dto.fotoPublicId !== undefined;
+
+    if (enviouUrl !== enviouPublicId) {
+      throw new BadRequestException(
+        'A URL e o identificador da foto devem ser atualizados juntos.',
+      );
+    }
+
     const dataNascimento =
       dto.dataNascimento === undefined
         ? animal.dataNascimento
@@ -116,12 +155,12 @@ export class AnimalsService {
         : dto.idadeAproximadaMeses;
 
     if (dataNascimento && idadeAproximadaMeses !== null) {
-      throw new ForbiddenException(
+      throw new BadRequestException(
         'Informe a data de nascimento ou a idade aproximada, não ambos.',
       );
     }
 
-    return this.prisma.animal.update({
+    const animalAtualizado = await this.prisma.animal.update({
       where: { id },
       data: {
         ...(dto.nome !== undefined && { nome: dto.nome.trim() }),
@@ -143,11 +182,25 @@ export class AnimalsService {
         ...(dto.fotoUrl !== undefined && {
           fotoUrl: dto.fotoUrl?.trim() || null,
         }),
+        ...(dto.fotoPublicId !== undefined && {
+          fotoPublicId: dto.fotoPublicId?.trim() || null,
+        }),
         ...(dto.observacoes !== undefined && {
           observacoes: dto.observacoes?.trim() || null,
         }),
       },
     });
+
+    // A foto antiga só é excluída depois que o banco salva a nova.
+    if (
+      enviouPublicId &&
+      animal.fotoPublicId &&
+      animal.fotoPublicId !== animalAtualizado.fotoPublicId
+    ) {
+      await this.excluirFotoCloudinary(animal.fotoPublicId);
+    }
+
+    return animalAtualizado;
   }
 
   async remove(id: string, usuario: AuthenticatedUser) {
@@ -166,9 +219,17 @@ export class AnimalsService {
       throw new NotFoundException('Animal não encontrado.');
     }
 
-    return this.prisma.animal.update({
+    const animalRemovido = await this.prisma.animal.update({
       where: { id },
-      data: { ativo: false },
+      data: {
+        ativo: false,
+        fotoUrl: null,
+        fotoPublicId: null,
+      },
     });
+
+    await this.excluirFotoCloudinary(animal.fotoPublicId);
+
+    return animalRemovido;
   }
 }

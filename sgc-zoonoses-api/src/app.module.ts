@@ -11,6 +11,7 @@ import { StatsModule } from './stats/stats.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { PendingTutorsCleanupService } from './cleanup/pending-tutors-cleanup.service.js';
 import { AnimalsModule } from './animals/animals.module.js';
+import { AdminModule } from './admin/admin.module.js';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AnimalsModule } from './animals/animals.module.js';
     StatsModule,
     AuthModule,
     AnimalsModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [
