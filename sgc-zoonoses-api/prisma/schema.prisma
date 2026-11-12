@@ -1,0 +1,449 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TipoOrganizacao {
+  PREFEITURA
+  CLINICA
+  OUTRA
+}
+
+enum PapelUsuario {
+  ADMIN
+  EQUIPE
+  TUTOR
+}
+
+enum FinalidadeCodigoVerificacao {
+  VERIFICACAO_EMAIL
+  RECUPERACAO_SENHA
+}
+
+enum StatusCadastroTutor {
+  PENDENTE
+  APROVADO
+  RECUSADO
+}
+
+enum EspecieAnimal {
+  CAO
+  GATO
+  OUTRA
+}
+
+enum SexoAnimal {
+  MACHO
+  FEMEA
+  NAO_INFORMADO
+}
+
+enum PorteAnimal {
+  PEQUENO
+  MEDIO
+  GRANDE
+  NAO_INFORMADO
+}
+
+enum StatusSolicitacao {
+  PENDENTE
+  EM_ANALISE
+  APROVADA
+  RECUSADA
+  AGENDADA
+  CONCLUIDA
+  CANCELADA
+}
+
+enum StatusOcorrencia {
+  PENDENTE
+  EM_ANALISE
+  EM_ATENDIMENTO
+  EM_ACOMPANHAMENTO
+  RESOLVIDA
+  RECUSADA
+  CANCELADA
+}
+
+enum StatusAgendamento {
+  AGENDADO
+  CONFIRMADO
+  REALIZADO
+  CANCELADO
+  NAO_COMPARECEU
+}
+
+enum StatusCampanha {
+  ATIVA
+  ENCERRADA
+  RASCUNHO
+}
+
+model Organizacao {
+  id        String          @id @default(uuid()) @db.Uuid
+  nome      String          @db.VarChar(160)
+  slug      String          @unique @db.VarChar(80)
+  tipo      TipoOrganizacao @default(PREFEITURA)
+  ativa     Boolean         @default(true)
+  createdAt DateTime        @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime        @updatedAt @db.Timestamptz(6)
+
+  usuarios           Usuario[]
+  tutores            Tutor[]
+  animais            Animal[]
+  servicos           Servico[]
+  solicitacoes       Solicitacao[]
+  tiposOcorrencia    TipoOcorrencia[]
+  ocorrencias        Ocorrencia[]
+  equipes            Equipe[]
+  recursos           Recurso[]
+  agendamentos       Agendamento[]
+  campanhas          Campaign[]
+  indicadoresImpacto ImpactStats?
+
+  @@map("organizacoes")
+}
+
+model Usuario {
+  id                String       @id @default(uuid()) @db.Uuid
+  organizacaoId     String       @db.Uuid
+  nome              String       @db.VarChar(160)
+  email             String       @db.VarChar(254)
+  senhaHash         String       @db.VarChar(255)
+  // Preenchido somente após a confirmação do endereço de e-mail.
+  emailVerificadoEm DateTime?    @db.Timestamptz(6)
+  papel             PapelUsuario @default(TUTOR)
+  ativo             Boolean      @default(true)
+  ultimoAcessoEm    DateTime?    @db.Timestamptz(6)
+  createdAt         DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime     @updatedAt @db.Timestamptz(6)
+  
+  fotoPerfilUrl      String? @db.VarChar(1000)
+  fotoPerfilPublicId String? @db.VarChar(255)
+
+  organizacao             Organizacao            @relation(fields: [organizacaoId], references: [id], onDelete: Restrict)
+  tutor                   Tutor?
+  codigosVerificacao      CodigoVerificacao[]
+  // Relação mantida temporariamente para preservar o modelo legado de avaliação.
+  tutoresAvaliados        Tutor[]                @relation("AvaliadorTutor")
+  solicitacoesAnalisadas  Solicitacao[]          @relation("AnalistaSolicitacao")
+  historicosSolicitacoes  HistoricoSolicitacao[] @relation("AutorHistoricoSolicitacao")
+  historicosOcorrencias   HistoricoOcorrencia[]  @relation("AutorHistoricoOcorrencia")
+  agendamentosResponsavel Agendamento[]          @relation("ResponsavelAgendamento")
+  agendamentosCriados     Agendamento[]          @relation("CriadorAgendamento")
+  campanhasCriadas        Campaign[]             @relation("CriadorCampanha")
+
+  @@unique([organizacaoId, email])
+  @@index([organizacaoId, papel, ativo])
+  @@map("usuarios")
+}
+
+model CodigoVerificacao {
+  id           String                      @id @default(uuid()) @db.Uuid
+  usuarioId    String                      @db.Uuid
+  finalidade   FinalidadeCodigoVerificacao
+  codigoHash   String                      @db.VarChar(255)
+  expiraEm     DateTime                    @db.Timestamptz(6)
+  tentativas   Int                         @default(0)
+  utilizadoEm  DateTime?                   @db.Timestamptz(6)
+  invalidadoEm DateTime?                   @db.Timestamptz(6)
+  createdAt    DateTime                    @default(now()) @db.Timestamptz(6)
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, finalidade, createdAt])
+  @@index([expiraEm])
+  @@map("codigos_verificacao")
+}
+
+model Tutor {
+  id             String              @id @default(uuid()) @db.Uuid
+  organizacaoId  String              @db.Uuid
+  usuarioId      String              @unique @db.Uuid
+  cpf            String              @db.VarChar(11)
+  dataNascimento DateTime            @db.Date
+  telefone       String              @db.VarChar(30)
+  endereco       String              @db.VarChar(180)
+  numero         String              @db.VarChar(20)
+  bairro         String              @db.VarChar(100)
+  cidade         String              @db.VarChar(100)
+  cep            String              @db.VarChar(8)
+  // Campos legados: o novo fluxo não dependerá de aprovação administrativa.
+  // Serão removidos em migração futura após confirmar que não há dados históricos necessários.
+  statusCadastro StatusCadastroTutor @default(PENDENTE)
+  motivoRecusa   String?             @db.VarChar(500)
+  avaliadoPorId  String?             @db.Uuid
+  avaliadoEm     DateTime?           @db.Timestamptz(6)
+  createdAt      DateTime            @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime            @updatedAt @db.Timestamptz(6)
+
+  organizacao  Organizacao   @relation(fields: [organizacaoId], references: [id], onDelete: Restrict)
+  usuario      Usuario       @relation(fields: [usuarioId], references: [id], onDelete: Restrict)
+  avaliadoPor  Usuario?      @relation("AvaliadorTutor", fields: [avaliadoPorId], references: [id], onDelete: SetNull)
+  animais      Animal[]
+  solicitacoes Solicitacao[]
+  ocorrencias  Ocorrencia[]
+
+  @@unique([organizacaoId, cpf])
+  @@index([organizacaoId, statusCadastro, createdAt])
+  @@map("tutores")
+}
+
+model Animal {
+  id                   String        @id @default(uuid()) @db.Uuid
+  organizacaoId        String        @db.Uuid
+  tutorId              String        @db.Uuid
+  nome                 String        @db.VarChar(100)
+  especie              EspecieAnimal
+  sexo                 SexoAnimal    @default(NAO_INFORMADO)
+  raca                 String?       @db.VarChar(100)
+  cor                  String?       @db.VarChar(80)
+  porte                PorteAnimal   @default(NAO_INFORMADO)
+  dataNascimento       DateTime?     @db.Date
+  idadeAproximadaMeses Int?
+  fotoUrl              String?       @db.VarChar(1000)
+  fotoPublicId         String?       @db.VarChar(255)
+  observacoes          String?       @db.Text
+  ativo                Boolean       @default(true)
+  createdAt            DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt            DateTime      @updatedAt @db.Timestamptz(6)
+
+  organizacao  Organizacao   @relation(fields: [organizacaoId], references: [id], onDelete: Restrict)
+  tutor        Tutor         @relation(fields: [tutorId], references: [id], onDelete: Restrict)
+  solicitacoes Solicitacao[]
+  ocorrencias  Ocorrencia[]
+
+  @@index([organizacaoId, tutorId, ativo])
+  @@index([organizacaoId, especie, sexo])
+  @@map("animais")
+}
+
+model Servico {
+  id            String   @id @default(uuid()) @db.Uuid
+  organizacaoId String   @db.Uuid
+  nome          String   @db.VarChar(120)
+  descricao     String?  @db.Text
+  ativo         Boolean  @default(true)
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @db.Timestamptz(6)
+
+  organizacao  Organizacao   @relation(fields: [organizacaoId], references: [id], onDelete: Restrict)
+  solicitacoes Solicitacao[]
+
+  @@unique([organizacaoId, nome])
+  @@index([organizacaoId, ativo])
+  @@map("servicos")
+}
+
+model Solicitacao {
+  id                 String            @id @default(uuid()) @db.Uuid
+  organizacaoId      String            @db.Uuid
+  tutorId            String            @db.Uuid
+  animalId           String            @db.Uuid
+  servicoId          String            @db.Uuid
+  status             StatusSolicitacao @default(PENDENTE)
+  observacoes        String?           @db.Text
+  observacoesAnalise String?           @db.Text
+  analisadoPorId     String?           @db.Uuid
+  analisadoEm        DateTime?         @db.Timestamptz(6)
+  createdAt          DateTime          @default(now()) @db.Timestamptz(6)
+  updatedAt          DateTime          @updatedAt @db.Timestamptz(6)
+
+  organizacao  Organizacao            @relation(fields: [organizacaoId], references: [id], onDelete: Restrict)
+  tutor        Tutor                  @relation(fields: [tutorId], references: [id], onDelete: Restrict)
+  animal       Animal                 @relation(fields: [animalId], references: [id], onDelete: Restrict)
+  servico      Servico                @relation(fields: [servicoId], references: [id], onDelete: Restrict)
+  analisadoPor Usuario?               @relation("AnalistaSolicitacao", fields: [analisadoPorId], references: [id], onDelete: SetNull)
+  historicos   HistoricoSolicitacao[]
+  agendamentos Agendamento[]
+
+  @@index([organizacaoId, status, createdAt])
+  @@index([organizacaoId, tutorId, createdAt])
+  @@index([organizacaoId, animalId])
+  @@map("solicitacoes")
+}
+
+model HistoricoSolicitacao {
+  id             String             @id @default(uuid()) @db.Uuid
+  solicitacaoId  String             @db.Uuid
+  statusAnterior StatusSolicitacao?
+  statusNovo     StatusSolicitacao
+  observacao     String?            @db.Text
+  alteradoPorId  String?            @db.Uuid
+  createdAt      DateTime           @default(now()) @db.Timestamptz(6)
+
+  solicitacao Solicitacao @relation(fields: [solicitacaoId], references: [id], onDelete: Restrict)
+  alteradoPor Usuario?    @relation("AutorHistoricoSolicitacao", fields: [alteradoPorId], references: [id], onDelete: SetNull)
+
+  @@index([solicitacaoId, createdAt])
+  @@map("historicos_solicitacoes")
+}
+
+model TipoOcorrencia {
+  id            String   @id @default(uuid()) @db.Uuid
+  organizacaoId String   @db.Uuid
+  nome          String   @db.VarChar(120)
+  descricao     String?  @db.Text
+  ativo         Boolean  @default(true)
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @db.Timestamptz(6)
+
+  organizacao Organizacao  @relation(fields: [organizacaoId], references: [id], onDelete: Restrict)
+  ocorrencias Ocorrencia[]
+
+  @@unique([organizacaoId, nome])
+  @@index([organizacaoId, ativo])
+  @@map("tipos_ocorrencia")
+}
+
+model Ocorrencia {
+  id                    String           @id @default(uuid()) @db.Uuid
+  organizacaoId         String           @db.Uuid
+  protocolo             String           @db.VarChar(30)
+  tutorId               String           @db.Uuid
+  tipoOcorrenciaId      String           @db.Uuid
+  animalId              String?          @db.Uuid
+  dataOcorrencia        DateTime         @db.Date
+  localReferencia       String?          @db.VarChar(180)
+  endereco              String           @db.VarChar(250)
+  descricao             String           @db.Text
+  informacoesAdicionais String?          @db.Text
+  anexoUrl              String?          @db.VarChar(1000)
+  status                StatusOcorrencia @default(PENDENTE)
+  resolvidaEm           DateTime?        @db.Timestamptz(6)
+  conclusao             String?          @db.Text
+  createdAt             DateTime         @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime         @updatedAt @db.Timestamptz(6)
+
+  organizacao Organizacao           @relation(fields: [organizacaoId], references: [id], onDelete: Restrict)
+  tutor       Tutor                 @relation(fields: [tutorId], references: [id], onDelete: Restrict)
+  tipo        TipoOcorrencia        @relation(fields: [tipoOcorrenciaId], references: [id], onDelete: Restrict)
+  animal      Animal?               @relation(fields: [animalId], references: [id], onDelete: SetNull)
+  historicos  HistoricoOcorrencia[]
+
+  @@unique([organizacaoId, protocolo])
+  @@index([organizacaoId, status, createdAt])
+  @@index([organizacaoId, tutorId, createdAt])
+  @@index([organizacaoId, tipoOcorrenciaId])
+  @@map("ocorrencias")
+}
+
+model HistoricoOcorrencia {
+  id             String            @id @default(uuid()) @db.Uuid
+  ocorrenciaId   String            @db.Uuid
+  statusAnterior StatusOcorrencia?
+  statusNovo     StatusOcorrencia
+  observacao     String?           @db.Text
+  alteradoPorId  String?           @db.Uuid
+  createdAt      DateTime          @default(now()) @db.Timestamptz(6)
+
+  ocorrencia  Ocorrencia @relation(fields: [ocorrenciaId], references: [id], onDelete: Restrict)
+  alteradoPor Usuario?   @relation("AutorHistoricoOcorrencia", fields: [alteradoPorId], references: [id], onDelete: SetNull)
+
+  @@index([ocorrenciaId, createdAt])
+  @@map("historicos_ocorrencias")
+}
+
+model Equipe {
+  id            String   @id @default(uuid()) @db.Uuid
+  organizacaoId String   @db.Uuid
+  nome          String   @db.VarChar(120)
+  ativa         Boolean  @default(true)
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @db.Timestamptz(6)
+
+  organizacao  Organizacao   @relation(fields: [organizacaoId], references: [id], onDelete: Restrict)
+  agendamentos Agendamento[]
+
+  @@unique([organizacaoId, nome])
+  @@index([organizacaoId, ativa])
+  @@map("equipes")
+}
+
+model Recurso {
+  id            String   @id @default(uuid()) @db.Uuid
+  organizacaoId String   @db.Uuid
+  nome          String   @db.VarChar(120)
+  tipo          String   @db.VarChar(80)
+  ativo         Boolean  @default(true)
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @db.Timestamptz(6)
+
+  organizacao  Organizacao   @relation(fields: [organizacaoId], references: [id], onDelete: Restrict)
+  agendamentos Agendamento[]
+
+  @@unique([organizacaoId, nome])
+  @@index([organizacaoId, ativo])
+  @@map("recursos")
+}
+
+model Agendamento {
+  id                   String            @id @default(uuid()) @db.Uuid
+  organizacaoId        String            @db.Uuid
+  solicitacaoId        String            @db.Uuid
+  equipeId             String?           @db.Uuid
+  responsavelUsuarioId String?           @db.Uuid
+  recursoId            String?           @db.Uuid
+  inicio               DateTime          @db.Timestamptz(6)
+  fim                  DateTime          @db.Timestamptz(6)
+  local                String            @db.VarChar(250)
+  observacoes          String?           @db.Text
+  status               StatusAgendamento @default(AGENDADO)
+  criadoPorId          String            @db.Uuid
+  canceladoEm          DateTime?         @db.Timestamptz(6)
+  motivoCancelamento   String?           @db.VarChar(500)
+  createdAt            DateTime          @default(now()) @db.Timestamptz(6)
+  updatedAt            DateTime          @updatedAt @db.Timestamptz(6)
+
+  organizacao        Organizacao @relation(fields: [organizacaoId], references: [id], onDelete: Restrict)
+  solicitacao        Solicitacao @relation(fields: [solicitacaoId], references: [id], onDelete: Restrict)
+  equipe             Equipe?     @relation(fields: [equipeId], references: [id], onDelete: SetNull)
+  responsavelUsuario Usuario?    @relation("ResponsavelAgendamento", fields: [responsavelUsuarioId], references: [id], onDelete: SetNull)
+  recurso            Recurso?    @relation(fields: [recursoId], references: [id], onDelete: SetNull)
+  criadoPor          Usuario     @relation("CriadorAgendamento", fields: [criadoPorId], references: [id], onDelete: Restrict)
+
+  @@index([organizacaoId, inicio, fim])
+  @@index([organizacaoId, status, inicio])
+  @@index([solicitacaoId, status])
+  @@map("agendamentos")
+}
+
+model Campaign {
+  id            String         @id @default(uuid()) @db.Uuid
+  organizacaoId String         @map("organizacao_id") @db.Uuid
+  title         String         @db.VarChar(180)
+  description   String         @db.Text
+  status        StatusCampanha @default(RASCUNHO)
+  schedule      String?        @db.VarChar(180)
+  location      String?        @db.VarChar(180)
+  buttonText    String         @default("Saiba mais") @map("button_text") @db.VarChar(80)
+  createdById   String?        @map("created_by") @db.Uuid
+  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  organizacao Organizacao @relation(fields: [organizacaoId], references: [id], onDelete: Restrict)
+  createdBy   Usuario?    @relation("CriadorCampanha", fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([organizacaoId, status, createdAt])
+  @@map("campaigns")
+}
+
+model ImpactStats {
+  id            String   @id @default(uuid()) @db.Uuid
+  organizacaoId String   @unique @map("organizacao_id") @db.Uuid
+  vaccinated    Int      @default(0)
+  castrations   Int      @default(0)
+  tests         Int      @default(0)
+  sheltered     Int      @default(0)
+  citizens      Int      @default(0)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  organizacao Organizacao @relation(fields: [organizacaoId], references: [id], onDelete: Restrict)
+
+  @@map("impact_stats")
+}

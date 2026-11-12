@@ -4,13 +4,14 @@ import {
   listCampaigns,
   type Campaign,
 } from "../services/campaigns";
+import { formatCampaignDateTime } from "../utils/formatDate";
 
 export default function Campaigns() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  async function carregarCampanhas() {
+    async function carregarCampanhas() {
       try {
         const data = await listCampaigns();
         setCampaigns(data);
@@ -104,7 +105,11 @@ export default function Campaigns() {
                     </div>
 
                     <div className="space-y-1 text-xs text-gray-500">
-                      <p>📅 {camp.schedule || "Todo sábado - 08h às 12h"}</p>
+                      <p>
+                        📅 {camp.schedule
+                          ? formatCampaignDateTime(camp.schedule)
+                          : "Todo sábado - 08h às 12h"}
+                      </p>
                       <p>📍 {camp.location || "Ponto de vacinação do seu bairro"}</p>
                     </div>
                   </div>
