@@ -168,7 +168,7 @@ export default function TutorProfile() {
 
       setErroFoto(
         error.response?.data?.message ||
-          "Não foi possível enviar a foto. Tente novamente."
+        "Não foi possível enviar a foto. Tente novamente."
       );
     } finally {
       setEnviandoFoto(false);
@@ -205,7 +205,7 @@ export default function TutorProfile() {
 
       setErroFoto(
         error.response?.data?.message ||
-          "Não foi possível remover a foto. Tente novamente."
+        "Não foi possível remover a foto. Tente novamente."
       );
     } finally {
       setExcluindoFoto(false);
@@ -258,7 +258,7 @@ export default function TutorProfile() {
 
       setErroExclusao(
         error.response?.data?.message ||
-          "Não foi possível excluir o animal. Tente novamente."
+        "Não foi possível excluir o animal. Tente novamente."
       );
     } finally {
       setExcluindoAnimalId(null);
@@ -520,20 +520,27 @@ export default function TutorProfile() {
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
+                <button
+                  type="button"
+                  onClick={() => navigate("/solicitacoes/nova")}
+                  className="w-full text-left bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:border-[#BCE7E7] hover:shadow-md transition cursor-pointer"
+                >
                   <div className="w-11 h-11 rounded-xl bg-[#E8F7F7] flex items-center justify-center mb-4">
                     <FiClipboard className="text-[#05ABAD] text-xl" />
                   </div>
+
                   <h4 className="font-bold text-gray-800">
                     Solicitações de serviços
                   </h4>
+
                   <p className="text-sm text-gray-500 mt-2">
                     Solicite castração, vacinação e outros serviços para seus animais.
                   </p>
+
                   <p className="text-xs text-[#05ABAD] font-semibold mt-4">
-                    Em breve
+                    Solicitar agora →
                   </p>
-                </div>
+                </button>
 
                 <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
                   <div className="w-11 h-11 rounded-xl bg-orange-50 flex items-center justify-center mb-4">

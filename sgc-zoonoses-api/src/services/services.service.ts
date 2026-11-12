@@ -23,6 +23,7 @@ export class ServicesService {
         id: true,
         nome: true,
         descricao: true,
+        ativo: true,
       },
       orderBy: {
         nome: 'asc',

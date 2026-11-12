@@ -12,6 +12,8 @@ import { AuthModule } from './auth/auth.module.js';
 import { PendingTutorsCleanupService } from './cleanup/pending-tutors-cleanup.service.js';
 import { AnimalsModule } from './animals/animals.module.js';
 import { AdminModule } from './admin/admin.module.js';
+import { ServicesModule } from './services/services.module.js';
+import { SolicitationsModule } from './solicitations/solicitations.module.js';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { AdminModule } from './admin/admin.module.js';
     AuthModule,
     AnimalsModule,
     AdminModule,
+    ServicesModule,
+    SolicitationsModule,
   ],
   controllers: [AppController],
   providers: [
