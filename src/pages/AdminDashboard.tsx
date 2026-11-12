@@ -102,7 +102,7 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Link
               to="/admin/campanhas"
-              className="group bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-[#BCE7E7] transition duration-200 cursor-pointer"
+              className="group bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-[#BCE7E7] transition duration-200 cursor-pointer block"
             >
               <div className="w-12 h-12 rounded-xl bg-[#E2F7F7] flex items-center justify-center mb-5">
                 <FiBell className="text-[#026B6D] text-xl" />
@@ -125,7 +125,7 @@ export default function AdminDashboard() {
 
             <Link
               to="/admin/tutores"
-              className="group bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-[#BCE7E7] transition duration-200 cursor-pointer"
+              className="group bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-[#BCE7E7] transition duration-200 cursor-pointer block"
             >
               <div className="w-12 h-12 rounded-xl bg-[#E2F7F7] flex items-center justify-center mb-5">
                 <FiUsers className="text-[#026B6D] text-xl" />
@@ -145,6 +145,29 @@ export default function AdminDashboard() {
                 <span>→</span>
               </span>
             </Link>
+
+            <Link
+              to="/admin/solicitacoes"
+              className="group bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-[#BCE7E7] transition duration-200 cursor-pointer block"
+            >
+              <div className="w-12 h-12 rounded-xl bg-[#E2F7F7] flex items-center justify-center mb-5">
+                <FiClipboard className="text-[#026B6D] text-xl" />
+              </div>
+
+              <h4 className="font-bold text-gray-800 text-lg">
+                Solicitações de serviços
+              </h4>
+
+              <p className="text-sm text-gray-500 mt-2 leading-relaxed">
+                Consulte, organize e acompanhe os pedidos enviados pelos
+                tutores, filtrando por situação e tipo de serviço.
+              </p>
+
+              <span className="inline-flex items-center gap-2 mt-5 text-sm font-semibold text-[#05ABAD] group-hover:text-[#026B6D] transition">
+                Acessar solicitações
+                <span>→</span>
+              </span>
+            </Link>
           </div>
         </section>
 
@@ -160,24 +183,6 @@ export default function AdminDashboard() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
-              <div className="w-11 h-11 rounded-xl bg-[#E2F7F7] flex items-center justify-center mb-4">
-                <FiClipboard className="text-[#026B6D] text-xl" />
-              </div>
-
-              <h4 className="font-bold text-gray-800">
-                Solicitações de serviços
-              </h4>
-
-              <p className="text-sm text-gray-500 mt-2">
-                Consulte e gerencie os pedidos enviados pelos tutores.
-              </p>
-
-              <p className="text-xs text-[#05ABAD] font-semibold mt-4">
-                Em breve
-              </p>
-            </div>
-
             <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
               <div className="w-11 h-11 rounded-xl bg-[#E2F7F7] flex items-center justify-center mb-4">
                 <FiHeart className="text-[#026B6D] text-xl" />
@@ -225,24 +230,6 @@ export default function AdminDashboard() {
 
               <p className="text-sm text-gray-500 mt-2">
                 Consulte indicadores e dados sobre os atendimentos realizados.
-              </p>
-
-              <p className="text-xs text-[#05ABAD] font-semibold mt-4">
-                Em breve
-              </p>
-            </div>
-
-            <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
-              <div className="w-11 h-11 rounded-xl bg-[#E2F7F7] flex items-center justify-center mb-4">
-                <FiHeart className="text-[#026B6D] text-xl" />
-              </div>
-
-              <h4 className="font-bold text-gray-800">
-                Animais cadastrados
-              </h4>
-
-              <p className="text-sm text-gray-500 mt-2">
-                Acompanhe os registros de animais vinculados aos tutores.
               </p>
 
               <p className="text-xs text-[#05ABAD] font-semibold mt-4">

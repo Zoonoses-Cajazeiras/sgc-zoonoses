@@ -13,6 +13,7 @@ import AdminTutors from "../pages/AdminTutors";
 import NewSolicitation from "../pages/NewSolicitation.tsx";
 import MySolicitations from "../pages/MySolicitations.tsx";
 import SolicitationDetails from "../pages/SolicitationDetails.tsx";
+import AdminSolicitations from "../pages/AdminSolicitations";
 
 export default function AppRoutes() {
     return (
@@ -30,6 +31,10 @@ export default function AppRoutes() {
                     element={<CampaignManagement />}
                 />
                 <Route path="/admin/tutores" element={<AdminTutors />} />
+                <Route
+                    path="/admin/solicitacoes"
+                    element={<AdminSolicitations />}
+                />
 
                 <Route path="/perfil" element={<TutorProfile />} />
                 <Route path="/animais/cadastrar" element={<RegisterAnimal />} />
