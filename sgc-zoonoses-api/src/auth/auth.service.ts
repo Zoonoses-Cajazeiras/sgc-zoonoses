@@ -18,6 +18,9 @@ import { EmailService } from './email.service.js';
 import { UpdateTutorProfileDto } from './dto/update-tutor-profile.dto.js';
 import { CloudinaryService } from '../storage/cloudinary.service.js';
 import type { UploadedImage } from '../storage/cloudinary.service.js';
+import { ChangeVerificationEmailDto } from './dto/change-verification-email.dto.js';
+import { ForgotPasswordDto } from './dto/forgot-password.dto.js';
+import { ResetPasswordDto } from './dto/reset-password.dto.js';
 
 @Injectable()
 export class AuthService {
@@ -419,6 +422,417 @@ export class AuthService {
       message: 'Um novo código de verificação foi enviado para seu e-mail.',
     };
   }
+
+
+  async changeVerificationEmail(dto: ChangeVerificationEmailDto) {
+    const email = dto.email.trim().toLowerCase();
+    const novoEmail = dto.novoEmail.trim().toLowerCase();
+    const cpf = dto.cpf.replace(/\D/g, '');
+
+    if (email === novoEmail) {
+      throw new BadRequestException(
+        'O novo e-mail deve ser diferente do atual.',
+      );
+    }
+
+    const organizacao = await this.prisma.organizacao.findUnique({
+      where: { slug: 'cajazeiras-pb' },
+      select: { id: true, ativa: true },
+    });
+
+    if (!organizacao || !organizacao.ativa) {
+      throw new BadRequestException(
+        'Não foi possível realizar a operação.',
+      );
+    }
+
+    const usuario = await this.prisma.usuario.findUnique({
+      where: {
+        organizacaoId_email: {
+          organizacaoId: organizacao.id,
+          email,
+        },
+      },
+      select: {
+        id: true,
+        papel: true,
+        emailVerificadoEm: true,
+      },
+    });
+
+    if (!usuario || usuario.papel !== 'TUTOR' || usuario.emailVerificadoEm) {
+      throw new BadRequestException(
+        'Não foi possível realizar a operação. Confira os dados informados.',
+      );
+    }
+
+    const tutor = await this.prisma.tutor.findFirst({
+      where: {
+        usuarioId: usuario.id,
+        organizacaoId: organizacao.id,
+        cpf,
+      },
+      select: { id: true },
+    });
+
+    if (!tutor) {
+      throw new BadRequestException(
+        'Não foi possível realizar a operação. Confira os dados informados.',
+      );
+    }
+
+    const emailExistente = await this.prisma.usuario.findUnique({
+      where: {
+        organizacaoId_email: {
+          organizacaoId: organizacao.id,
+          email: novoEmail,
+        },
+      },
+      select: { id: true },
+    });
+
+    if (emailExistente) {
+      throw new ConflictException(
+        'Este novo e-mail já está cadastrado.',
+      );
+    }
+
+    const agora = new Date();
+    const umaHoraAtras = new Date(
+      agora.getTime() - 60 * 60 * 1000,
+    );
+
+    const codigosRecentes = await this.prisma.codigoVerificacao.count({
+      where: {
+        usuarioId: usuario.id,
+        finalidade: 'VERIFICACAO_EMAIL',
+        createdAt: { gte: umaHoraAtras },
+      },
+    });
+
+    if (codigosRecentes >= 5) {
+      throw new BadRequestException(
+        'Limite de envios atingido. Tente novamente mais tarde.',
+      );
+    }
+
+    const ultimoCodigo = await this.prisma.codigoVerificacao.findFirst({
+      where: {
+        usuarioId: usuario.id,
+        finalidade: 'VERIFICACAO_EMAIL',
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    if (
+      ultimoCodigo &&
+      agora.getTime() - ultimoCodigo.createdAt.getTime() < 60 * 1000
+    ) {
+      throw new BadRequestException(
+        'Aguarde um minuto antes de solicitar outro código.',
+      );
+    }
+
+    const codigo = randomInt(100000, 1000000).toString();
+    const codigoHash = await bcrypt.hash(codigo, 10);
+    const expiraEm = new Date(agora.getTime() + 10 * 60 * 1000);
+
+    let novoCodigo: { id: string };
+
+    try {
+      novoCodigo = await this.prisma.$transaction(async (tx) => {
+        await tx.usuario.update({
+          where: { id: usuario.id },
+          data: { email: novoEmail },
+        });
+
+        await tx.codigoVerificacao.updateMany({
+          where: {
+            usuarioId: usuario.id,
+            finalidade: 'VERIFICACAO_EMAIL',
+            utilizadoEm: null,
+            invalidadoEm: null,
+          },
+          data: { invalidadoEm: agora },
+        });
+
+        return tx.codigoVerificacao.create({
+          data: {
+            usuarioId: usuario.id,
+            finalidade: 'VERIFICACAO_EMAIL',
+            codigoHash,
+            expiraEm,
+          },
+          select: { id: true },
+        });
+      });
+    } catch (error) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        error.code === 'P2002'
+      ) {
+        throw new ConflictException(
+          'Este novo e-mail já está cadastrado.',
+        );
+      }
+
+      throw error;
+    }
+
+    try {
+      await this.emailService.enviarCodigoVerificacao(novoEmail, codigo);
+    } catch (error) {
+      await this.prisma.codigoVerificacao.update({
+        where: { id: novoCodigo.id },
+        data: { invalidadoEm: new Date() },
+      });
+
+      throw error;
+    }
+
+    return {
+      message: 'E-mail atualizado. Enviamos um novo código de verificação.',
+      email: novoEmail,
+    };
+  }
+
+  async forgotPassword(dto: ForgotPasswordDto) {
+    const email = dto.email.trim().toLowerCase();
+
+    const resposta = {
+      message:
+        'Se o e-mail estiver cadastrado, ativo e verificado, você receberá as instruções para recuperar sua senha.',
+    };
+
+    const organizacao = await this.prisma.organizacao.findUnique({
+      where: { slug: 'cajazeiras-pb' },
+      select: { id: true, ativa: true },
+    });
+
+    if (!organizacao || !organizacao.ativa) {
+      return resposta;
+    }
+
+    const usuario = await this.prisma.usuario.findUnique({
+      where: {
+        organizacaoId_email: {
+          organizacaoId: organizacao.id,
+          email,
+        },
+      },
+      select: {
+        id: true,
+        papel: true,
+        ativo: true,
+        emailVerificadoEm: true,
+      },
+    });
+
+    if (
+      !usuario ||
+      usuario.papel !== 'TUTOR' ||
+      !usuario.ativo ||
+      !usuario.emailVerificadoEm
+    ) {
+      return resposta;
+    }
+
+    const agora = new Date();
+    const umaHoraAtras = new Date(
+      agora.getTime() - 60 * 60 * 1000,
+    );
+
+    const codigosRecentes = await this.prisma.codigoVerificacao.count({
+      where: {
+        usuarioId: usuario.id,
+        finalidade: 'RECUPERACAO_SENHA',
+        createdAt: { gte: umaHoraAtras },
+      },
+    });
+
+    if (codigosRecentes >= 5) {
+      return resposta;
+    }
+
+    const ultimoCodigo = await this.prisma.codigoVerificacao.findFirst({
+      where: {
+        usuarioId: usuario.id,
+        finalidade: 'RECUPERACAO_SENHA',
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    if (
+      ultimoCodigo &&
+      agora.getTime() - ultimoCodigo.createdAt.getTime() < 60 * 1000
+    ) {
+      return resposta;
+    }
+
+    const codigo = randomInt(100000, 1000000).toString();
+    const codigoHash = await bcrypt.hash(codigo, 10);
+    const expiraEm = new Date(agora.getTime() + 10 * 60 * 1000);
+
+    const novoCodigo = await this.prisma.$transaction(async (tx) => {
+      await tx.codigoVerificacao.updateMany({
+        where: {
+          usuarioId: usuario.id,
+          finalidade: 'RECUPERACAO_SENHA',
+          utilizadoEm: null,
+          invalidadoEm: null,
+        },
+        data: { invalidadoEm: agora },
+      });
+
+      return tx.codigoVerificacao.create({
+        data: {
+          usuarioId: usuario.id,
+          finalidade: 'RECUPERACAO_SENHA',
+          codigoHash,
+          expiraEm,
+        },
+        select: { id: true },
+      });
+    });
+
+    try {
+      await this.emailService.enviarCodigoRecuperacaoSenha(email, codigo);
+    } catch (error) {
+      await this.prisma.codigoVerificacao.update({
+        where: { id: novoCodigo.id },
+        data: { invalidadoEm: new Date() },
+      });
+
+      throw error;
+    }
+
+    return resposta;
+  }
+
+
+  async resetPassword(dto: ResetPasswordDto) {
+    const email = dto.email.trim().toLowerCase();
+    const cpf = dto.cpf.replace(/\D/g, '');
+
+    const organizacao = await this.prisma.organizacao.findUnique({
+      where: { slug: 'cajazeiras-pb' },
+      select: { id: true, ativa: true },
+    });
+
+    if (!organizacao || !organizacao.ativa) {
+      throw new BadRequestException(
+        'Dados inválidos ou recuperação expirada.',
+      );
+    }
+
+    const usuario = await this.prisma.usuario.findUnique({
+      where: {
+        organizacaoId_email: {
+          organizacaoId: organizacao.id,
+          email,
+        },
+      },
+      select: {
+        id: true,
+        papel: true,
+        ativo: true,
+        emailVerificadoEm: true,
+        tutor: {
+          select: {
+            cpf: true,
+          },
+        },
+      },
+    });
+
+    if (
+      !usuario ||
+      usuario.papel !== 'TUTOR' ||
+      !usuario.ativo ||
+      !usuario.emailVerificadoEm ||
+      !usuario.tutor ||
+      usuario.tutor.cpf.replace(/\D/g, '') !== cpf
+    ) {
+      throw new BadRequestException(
+        'Dados inválidos ou recuperação expirada.',
+      );
+    }
+
+    const agora = new Date();
+
+    const registro = await this.prisma.codigoVerificacao.findFirst({
+      where: {
+        usuarioId: usuario.id,
+        finalidade: 'RECUPERACAO_SENHA',
+        utilizadoEm: null,
+        invalidadoEm: null,
+        expiraEm: { gt: agora },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    if (!registro || registro.tentativas >= 5) {
+      throw new BadRequestException(
+        'Código inválido ou expirado.',
+      );
+    }
+
+    const codigoValido = await bcrypt.compare(
+      dto.codigo,
+      registro.codigoHash,
+    );
+
+    if (!codigoValido) {
+      const novasTentativas = registro.tentativas + 1;
+
+      await this.prisma.codigoVerificacao.update({
+        where: { id: registro.id },
+        data: {
+          tentativas: { increment: 1 },
+          ...(novasTentativas >= 5
+            ? { invalidadoEm: agora }
+            : {}),
+        },
+      });
+
+      throw new BadRequestException(
+        'Código inválido ou expirado.',
+      );
+    }
+
+    const senhaHash = await bcrypt.hash(dto.novaSenha, 10);
+
+    await this.prisma.$transaction(async (tx) => {
+      await tx.usuario.update({
+        where: { id: usuario.id },
+        data: { senhaHash },
+      });
+
+      await tx.codigoVerificacao.update({
+        where: { id: registro.id },
+        data: { utilizadoEm: agora },
+      });
+
+      await tx.codigoVerificacao.updateMany({
+        where: {
+          usuarioId: usuario.id,
+          finalidade: 'RECUPERACAO_SENHA',
+          id: { not: registro.id },
+          utilizadoEm: null,
+          invalidadoEm: null,
+        },
+        data: { invalidadoEm: agora },
+      });
+    });
+
+    return {
+      message: 'Senha redefinida com sucesso. Você já pode fazer login.',
+    };
+  }
+
+
 
   async login(dto: LoginDto) {
     const email = dto.email.trim().toLowerCase();

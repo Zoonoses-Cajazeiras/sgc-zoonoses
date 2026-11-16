@@ -1,7 +1,13 @@
 
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { api } from "../services/api";
+
+import {
+    verificarEmail,
+    reenviarCodigoVerificacao,
+    alterarEmailVerificacao,
+} from "../services/auth";
+
 import patinhas from "../assets/patterns/patinhas.png";
 
 interface LocationState {
@@ -17,9 +23,26 @@ function VerifyEmail() {
 
     const [email, setEmail] = useState(state?.email || "");
     const [codigo, setCodigo] = useState("");
+
+    const [cpf, setCpf] = useState("");
+    const [novoEmail, setNovoEmail] = useState("");
+
+    const [mostrarCorrecao, setMostrarCorrecao] = useState(false);
+
     const [loading, setLoading] = useState(false);
+    const [loadingReenvio, setLoadingReenvio] = useState(false);
+    const [loadingCorrecao, setLoadingCorrecao] = useState(false);
+
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
+
+    function obterMensagemErro(err: any, mensagemPadrao: string) {
+        const backendMessage = err.response?.data?.message;
+
+        return Array.isArray(backendMessage)
+            ? backendMessage.join("\n")
+            : backendMessage || mensagemPadrao;
+    }
 
     async function handleVerify(e: React.FormEvent) {
         e.preventDefault();
@@ -30,13 +53,10 @@ function VerifyEmail() {
         try {
             setLoading(true);
 
-            const { data } = await api.post("/auth/verify-email", {
-                email: email.trim().toLowerCase(),
-                codigo: codigo.trim(),
-            });
+            const response = await verificarEmail(email, codigo);
 
             setMessage(
-                data.message || "E-mail confirmado com sucesso!"
+                response.message || "E-mail confirmado com sucesso!"
             );
 
             setTimeout(() => {
@@ -51,15 +71,99 @@ function VerifyEmail() {
         } catch (err: any) {
             console.error("Erro ao verificar e-mail:", err);
 
-            const backendMessage = err.response?.data?.message;
-
             setError(
-                Array.isArray(backendMessage)
-                    ? backendMessage.join("\n")
-                    : backendMessage || "Não foi possível confirmar o e-mail."
+                obterMensagemErro(
+                    err,
+                    "Não foi possível confirmar o e-mail."
+                )
             );
         } finally {
             setLoading(false);
+        }
+    }
+
+    async function handleResend() {
+        setError("");
+        setMessage("");
+
+        try {
+            setLoadingReenvio(true);
+
+            const response = await reenviarCodigoVerificacao(email);
+
+            setMessage(
+                response.message || "Um novo código foi enviado para seu e-mail."
+            );
+
+            setCodigo("");
+
+        } catch (err: any) {
+            console.error("Erro ao reenviar código:", err);
+
+            setError(
+                obterMensagemErro(
+                    err,
+                    "Não foi possível reenviar o código."
+                )
+            );
+        } finally {
+            setLoadingReenvio(false);
+        }
+    }
+
+    async function handleChangeEmail() {
+        setError("");
+        setMessage("");
+
+        if (!cpf.trim() || !novoEmail.trim()) {
+            setError("Informe seu CPF e o novo e-mail.");
+            return;
+        }
+
+        if (novoEmail.trim().toLowerCase() === email.trim().toLowerCase()) {
+            setError("O novo e-mail deve ser diferente do e-mail atual.");
+            return;
+        }
+
+        if (cpf.replace(/\D/g, "").length !== 11) {
+            setError("Informe um CPF válido com 11 números.");
+            return;
+        }
+
+        try {
+            setLoadingCorrecao(true);
+
+            const response = await alterarEmailVerificacao(
+                email,
+                cpf,
+                novoEmail,
+            );
+
+            const emailAtualizado =
+                response.email || novoEmail.trim().toLowerCase();
+
+            setEmail(emailAtualizado);
+            setCodigo("");
+            setCpf("");
+            setNovoEmail("");
+            setMostrarCorrecao(false);
+
+            setMessage(
+                response.message ||
+                `O código de verificação foi enviado para ${emailAtualizado}.`
+            );
+
+        } catch (err: any) {
+            console.error("Erro ao corrigir e-mail:", err);
+
+            setError(
+                obterMensagemErro(
+                    err,
+                    "Não foi possível alterar o e-mail."
+                )
+            );
+        } finally {
+            setLoadingCorrecao(false);
         }
     }
 
@@ -95,7 +199,7 @@ function VerifyEmail() {
                     </p>
 
                     {error && (
-                        <div className="w-full bg-red-100 text-red-700 rounded-xl p-3 mb-4 text-sm text-center">
+                        <div className="w-full bg-red-100 text-red-700 rounded-xl p-3 mb-4 text-sm text-center whitespace-pre-line">
                             {error}
                         </div>
                     )}
@@ -120,7 +224,9 @@ function VerifyEmail() {
                         inputMode="numeric"
                         placeholder="Código de 6 dígitos"
                         value={codigo}
-                        onChange={(e) => setCodigo(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                        onChange={(e) =>
+                            setCodigo(e.target.value.replace(/\D/g, "").slice(0, 6))
+                        }
                         maxLength={6}
                         className="w-full h-12 mt-4 rounded-full bg-white px-5 text-gray-700 text-center tracking-[0.4em] text-lg outline-none focus:ring-2 focus:ring-[#026B6D]"
                         required
@@ -138,7 +244,7 @@ function VerifyEmail() {
                         disabled={loading || codigo.length !== 6}
                         className="
                             mt-7 w-full h-12 rounded-full
-                            bg-white text-[#026B6D] font-bold
+                            bg-white text-[#026B6D] font-bold cursor-pointer
                             hover:-translate-y-1 hover:shadow-xl
                             transition-all duration-300
                             disabled:opacity-60 disabled:cursor-not-allowed
@@ -146,6 +252,79 @@ function VerifyEmail() {
                     >
                         {loading ? "Verificando..." : "Confirmar e-mail"}
                     </button>
+
+                    <button
+                        type="button"
+                        onClick={handleResend}
+                        disabled={loadingReenvio || loading}
+                        className="mt-5 text-sm text-white font-semibold hover:underline disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                        {loadingReenvio ? "Enviando código..." : "Não recebeu o código? Reenviar"}
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setMostrarCorrecao(!mostrarCorrecao);
+                            setError("");
+                            setMessage("");
+                        }}
+                        className="mt-3 text-sm text-white hover:underline"
+                    >
+                        {mostrarCorrecao
+                            ? "Cancelar correção de e-mail"
+                            : "Digitou o e-mail errado? Corrigir"}
+                    </button>
+
+                    {mostrarCorrecao && (
+                        <div className="w-full mt-5 pt-5 border-t border-white/30 flex flex-col">
+
+                            <h2 className="text-lg font-bold text-white text-center">
+                                Corrigir endereço de e-mail
+                            </h2>
+
+                            <p className="text-white/85 text-xs mt-2 mb-4 text-center">
+                                Informe seu CPF e o endereço correto. Enviaremos um novo código para ele.
+                            </p>
+
+                            <input
+                                type="text"
+                                inputMode="numeric"
+                                placeholder="CPF cadastrado"
+                                value={cpf}
+                                onChange={(e) =>
+                                    setCpf(e.target.value.replace(/\D/g, "").slice(0, 11))
+                                }
+                                maxLength={11}
+                                className="w-full h-12 rounded-full bg-white px-5 text-gray-700 outline-none focus:ring-2 focus:ring-[#026B6D]"
+                            />
+
+                            <input
+                                type="email"
+                                placeholder="Novo endereço de e-mail"
+                                value={novoEmail}
+                                onChange={(e) => setNovoEmail(e.target.value)}
+                                className="w-full h-12 mt-4 rounded-full bg-white px-5 text-gray-700 outline-none focus:ring-2 focus:ring-[#026B6D]"
+                            />
+
+                            <button
+                                type="button"
+                                onClick={handleChangeEmail}
+                                disabled={loadingCorrecao}
+                                className="
+                                    mt-5 w-full h-12 rounded-full
+                                    bg-[#026B6D] text-white font-bold cursor-pointer
+                                    hover:-translate-y-1 hover:shadow-xl
+                                    transition-all duration-300
+                                    disabled:opacity-60 disabled:cursor-not-allowed
+                                "
+                            >
+                                {loadingCorrecao
+                                    ? "Atualizando..."
+                                    : "Atualizar e-mail"}
+                            </button>
+                        </div>
+                    )}
 
                     <Link
                         to="/login"

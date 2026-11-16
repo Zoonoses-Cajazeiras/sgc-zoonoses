@@ -14,6 +14,8 @@ import NewSolicitation from "../pages/NewSolicitation.tsx";
 import MySolicitations from "../pages/MySolicitations.tsx";
 import SolicitationDetails from "../pages/SolicitationDetails.tsx";
 import AdminSolicitations from "../pages/AdminSolicitations";
+import ForgotPassword from "../pages/ForgotPassword.tsx";
+import AnimalDetails from "../pages/AnimalDetails.tsx";
 
 export default function AppRoutes() {
     return (
@@ -22,6 +24,10 @@ export default function AppRoutes() {
                 <Route path="/" element={<Home />} />
 
                 <Route path="/login" element={<Login />} />
+                <Route
+                    path="/recuperar-senha"
+                    element={<ForgotPassword />}
+                />
                 <Route path="/cadastro" element={<RegisterTutor />} />
                 <Route path="/verificar-email" element={<VerifyEmail />} />
 
@@ -39,6 +45,7 @@ export default function AppRoutes() {
                 <Route path="/perfil" element={<TutorProfile />} />
                 <Route path="/animais/cadastrar" element={<RegisterAnimal />} />
                 <Route path="/animais/editar/:id" element={<RegisterAnimal />} />
+                <Route path="/animais/:id" element={<AnimalDetails />} />
 
                 <Route
                     path="/solicitacoes/nova"

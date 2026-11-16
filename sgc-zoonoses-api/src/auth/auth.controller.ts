@@ -25,6 +25,9 @@ import { VerifyEmailDto } from './dto/verify-email.dto.js';
 import { ResendVerificationDto } from './dto/resend-verification.dto.js';
 import { UpdateTutorProfileDto } from './dto/update-tutor-profile.dto.js';
 import type { UploadedImage } from '../storage/cloudinary.service.js';
+import { ChangeVerificationEmailDto } from './dto/change-verification-email.dto.js';
+import { ForgotPasswordDto } from './dto/forgot-password.dto.js';
+import { ResetPasswordDto } from './dto/reset-password.dto.js';
 
 interface AuthenticatedRequest {
   user: {
@@ -54,6 +57,23 @@ export class AuthController {
   resendVerification(@Body() dto: ResendVerificationDto) {
     return this.authService.resendVerification(dto);
   }
+
+
+  @Post('change-verification-email')
+  changeVerificationEmail(@Body() dto: ChangeVerificationEmailDto) {
+    return this.authService.changeVerificationEmail(dto);
+  }
+
+  @Post('forgot-password')
+  forgotPassword(@Body() dto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(dto);
+  }
+
+  @Post('reset-password')
+  resetPassword(@Body() dto: ResetPasswordDto) {
+    return this.authService.resetPassword(dto);
+  }
+
 
   @Post('login')
   login(@Body() dto: LoginDto) {

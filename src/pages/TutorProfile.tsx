@@ -445,7 +445,8 @@ export default function TutorProfile() {
                   {animais.map((animal) => (
                     <div
                       key={animal.id}
-                      className="border border-gray-100 rounded-xl p-5 hover:border-[#BCE7E7] transition"
+                      onClick={() => navigate(`/animais/${animal.id}`)}
+                      className="border border-gray-100 rounded-xl p-5 hover:border-[#BCE7E7] hover:shadow-sm transition cursor-pointer"
                     >
                       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                         <div className="flex items-start gap-4">
@@ -466,7 +467,10 @@ export default function TutorProfile() {
 
                         <div className="flex items-center gap-2 sm:justify-end">
                           <button
-                            onClick={() => navigate(`/animais/editar/${animal.id}`)}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              navigate(`/animais/editar/${animal.id}`);
+                            }}
                             title="Editar animal"
                             className="p-2 rounded-lg bg-[#E8F7F7] text-[#05ABAD] hover:bg-[#D5F0F0] transition cursor-pointer"
                           >
@@ -474,7 +478,8 @@ export default function TutorProfile() {
                           </button>
 
                           <button
-                            onClick={() => {
+                            onClick={(event) => {
+                              event.stopPropagation();
                               setErroExclusao("");
                               setAnimalParaExcluir(animal);
                             }}

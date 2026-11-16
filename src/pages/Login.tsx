@@ -128,6 +128,7 @@ function Login() {
                         </button>
                     </div>
 
+
                     {/* Entrar */}
                     <button
                         type="submit"
@@ -144,8 +145,17 @@ function Login() {
                         {loading ? "Entrando..." : "Entrar"}
                     </button>
 
+                    <div className="w-full flex justify-center mt-4">
+                        <Link
+                            to="/recuperar-senha"
+                            className="text-sm text-white font-semibold hover:underline"
+                        >
+                            Esqueci minha senha
+                        </Link>
+                    </div>
+
                     {/* Cadastro */}
-                    <p className="mt-6 text-sm text-white text-center">
+                    <p className="mt-2 text-sm text-white text-center">
                         Ainda não tem uma conta?{" "}
                         <Link
                             to="/cadastro"

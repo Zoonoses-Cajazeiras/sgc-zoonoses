@@ -16,6 +16,11 @@ interface LoginResponse {
   user: AuthUser;
 }
 
+interface AuthMessageResponse {
+  message: string;
+  email?: string;
+}
+
 export interface RegisterTutorData {
   nome: string;
   email: string;
@@ -66,6 +71,88 @@ export async function login(
   return data;
 }
 
+// Confirmar o e-mail do cadastro
+export async function verificarEmail(
+  email: string,
+  codigo: string,
+): Promise<AuthMessageResponse> {
+  const { data } = await api.post<AuthMessageResponse>(
+    "/auth/verify-email",
+    {
+      email: email.trim().toLowerCase(),
+      codigo: codigo.trim(),
+    },
+  );
+
+  return data;
+}
+
+// Reenviar o código de verificação
+export async function reenviarCodigoVerificacao(
+  email: string,
+): Promise<AuthMessageResponse> {
+  const { data } = await api.post<AuthMessageResponse>(
+    "/auth/resend-verification",
+    {
+      email: email.trim().toLowerCase(),
+    },
+  );
+
+  return data;
+}
+
+// Corrigir o e-mail antes de concluir a verificação
+export async function alterarEmailVerificacao(
+  email: string,
+  cpf: string,
+  novoEmail: string,
+): Promise<AuthMessageResponse> {
+  const { data } = await api.post<AuthMessageResponse>(
+    "/auth/change-verification-email",
+    {
+      email: email.trim().toLowerCase(),
+      cpf: cpf.replace(/\D/g, ""),
+      novoEmail: novoEmail.trim().toLowerCase(),
+    },
+  );
+
+  return data;
+}
+
+// Solicitar recuperação de senha
+export async function solicitarRecuperacaoSenha(
+  email: string,
+): Promise<AuthMessageResponse> {
+  const { data } = await api.post<AuthMessageResponse>(
+    "/auth/forgot-password",
+    {
+      email: email.trim().toLowerCase(),
+    },
+  );
+
+  return data;
+}
+
+// Redefinir a senha usando o código recebido
+export async function redefinirSenha(
+  email: string,
+  cpf: string,
+  codigo: string,
+  novaSenha: string,
+): Promise<AuthMessageResponse> {
+  const { data } = await api.post<AuthMessageResponse>(
+    "/auth/reset-password",
+    {
+      email: email.trim().toLowerCase(),
+      cpf: cpf.replace(/\D/g, ""),
+      codigo: codigo.trim(),
+      novaSenha,
+    },
+  );
+
+  return data;
+}
+
 export async function logout(): Promise<void> {
   removeTokens();
 }
@@ -111,7 +198,6 @@ export async function excluirFotoPerfil() {
   return data;
 }
 
-
 export interface UpdateTutorProfileData {
   nome: string;
   telefone: string;
@@ -132,4 +218,3 @@ export async function atualizarPerfilTutor(
 
   return data;
 }
-

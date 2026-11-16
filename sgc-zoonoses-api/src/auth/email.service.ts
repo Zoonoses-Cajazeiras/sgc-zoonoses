@@ -87,4 +87,68 @@ export class EmailService {
       );
     }
   }
+
+
+  async enviarCodigoRecuperacaoSenha(email: string, codigo: string) {
+    try {
+      const resultado = await this.transporter.sendMail({
+        from: `"Núcleo de Zoonoses" <${this.remetente}>`,
+        to: email,
+        subject: 'Recuperação de senha - Núcleo de Zoonoses',
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 30px; color: #333;">
+            <h2 style="color: #026B6D;">Núcleo de Zoonoses</h2>
+
+            <p>Olá!</p>
+
+            <p>
+              Recebemos uma solicitação para redefinir a senha
+              da sua conta no sistema do Núcleo de Zoonoses
+              da Prefeitura de Cajazeiras.
+            </p>
+
+            <p>Utilize o código abaixo para cadastrar uma nova senha:</p>
+
+            <div style="background: #E8F7F7; padding: 20px; text-align: center; border-radius: 10px; margin: 25px 0;">
+              <strong style="font-size: 32px; letter-spacing: 8px; color: #026B6D;">
+                ${codigo}
+              </strong>
+            </div>
+
+            <p>Este código expira em 10 minutos.</p>
+
+            <p>
+              Se você não solicitou a recuperação de senha,
+              ignore esta mensagem. Sua senha permanecerá inalterada.
+            </p>
+
+            <hr style="border: none; border-top: 1px solid #eee; margin-top: 30px;" />
+
+            <p style="font-size: 12px; color: #888;">
+              Núcleo de Zoonoses — Prefeitura de Cajazeiras
+            </p>
+          </div>
+        `,
+        text: `Seu código para recuperação de senha é: ${codigo}. Ele expira em 10 minutos.`,
+      });
+
+      this.logger.log(
+        `E-mail de recuperação enviado para ${email}. ID: ${resultado.messageId}`,
+      );
+
+      return resultado;
+    } catch (error) {
+      const mensagem =
+        error instanceof Error ? error.message : 'Erro desconhecido';
+
+      this.logger.error(
+        `Falha ao enviar recuperação de senha para ${email}: ${mensagem}`,
+      );
+
+      throw new InternalServerErrorException(
+        'Não foi possível enviar o e-mail de recuperação de senha.',
+      );
+    }
+  }
+
 }
