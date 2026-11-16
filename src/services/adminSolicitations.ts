@@ -20,6 +20,7 @@ export interface ServicoAdmin {
 
 export interface SolicitacaoAdmin {
   id: string;
+  protocolo: string | null;
   status: StatusSolicitacao;
   observacoes: string | null;
   observacoesAnalise: string | null;

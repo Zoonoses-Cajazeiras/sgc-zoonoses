@@ -404,6 +404,7 @@ export const ModelName = {
   Animal: 'Animal',
   Servico: 'Servico',
   Solicitacao: 'Solicitacao',
+  ContadorProtocolo: 'ContadorProtocolo',
   HistoricoSolicitacao: 'HistoricoSolicitacao',
   TipoOcorrencia: 'TipoOcorrencia',
   Ocorrencia: 'Ocorrencia',
@@ -428,7 +429,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "organizacao" | "usuario" | "codigoVerificacao" | "tutor" | "animal" | "servico" | "solicitacao" | "historicoSolicitacao" | "tipoOcorrencia" | "ocorrencia" | "historicoOcorrencia" | "equipe" | "recurso" | "agendamento" | "campaign" | "impactStats"
+    modelProps: "organizacao" | "usuario" | "codigoVerificacao" | "tutor" | "animal" | "servico" | "solicitacao" | "contadorProtocolo" | "historicoSolicitacao" | "tipoOcorrencia" | "ocorrencia" | "historicoOcorrencia" | "equipe" | "recurso" | "agendamento" | "campaign" | "impactStats"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -947,6 +948,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.SolicitacaoCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.SolicitacaoCountAggregateOutputType> | number
+        }
+      }
+    }
+    ContadorProtocolo: {
+      payload: Prisma.$ContadorProtocoloPayload<ExtArgs>
+      fields: Prisma.ContadorProtocoloFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ContadorProtocoloFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContadorProtocoloPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ContadorProtocoloFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContadorProtocoloPayload>
+        }
+        findFirst: {
+          args: Prisma.ContadorProtocoloFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContadorProtocoloPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ContadorProtocoloFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContadorProtocoloPayload>
+        }
+        findMany: {
+          args: Prisma.ContadorProtocoloFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContadorProtocoloPayload>[]
+        }
+        create: {
+          args: Prisma.ContadorProtocoloCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContadorProtocoloPayload>
+        }
+        createMany: {
+          args: Prisma.ContadorProtocoloCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ContadorProtocoloCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContadorProtocoloPayload>[]
+        }
+        delete: {
+          args: Prisma.ContadorProtocoloDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContadorProtocoloPayload>
+        }
+        update: {
+          args: Prisma.ContadorProtocoloUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContadorProtocoloPayload>
+        }
+        deleteMany: {
+          args: Prisma.ContadorProtocoloDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ContadorProtocoloUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ContadorProtocoloUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContadorProtocoloPayload>[]
+        }
+        upsert: {
+          args: Prisma.ContadorProtocoloUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContadorProtocoloPayload>
+        }
+        aggregate: {
+          args: Prisma.ContadorProtocoloAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateContadorProtocolo>
+        }
+        groupBy: {
+          args: Prisma.ContadorProtocoloGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContadorProtocoloGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ContadorProtocoloCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContadorProtocoloCountAggregateOutputType> | number
         }
       }
     }
@@ -1767,6 +1842,7 @@ export const SolicitacaoScalarFieldEnum = {
   tutorId: 'tutorId',
   animalId: 'animalId',
   servicoId: 'servicoId',
+  protocolo: 'protocolo',
   status: 'status',
   observacoes: 'observacoes',
   observacoesAnalise: 'observacoesAnalise',
@@ -1777,6 +1853,19 @@ export const SolicitacaoScalarFieldEnum = {
 } as const
 
 export type SolicitacaoScalarFieldEnum = (typeof SolicitacaoScalarFieldEnum)[keyof typeof SolicitacaoScalarFieldEnum]
+
+
+export const ContadorProtocoloScalarFieldEnum = {
+  id: 'id',
+  organizacaoId: 'organizacaoId',
+  prefixo: 'prefixo',
+  ano: 'ano',
+  ultimoNumero: 'ultimoNumero',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ContadorProtocoloScalarFieldEnum = (typeof ContadorProtocoloScalarFieldEnum)[keyof typeof ContadorProtocoloScalarFieldEnum]
 
 
 export const HistoricoSolicitacaoScalarFieldEnum = {
@@ -2324,6 +2413,7 @@ export type GlobalOmitConfig = {
   animal?: Prisma.AnimalOmit
   servico?: Prisma.ServicoOmit
   solicitacao?: Prisma.SolicitacaoOmit
+  contadorProtocolo?: Prisma.ContadorProtocoloOmit
   historicoSolicitacao?: Prisma.HistoricoSolicitacaoOmit
   tipoOcorrencia?: Prisma.TipoOcorrenciaOmit
   ocorrencia?: Prisma.OcorrenciaOmit

@@ -3,6 +3,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 
@@ -43,6 +44,40 @@ export class SolicitationsService {
     }
 
     return tutor;
+  }
+
+  private obterPrefixoServico(nomeServico: string): string {
+    const nomeNormalizado = nomeServico
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim()
+      .toLowerCase();
+
+    const prefixos: Record<string, string> = {
+      castracao: 'CA',
+      'atendimento veterinario': 'AV',
+      'outros procedimentos': 'OS',
+      vacinacao: 'VA',
+    };
+
+    const prefixo = prefixos[nomeNormalizado];
+
+    if (!prefixo) {
+      throw new BadRequestException(
+        'Não existe um protocolo configurado para este serviço.',
+      );
+    }
+
+    return prefixo;
+  }
+
+  private obterAnoAtual(): number {
+    const ano = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Fortaleza',
+      year: 'numeric',
+    }).format(new Date());
+
+    return Number(ano);
   }
 
   async create(
@@ -105,18 +140,59 @@ export class SolicitationsService {
       );
     }
 
+    const prefixo = this.obterPrefixoServico(servico.nome);
+    const ano = this.obterAnoAtual();
+
     return this.prisma.$transaction(async (tx) => {
+      // Cria ou incrementa o contador específico do serviço e do ano.
+      const contador = await tx.contadorProtocolo.upsert({
+        where: {
+          organizacaoId_prefixo_ano: {
+            organizacaoId: usuario.organizacaoId,
+            prefixo,
+            ano,
+          },
+        },
+        create: {
+          organizacaoId: usuario.organizacaoId,
+          prefixo,
+          ano,
+          ultimoNumero: 1,
+        },
+        update: {
+          ultimoNumero: {
+            increment: 1,
+          },
+        },
+        select: {
+          ultimoNumero: true,
+        },
+      });
+
+      if (contador.ultimoNumero > 999999) {
+        throw new InternalServerErrorException(
+          'O limite de protocolos deste serviço foi atingido.',
+        );
+      }
+
+      const protocolo = `${prefixo}-${ano}-${String(
+        contador.ultimoNumero,
+      ).padStart(6, '0')}`;
+
+      // Registra a solicitação com o protocolo gerado.
       const solicitacao = await tx.solicitacao.create({
         data: {
           organizacaoId: usuario.organizacaoId,
           tutorId: tutor.id,
           animalId: animal.id,
           servicoId: servico.id,
+          protocolo,
           status: StatusSolicitacao.PENDENTE,
           observacoes,
         },
       });
 
+      // Registra o histórico inicial da solicitação.
       await tx.historicoSolicitacao.create({
         data: {
           solicitacaoId: solicitacao.id,

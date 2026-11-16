@@ -58,6 +58,7 @@ export const ModelName = {
   Animal: 'Animal',
   Servico: 'Servico',
   Solicitacao: 'Solicitacao',
+  ContadorProtocolo: 'ContadorProtocolo',
   HistoricoSolicitacao: 'HistoricoSolicitacao',
   TipoOcorrencia: 'TipoOcorrencia',
   Ocorrencia: 'Ocorrencia',
@@ -197,6 +198,7 @@ export const SolicitacaoScalarFieldEnum = {
   tutorId: 'tutorId',
   animalId: 'animalId',
   servicoId: 'servicoId',
+  protocolo: 'protocolo',
   status: 'status',
   observacoes: 'observacoes',
   observacoesAnalise: 'observacoesAnalise',
@@ -207,6 +209,19 @@ export const SolicitacaoScalarFieldEnum = {
 } as const
 
 export type SolicitacaoScalarFieldEnum = (typeof SolicitacaoScalarFieldEnum)[keyof typeof SolicitacaoScalarFieldEnum]
+
+
+export const ContadorProtocoloScalarFieldEnum = {
+  id: 'id',
+  organizacaoId: 'organizacaoId',
+  prefixo: 'prefixo',
+  ano: 'ano',
+  ultimoNumero: 'ultimoNumero',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ContadorProtocoloScalarFieldEnum = (typeof ContadorProtocoloScalarFieldEnum)[keyof typeof ContadorProtocoloScalarFieldEnum]
 
 
 export const HistoricoSolicitacaoScalarFieldEnum = {

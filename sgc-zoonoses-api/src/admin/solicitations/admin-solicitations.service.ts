@@ -61,6 +61,12 @@ export class AdminSolicitationsService {
         const condicoesBusca = busca
             ? [
                 {
+                    protocolo: {
+                        contains: busca,
+                        mode: 'insensitive' as const,
+                    },
+                },
+                {
                     tutor: {
                         is: {
                             usuario: {
@@ -119,6 +125,7 @@ export class AdminSolicitationsService {
                 where,
                 select: {
                     id: true,
+                    protocolo: true,
                     status: true,
                     observacoes: true,
                     observacoesAnalise: true,

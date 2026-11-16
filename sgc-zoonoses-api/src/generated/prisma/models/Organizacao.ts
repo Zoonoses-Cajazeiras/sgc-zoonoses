@@ -203,6 +203,7 @@ export type OrganizacaoWhereInput = {
   animais?: Prisma.AnimalListRelationFilter
   servicos?: Prisma.ServicoListRelationFilter
   solicitacoes?: Prisma.SolicitacaoListRelationFilter
+  contadoresProtocolos?: Prisma.ContadorProtocoloListRelationFilter
   tiposOcorrencia?: Prisma.TipoOcorrenciaListRelationFilter
   ocorrencias?: Prisma.OcorrenciaListRelationFilter
   equipes?: Prisma.EquipeListRelationFilter
@@ -225,6 +226,7 @@ export type OrganizacaoOrderByWithRelationInput = {
   animais?: Prisma.AnimalOrderByRelationAggregateInput
   servicos?: Prisma.ServicoOrderByRelationAggregateInput
   solicitacoes?: Prisma.SolicitacaoOrderByRelationAggregateInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloOrderByRelationAggregateInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaOrderByRelationAggregateInput
   ocorrencias?: Prisma.OcorrenciaOrderByRelationAggregateInput
   equipes?: Prisma.EquipeOrderByRelationAggregateInput
@@ -250,6 +252,7 @@ export type OrganizacaoWhereUniqueInput = Prisma.AtLeast<{
   animais?: Prisma.AnimalListRelationFilter
   servicos?: Prisma.ServicoListRelationFilter
   solicitacoes?: Prisma.SolicitacaoListRelationFilter
+  contadoresProtocolos?: Prisma.ContadorProtocoloListRelationFilter
   tiposOcorrencia?: Prisma.TipoOcorrenciaListRelationFilter
   ocorrencias?: Prisma.OcorrenciaListRelationFilter
   equipes?: Prisma.EquipeListRelationFilter
@@ -298,6 +301,7 @@ export type OrganizacaoCreateInput = {
   animais?: Prisma.AnimalCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeCreateNestedManyWithoutOrganizacaoInput
@@ -320,6 +324,7 @@ export type OrganizacaoUncheckedCreateInput = {
   animais?: Prisma.AnimalUncheckedCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoUncheckedCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeUncheckedCreateNestedManyWithoutOrganizacaoInput
@@ -342,6 +347,7 @@ export type OrganizacaoUpdateInput = {
   animais?: Prisma.AnimalUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUpdateManyWithoutOrganizacaoNestedInput
@@ -364,6 +370,7 @@ export type OrganizacaoUncheckedUpdateInput = {
   animais?: Prisma.AnimalUncheckedUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUncheckedUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUncheckedUpdateManyWithoutOrganizacaoNestedInput
@@ -524,6 +531,20 @@ export type OrganizacaoUpdateOneRequiredWithoutSolicitacoesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizacaoUpdateToOneWithWhereWithoutSolicitacoesInput, Prisma.OrganizacaoUpdateWithoutSolicitacoesInput>, Prisma.OrganizacaoUncheckedUpdateWithoutSolicitacoesInput>
 }
 
+export type OrganizacaoCreateNestedOneWithoutContadoresProtocolosInput = {
+  create?: Prisma.XOR<Prisma.OrganizacaoCreateWithoutContadoresProtocolosInput, Prisma.OrganizacaoUncheckedCreateWithoutContadoresProtocolosInput>
+  connectOrCreate?: Prisma.OrganizacaoCreateOrConnectWithoutContadoresProtocolosInput
+  connect?: Prisma.OrganizacaoWhereUniqueInput
+}
+
+export type OrganizacaoUpdateOneRequiredWithoutContadoresProtocolosNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizacaoCreateWithoutContadoresProtocolosInput, Prisma.OrganizacaoUncheckedCreateWithoutContadoresProtocolosInput>
+  connectOrCreate?: Prisma.OrganizacaoCreateOrConnectWithoutContadoresProtocolosInput
+  upsert?: Prisma.OrganizacaoUpsertWithoutContadoresProtocolosInput
+  connect?: Prisma.OrganizacaoWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizacaoUpdateToOneWithWhereWithoutContadoresProtocolosInput, Prisma.OrganizacaoUpdateWithoutContadoresProtocolosInput>, Prisma.OrganizacaoUncheckedUpdateWithoutContadoresProtocolosInput>
+}
+
 export type OrganizacaoCreateNestedOneWithoutTiposOcorrenciaInput = {
   create?: Prisma.XOR<Prisma.OrganizacaoCreateWithoutTiposOcorrenciaInput, Prisma.OrganizacaoUncheckedCreateWithoutTiposOcorrenciaInput>
   connectOrCreate?: Prisma.OrganizacaoCreateOrConnectWithoutTiposOcorrenciaInput
@@ -634,6 +655,7 @@ export type OrganizacaoCreateWithoutUsuariosInput = {
   animais?: Prisma.AnimalCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeCreateNestedManyWithoutOrganizacaoInput
@@ -655,6 +677,7 @@ export type OrganizacaoUncheckedCreateWithoutUsuariosInput = {
   animais?: Prisma.AnimalUncheckedCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoUncheckedCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeUncheckedCreateNestedManyWithoutOrganizacaoInput
@@ -692,6 +715,7 @@ export type OrganizacaoUpdateWithoutUsuariosInput = {
   animais?: Prisma.AnimalUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUpdateManyWithoutOrganizacaoNestedInput
@@ -713,6 +737,7 @@ export type OrganizacaoUncheckedUpdateWithoutUsuariosInput = {
   animais?: Prisma.AnimalUncheckedUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUncheckedUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUncheckedUpdateManyWithoutOrganizacaoNestedInput
@@ -734,6 +759,7 @@ export type OrganizacaoCreateWithoutTutoresInput = {
   animais?: Prisma.AnimalCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeCreateNestedManyWithoutOrganizacaoInput
@@ -755,6 +781,7 @@ export type OrganizacaoUncheckedCreateWithoutTutoresInput = {
   animais?: Prisma.AnimalUncheckedCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoUncheckedCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeUncheckedCreateNestedManyWithoutOrganizacaoInput
@@ -792,6 +819,7 @@ export type OrganizacaoUpdateWithoutTutoresInput = {
   animais?: Prisma.AnimalUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUpdateManyWithoutOrganizacaoNestedInput
@@ -813,6 +841,7 @@ export type OrganizacaoUncheckedUpdateWithoutTutoresInput = {
   animais?: Prisma.AnimalUncheckedUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUncheckedUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUncheckedUpdateManyWithoutOrganizacaoNestedInput
@@ -834,6 +863,7 @@ export type OrganizacaoCreateWithoutAnimaisInput = {
   tutores?: Prisma.TutorCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeCreateNestedManyWithoutOrganizacaoInput
@@ -855,6 +885,7 @@ export type OrganizacaoUncheckedCreateWithoutAnimaisInput = {
   tutores?: Prisma.TutorUncheckedCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoUncheckedCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeUncheckedCreateNestedManyWithoutOrganizacaoInput
@@ -892,6 +923,7 @@ export type OrganizacaoUpdateWithoutAnimaisInput = {
   tutores?: Prisma.TutorUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUpdateManyWithoutOrganizacaoNestedInput
@@ -913,6 +945,7 @@ export type OrganizacaoUncheckedUpdateWithoutAnimaisInput = {
   tutores?: Prisma.TutorUncheckedUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUncheckedUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUncheckedUpdateManyWithoutOrganizacaoNestedInput
@@ -934,6 +967,7 @@ export type OrganizacaoCreateWithoutServicosInput = {
   tutores?: Prisma.TutorCreateNestedManyWithoutOrganizacaoInput
   animais?: Prisma.AnimalCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeCreateNestedManyWithoutOrganizacaoInput
@@ -955,6 +989,7 @@ export type OrganizacaoUncheckedCreateWithoutServicosInput = {
   tutores?: Prisma.TutorUncheckedCreateNestedManyWithoutOrganizacaoInput
   animais?: Prisma.AnimalUncheckedCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeUncheckedCreateNestedManyWithoutOrganizacaoInput
@@ -992,6 +1027,7 @@ export type OrganizacaoUpdateWithoutServicosInput = {
   tutores?: Prisma.TutorUpdateManyWithoutOrganizacaoNestedInput
   animais?: Prisma.AnimalUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUpdateManyWithoutOrganizacaoNestedInput
@@ -1013,6 +1049,7 @@ export type OrganizacaoUncheckedUpdateWithoutServicosInput = {
   tutores?: Prisma.TutorUncheckedUpdateManyWithoutOrganizacaoNestedInput
   animais?: Prisma.AnimalUncheckedUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUncheckedUpdateManyWithoutOrganizacaoNestedInput
@@ -1034,6 +1071,7 @@ export type OrganizacaoCreateWithoutSolicitacoesInput = {
   tutores?: Prisma.TutorCreateNestedManyWithoutOrganizacaoInput
   animais?: Prisma.AnimalCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeCreateNestedManyWithoutOrganizacaoInput
@@ -1055,6 +1093,7 @@ export type OrganizacaoUncheckedCreateWithoutSolicitacoesInput = {
   tutores?: Prisma.TutorUncheckedCreateNestedManyWithoutOrganizacaoInput
   animais?: Prisma.AnimalUncheckedCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoUncheckedCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeUncheckedCreateNestedManyWithoutOrganizacaoInput
@@ -1092,6 +1131,7 @@ export type OrganizacaoUpdateWithoutSolicitacoesInput = {
   tutores?: Prisma.TutorUpdateManyWithoutOrganizacaoNestedInput
   animais?: Prisma.AnimalUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUpdateManyWithoutOrganizacaoNestedInput
@@ -1113,6 +1153,111 @@ export type OrganizacaoUncheckedUpdateWithoutSolicitacoesInput = {
   tutores?: Prisma.TutorUncheckedUpdateManyWithoutOrganizacaoNestedInput
   animais?: Prisma.AnimalUncheckedUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  ocorrencias?: Prisma.OcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  equipes?: Prisma.EquipeUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  recursos?: Prisma.RecursoUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  agendamentos?: Prisma.AgendamentoUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  campanhas?: Prisma.CampaignUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  indicadoresImpacto?: Prisma.ImpactStatsUncheckedUpdateOneWithoutOrganizacaoNestedInput
+}
+
+export type OrganizacaoCreateWithoutContadoresProtocolosInput = {
+  id?: string
+  nome: string
+  slug: string
+  tipo?: $Enums.TipoOrganizacao
+  ativa?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  usuarios?: Prisma.UsuarioCreateNestedManyWithoutOrganizacaoInput
+  tutores?: Prisma.TutorCreateNestedManyWithoutOrganizacaoInput
+  animais?: Prisma.AnimalCreateNestedManyWithoutOrganizacaoInput
+  servicos?: Prisma.ServicoCreateNestedManyWithoutOrganizacaoInput
+  solicitacoes?: Prisma.SolicitacaoCreateNestedManyWithoutOrganizacaoInput
+  tiposOcorrencia?: Prisma.TipoOcorrenciaCreateNestedManyWithoutOrganizacaoInput
+  ocorrencias?: Prisma.OcorrenciaCreateNestedManyWithoutOrganizacaoInput
+  equipes?: Prisma.EquipeCreateNestedManyWithoutOrganizacaoInput
+  recursos?: Prisma.RecursoCreateNestedManyWithoutOrganizacaoInput
+  agendamentos?: Prisma.AgendamentoCreateNestedManyWithoutOrganizacaoInput
+  campanhas?: Prisma.CampaignCreateNestedManyWithoutOrganizacaoInput
+  indicadoresImpacto?: Prisma.ImpactStatsCreateNestedOneWithoutOrganizacaoInput
+}
+
+export type OrganizacaoUncheckedCreateWithoutContadoresProtocolosInput = {
+  id?: string
+  nome: string
+  slug: string
+  tipo?: $Enums.TipoOrganizacao
+  ativa?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  usuarios?: Prisma.UsuarioUncheckedCreateNestedManyWithoutOrganizacaoInput
+  tutores?: Prisma.TutorUncheckedCreateNestedManyWithoutOrganizacaoInput
+  animais?: Prisma.AnimalUncheckedCreateNestedManyWithoutOrganizacaoInput
+  servicos?: Prisma.ServicoUncheckedCreateNestedManyWithoutOrganizacaoInput
+  solicitacoes?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutOrganizacaoInput
+  tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
+  ocorrencias?: Prisma.OcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
+  equipes?: Prisma.EquipeUncheckedCreateNestedManyWithoutOrganizacaoInput
+  recursos?: Prisma.RecursoUncheckedCreateNestedManyWithoutOrganizacaoInput
+  agendamentos?: Prisma.AgendamentoUncheckedCreateNestedManyWithoutOrganizacaoInput
+  campanhas?: Prisma.CampaignUncheckedCreateNestedManyWithoutOrganizacaoInput
+  indicadoresImpacto?: Prisma.ImpactStatsUncheckedCreateNestedOneWithoutOrganizacaoInput
+}
+
+export type OrganizacaoCreateOrConnectWithoutContadoresProtocolosInput = {
+  where: Prisma.OrganizacaoWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizacaoCreateWithoutContadoresProtocolosInput, Prisma.OrganizacaoUncheckedCreateWithoutContadoresProtocolosInput>
+}
+
+export type OrganizacaoUpsertWithoutContadoresProtocolosInput = {
+  update: Prisma.XOR<Prisma.OrganizacaoUpdateWithoutContadoresProtocolosInput, Prisma.OrganizacaoUncheckedUpdateWithoutContadoresProtocolosInput>
+  create: Prisma.XOR<Prisma.OrganizacaoCreateWithoutContadoresProtocolosInput, Prisma.OrganizacaoUncheckedCreateWithoutContadoresProtocolosInput>
+  where?: Prisma.OrganizacaoWhereInput
+}
+
+export type OrganizacaoUpdateToOneWithWhereWithoutContadoresProtocolosInput = {
+  where?: Prisma.OrganizacaoWhereInput
+  data: Prisma.XOR<Prisma.OrganizacaoUpdateWithoutContadoresProtocolosInput, Prisma.OrganizacaoUncheckedUpdateWithoutContadoresProtocolosInput>
+}
+
+export type OrganizacaoUpdateWithoutContadoresProtocolosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  tipo?: Prisma.EnumTipoOrganizacaoFieldUpdateOperationsInput | $Enums.TipoOrganizacao
+  ativa?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  usuarios?: Prisma.UsuarioUpdateManyWithoutOrganizacaoNestedInput
+  tutores?: Prisma.TutorUpdateManyWithoutOrganizacaoNestedInput
+  animais?: Prisma.AnimalUpdateManyWithoutOrganizacaoNestedInput
+  servicos?: Prisma.ServicoUpdateManyWithoutOrganizacaoNestedInput
+  solicitacoes?: Prisma.SolicitacaoUpdateManyWithoutOrganizacaoNestedInput
+  tiposOcorrencia?: Prisma.TipoOcorrenciaUpdateManyWithoutOrganizacaoNestedInput
+  ocorrencias?: Prisma.OcorrenciaUpdateManyWithoutOrganizacaoNestedInput
+  equipes?: Prisma.EquipeUpdateManyWithoutOrganizacaoNestedInput
+  recursos?: Prisma.RecursoUpdateManyWithoutOrganizacaoNestedInput
+  agendamentos?: Prisma.AgendamentoUpdateManyWithoutOrganizacaoNestedInput
+  campanhas?: Prisma.CampaignUpdateManyWithoutOrganizacaoNestedInput
+  indicadoresImpacto?: Prisma.ImpactStatsUpdateOneWithoutOrganizacaoNestedInput
+}
+
+export type OrganizacaoUncheckedUpdateWithoutContadoresProtocolosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  tipo?: Prisma.EnumTipoOrganizacaoFieldUpdateOperationsInput | $Enums.TipoOrganizacao
+  ativa?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  usuarios?: Prisma.UsuarioUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  tutores?: Prisma.TutorUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  animais?: Prisma.AnimalUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  servicos?: Prisma.ServicoUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  solicitacoes?: Prisma.SolicitacaoUncheckedUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUncheckedUpdateManyWithoutOrganizacaoNestedInput
@@ -1135,6 +1280,7 @@ export type OrganizacaoCreateWithoutTiposOcorrenciaInput = {
   animais?: Prisma.AnimalCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeCreateNestedManyWithoutOrganizacaoInput
   recursos?: Prisma.RecursoCreateNestedManyWithoutOrganizacaoInput
@@ -1156,6 +1302,7 @@ export type OrganizacaoUncheckedCreateWithoutTiposOcorrenciaInput = {
   animais?: Prisma.AnimalUncheckedCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoUncheckedCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeUncheckedCreateNestedManyWithoutOrganizacaoInput
   recursos?: Prisma.RecursoUncheckedCreateNestedManyWithoutOrganizacaoInput
@@ -1193,6 +1340,7 @@ export type OrganizacaoUpdateWithoutTiposOcorrenciaInput = {
   animais?: Prisma.AnimalUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUpdateManyWithoutOrganizacaoNestedInput
   recursos?: Prisma.RecursoUpdateManyWithoutOrganizacaoNestedInput
@@ -1214,6 +1362,7 @@ export type OrganizacaoUncheckedUpdateWithoutTiposOcorrenciaInput = {
   animais?: Prisma.AnimalUncheckedUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUncheckedUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUncheckedUpdateManyWithoutOrganizacaoNestedInput
   recursos?: Prisma.RecursoUncheckedUpdateManyWithoutOrganizacaoNestedInput
@@ -1235,6 +1384,7 @@ export type OrganizacaoCreateWithoutOcorrenciasInput = {
   animais?: Prisma.AnimalCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeCreateNestedManyWithoutOrganizacaoInput
   recursos?: Prisma.RecursoCreateNestedManyWithoutOrganizacaoInput
@@ -1256,6 +1406,7 @@ export type OrganizacaoUncheckedCreateWithoutOcorrenciasInput = {
   animais?: Prisma.AnimalUncheckedCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoUncheckedCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeUncheckedCreateNestedManyWithoutOrganizacaoInput
   recursos?: Prisma.RecursoUncheckedCreateNestedManyWithoutOrganizacaoInput
@@ -1293,6 +1444,7 @@ export type OrganizacaoUpdateWithoutOcorrenciasInput = {
   animais?: Prisma.AnimalUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUpdateManyWithoutOrganizacaoNestedInput
   recursos?: Prisma.RecursoUpdateManyWithoutOrganizacaoNestedInput
@@ -1314,6 +1466,7 @@ export type OrganizacaoUncheckedUpdateWithoutOcorrenciasInput = {
   animais?: Prisma.AnimalUncheckedUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUncheckedUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUncheckedUpdateManyWithoutOrganizacaoNestedInput
   recursos?: Prisma.RecursoUncheckedUpdateManyWithoutOrganizacaoNestedInput
@@ -1335,6 +1488,7 @@ export type OrganizacaoCreateWithoutEquipesInput = {
   animais?: Prisma.AnimalCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaCreateNestedManyWithoutOrganizacaoInput
   recursos?: Prisma.RecursoCreateNestedManyWithoutOrganizacaoInput
@@ -1356,6 +1510,7 @@ export type OrganizacaoUncheckedCreateWithoutEquipesInput = {
   animais?: Prisma.AnimalUncheckedCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoUncheckedCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   recursos?: Prisma.RecursoUncheckedCreateNestedManyWithoutOrganizacaoInput
@@ -1393,6 +1548,7 @@ export type OrganizacaoUpdateWithoutEquipesInput = {
   animais?: Prisma.AnimalUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   recursos?: Prisma.RecursoUpdateManyWithoutOrganizacaoNestedInput
@@ -1414,6 +1570,7 @@ export type OrganizacaoUncheckedUpdateWithoutEquipesInput = {
   animais?: Prisma.AnimalUncheckedUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUncheckedUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   recursos?: Prisma.RecursoUncheckedUpdateManyWithoutOrganizacaoNestedInput
@@ -1435,6 +1592,7 @@ export type OrganizacaoCreateWithoutRecursosInput = {
   animais?: Prisma.AnimalCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeCreateNestedManyWithoutOrganizacaoInput
@@ -1456,6 +1614,7 @@ export type OrganizacaoUncheckedCreateWithoutRecursosInput = {
   animais?: Prisma.AnimalUncheckedCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoUncheckedCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeUncheckedCreateNestedManyWithoutOrganizacaoInput
@@ -1493,6 +1652,7 @@ export type OrganizacaoUpdateWithoutRecursosInput = {
   animais?: Prisma.AnimalUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUpdateManyWithoutOrganizacaoNestedInput
@@ -1514,6 +1674,7 @@ export type OrganizacaoUncheckedUpdateWithoutRecursosInput = {
   animais?: Prisma.AnimalUncheckedUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUncheckedUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUncheckedUpdateManyWithoutOrganizacaoNestedInput
@@ -1535,6 +1696,7 @@ export type OrganizacaoCreateWithoutAgendamentosInput = {
   animais?: Prisma.AnimalCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeCreateNestedManyWithoutOrganizacaoInput
@@ -1556,6 +1718,7 @@ export type OrganizacaoUncheckedCreateWithoutAgendamentosInput = {
   animais?: Prisma.AnimalUncheckedCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoUncheckedCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeUncheckedCreateNestedManyWithoutOrganizacaoInput
@@ -1593,6 +1756,7 @@ export type OrganizacaoUpdateWithoutAgendamentosInput = {
   animais?: Prisma.AnimalUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUpdateManyWithoutOrganizacaoNestedInput
@@ -1614,6 +1778,7 @@ export type OrganizacaoUncheckedUpdateWithoutAgendamentosInput = {
   animais?: Prisma.AnimalUncheckedUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUncheckedUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUncheckedUpdateManyWithoutOrganizacaoNestedInput
@@ -1635,6 +1800,7 @@ export type OrganizacaoCreateWithoutCampanhasInput = {
   animais?: Prisma.AnimalCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeCreateNestedManyWithoutOrganizacaoInput
@@ -1656,6 +1822,7 @@ export type OrganizacaoUncheckedCreateWithoutCampanhasInput = {
   animais?: Prisma.AnimalUncheckedCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoUncheckedCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeUncheckedCreateNestedManyWithoutOrganizacaoInput
@@ -1693,6 +1860,7 @@ export type OrganizacaoUpdateWithoutCampanhasInput = {
   animais?: Prisma.AnimalUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUpdateManyWithoutOrganizacaoNestedInput
@@ -1714,6 +1882,7 @@ export type OrganizacaoUncheckedUpdateWithoutCampanhasInput = {
   animais?: Prisma.AnimalUncheckedUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUncheckedUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUncheckedUpdateManyWithoutOrganizacaoNestedInput
@@ -1735,6 +1904,7 @@ export type OrganizacaoCreateWithoutIndicadoresImpactoInput = {
   animais?: Prisma.AnimalCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeCreateNestedManyWithoutOrganizacaoInput
@@ -1756,6 +1926,7 @@ export type OrganizacaoUncheckedCreateWithoutIndicadoresImpactoInput = {
   animais?: Prisma.AnimalUncheckedCreateNestedManyWithoutOrganizacaoInput
   servicos?: Prisma.ServicoUncheckedCreateNestedManyWithoutOrganizacaoInput
   solicitacoes?: Prisma.SolicitacaoUncheckedCreateNestedManyWithoutOrganizacaoInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedCreateNestedManyWithoutOrganizacaoInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   ocorrencias?: Prisma.OcorrenciaUncheckedCreateNestedManyWithoutOrganizacaoInput
   equipes?: Prisma.EquipeUncheckedCreateNestedManyWithoutOrganizacaoInput
@@ -1793,6 +1964,7 @@ export type OrganizacaoUpdateWithoutIndicadoresImpactoInput = {
   animais?: Prisma.AnimalUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUpdateManyWithoutOrganizacaoNestedInput
@@ -1814,6 +1986,7 @@ export type OrganizacaoUncheckedUpdateWithoutIndicadoresImpactoInput = {
   animais?: Prisma.AnimalUncheckedUpdateManyWithoutOrganizacaoNestedInput
   servicos?: Prisma.ServicoUncheckedUpdateManyWithoutOrganizacaoNestedInput
   solicitacoes?: Prisma.SolicitacaoUncheckedUpdateManyWithoutOrganizacaoNestedInput
+  contadoresProtocolos?: Prisma.ContadorProtocoloUncheckedUpdateManyWithoutOrganizacaoNestedInput
   tiposOcorrencia?: Prisma.TipoOcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   ocorrencias?: Prisma.OcorrenciaUncheckedUpdateManyWithoutOrganizacaoNestedInput
   equipes?: Prisma.EquipeUncheckedUpdateManyWithoutOrganizacaoNestedInput
@@ -1833,6 +2006,7 @@ export type OrganizacaoCountOutputType = {
   animais: number
   servicos: number
   solicitacoes: number
+  contadoresProtocolos: number
   tiposOcorrencia: number
   ocorrencias: number
   equipes: number
@@ -1847,6 +2021,7 @@ export type OrganizacaoCountOutputTypeSelect<ExtArgs extends runtime.Types.Exten
   animais?: boolean | OrganizacaoCountOutputTypeCountAnimaisArgs
   servicos?: boolean | OrganizacaoCountOutputTypeCountServicosArgs
   solicitacoes?: boolean | OrganizacaoCountOutputTypeCountSolicitacoesArgs
+  contadoresProtocolos?: boolean | OrganizacaoCountOutputTypeCountContadoresProtocolosArgs
   tiposOcorrencia?: boolean | OrganizacaoCountOutputTypeCountTiposOcorrenciaArgs
   ocorrencias?: boolean | OrganizacaoCountOutputTypeCountOcorrenciasArgs
   equipes?: boolean | OrganizacaoCountOutputTypeCountEquipesArgs
@@ -1898,6 +2073,13 @@ export type OrganizacaoCountOutputTypeCountServicosArgs<ExtArgs extends runtime.
  */
 export type OrganizacaoCountOutputTypeCountSolicitacoesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SolicitacaoWhereInput
+}
+
+/**
+ * OrganizacaoCountOutputType without action
+ */
+export type OrganizacaoCountOutputTypeCountContadoresProtocolosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ContadorProtocoloWhereInput
 }
 
 /**
@@ -1956,6 +2138,7 @@ export type OrganizacaoSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   animais?: boolean | Prisma.Organizacao$animaisArgs<ExtArgs>
   servicos?: boolean | Prisma.Organizacao$servicosArgs<ExtArgs>
   solicitacoes?: boolean | Prisma.Organizacao$solicitacoesArgs<ExtArgs>
+  contadoresProtocolos?: boolean | Prisma.Organizacao$contadoresProtocolosArgs<ExtArgs>
   tiposOcorrencia?: boolean | Prisma.Organizacao$tiposOcorrenciaArgs<ExtArgs>
   ocorrencias?: boolean | Prisma.Organizacao$ocorrenciasArgs<ExtArgs>
   equipes?: boolean | Prisma.Organizacao$equipesArgs<ExtArgs>
@@ -2003,6 +2186,7 @@ export type OrganizacaoInclude<ExtArgs extends runtime.Types.Extensions.Internal
   animais?: boolean | Prisma.Organizacao$animaisArgs<ExtArgs>
   servicos?: boolean | Prisma.Organizacao$servicosArgs<ExtArgs>
   solicitacoes?: boolean | Prisma.Organizacao$solicitacoesArgs<ExtArgs>
+  contadoresProtocolos?: boolean | Prisma.Organizacao$contadoresProtocolosArgs<ExtArgs>
   tiposOcorrencia?: boolean | Prisma.Organizacao$tiposOcorrenciaArgs<ExtArgs>
   ocorrencias?: boolean | Prisma.Organizacao$ocorrenciasArgs<ExtArgs>
   equipes?: boolean | Prisma.Organizacao$equipesArgs<ExtArgs>
@@ -2023,6 +2207,7 @@ export type $OrganizacaoPayload<ExtArgs extends runtime.Types.Extensions.Interna
     animais: Prisma.$AnimalPayload<ExtArgs>[]
     servicos: Prisma.$ServicoPayload<ExtArgs>[]
     solicitacoes: Prisma.$SolicitacaoPayload<ExtArgs>[]
+    contadoresProtocolos: Prisma.$ContadorProtocoloPayload<ExtArgs>[]
     tiposOcorrencia: Prisma.$TipoOcorrenciaPayload<ExtArgs>[]
     ocorrencias: Prisma.$OcorrenciaPayload<ExtArgs>[]
     equipes: Prisma.$EquipePayload<ExtArgs>[]
@@ -2438,6 +2623,7 @@ export interface Prisma__OrganizacaoClient<T, Null = never, ExtArgs extends runt
   animais<T extends Prisma.Organizacao$animaisArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organizacao$animaisArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AnimalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   servicos<T extends Prisma.Organizacao$servicosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organizacao$servicosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ServicoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   solicitacoes<T extends Prisma.Organizacao$solicitacoesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organizacao$solicitacoesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SolicitacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  contadoresProtocolos<T extends Prisma.Organizacao$contadoresProtocolosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organizacao$contadoresProtocolosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContadorProtocoloPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tiposOcorrencia<T extends Prisma.Organizacao$tiposOcorrenciaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organizacao$tiposOcorrenciaArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TipoOcorrenciaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ocorrencias<T extends Prisma.Organizacao$ocorrenciasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organizacao$ocorrenciasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OcorrenciaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   equipes<T extends Prisma.Organizacao$equipesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organizacao$equipesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EquipePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2991,6 +3177,30 @@ export type Organizacao$solicitacoesArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.SolicitacaoScalarFieldEnum | Prisma.SolicitacaoScalarFieldEnum[]
+}
+
+/**
+ * Organizacao.contadoresProtocolos
+ */
+export type Organizacao$contadoresProtocolosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ContadorProtocolo
+   */
+  select?: Prisma.ContadorProtocoloSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ContadorProtocolo
+   */
+  omit?: Prisma.ContadorProtocoloOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ContadorProtocoloInclude<ExtArgs> | null
+  where?: Prisma.ContadorProtocoloWhereInput
+  orderBy?: Prisma.ContadorProtocoloOrderByWithRelationInput | Prisma.ContadorProtocoloOrderByWithRelationInput[]
+  cursor?: Prisma.ContadorProtocoloWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ContadorProtocoloScalarFieldEnum | Prisma.ContadorProtocoloScalarFieldEnum[]
 }
 
 /**

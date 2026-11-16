@@ -17,6 +17,8 @@ import {
     FiClock,
     FiMapPin,
     FiCheckCircle,
+    FiCopy,
+    FiCheck,
 } from "react-icons/fi";
 
 import { getSession, logout } from "../services/auth";
@@ -128,6 +130,7 @@ export default function AdminSolicitations() {
     const [pagina, setPagina] = useState(1);
     const [totalPaginas, setTotalPaginas] = useState(1);
     const [totalSolicitacoes, setTotalSolicitacoes] = useState(0);
+    const [protocoloCopiado, setProtocoloCopiado] = useState<string | null>(null);
 
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState("");
@@ -254,7 +257,6 @@ export default function AdminSolicitations() {
         }
     }
 
-
     async function handleDecisao(status: "APROVADA" | "RECUSADA") {
         if (!solicitacaoSelecionada) return;
 
@@ -315,7 +317,6 @@ export default function AdminSolicitations() {
         }
     }
 
-
     function fecharDetalhes() {
         setSolicitacaoSelecionada(null);
         setErroDetalhes("");
@@ -362,8 +363,22 @@ export default function AdminSolicitations() {
         return sexos[sexo] || sexo;
     }
 
-    function copiarProtocolo(id: string) {
-        navigator.clipboard.writeText(id);
+    async function copiarProtocolo(protocolo: string | null) {
+        if (!protocolo) return;
+
+        try {
+            await navigator.clipboard.writeText(protocolo);
+
+            setProtocoloCopiado(protocolo);
+
+            window.setTimeout(() => {
+                setProtocoloCopiado((atual) =>
+                    atual === protocolo ? null : atual
+                );
+            }, 2000);
+        } catch (error) {
+            console.error("Erro ao copiar protocolo:", error);
+        }
     }
 
     return (
@@ -576,15 +591,26 @@ export default function AdminSolicitations() {
                                                 </span>
 
                                                 <span className="text-xs text-gray-500 font-mono break-all">
-                                                    {solicitacao.id}
+                                                    {solicitacao.protocolo || "Não disponível"}
                                                 </span>
 
                                                 <button
                                                     type="button"
-                                                    onClick={() => copiarProtocolo(solicitacao.id)}
-                                                    className="text-xs font-semibold text-[#05ABAD] hover:text-[#026B6D] cursor-pointer"
+                                                    onClick={() => copiarProtocolo(solicitacao.protocolo)}
+                                                    disabled={!solicitacao.protocolo}
+                                                    title={
+                                                        protocoloCopiado === solicitacao.protocolo
+                                                            ? "Protocolo copiado!"
+                                                            : "Copiar protocolo"
+                                                    }
+                                                    aria-label="Copiar protocolo"
+                                                    className="inline-flex items-center justify-center w-7 h-7 rounded-md text-[#05ABAD] hover:bg-[#E2F7F7] hover:text-[#026B6D] disabled:text-gray-300 disabled:cursor-not-allowed transition cursor-pointer"
                                                 >
-                                                    Copiar
+                                                    {protocoloCopiado === solicitacao.protocolo ? (
+                                                        <FiCheck className="text-base" />
+                                                    ) : (
+                                                        <FiCopy className="text-base" />
+                                                    )}
                                                 </button>
                                             </div>
                                         </div>
@@ -723,7 +749,7 @@ export default function AdminSolicitations() {
                                         <DetailItem
                                             icon={<FiClipboard />}
                                             label="Protocolo"
-                                            value={solicitacaoSelecionada.id}
+                                            value={solicitacaoSelecionada.protocolo || "Não disponível"}
                                         />
 
                                         <DetailItem
@@ -888,7 +914,6 @@ export default function AdminSolicitations() {
                                                     {erroDecisao}
                                                 </div>
                                             )}
-
                                         </section>
                                     )}
 

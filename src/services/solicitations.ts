@@ -39,6 +39,7 @@ export interface Solicitacao {
     tutorId: string;
     animalId: string;
     servicoId: string;
+    protocolo: string | null;
     status: StatusSolicitacao;
     observacoes: string | null;
     observacoesAnalise: string | null;

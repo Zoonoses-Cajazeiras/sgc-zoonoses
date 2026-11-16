@@ -92,18 +92,19 @@ model Organizacao {
   createdAt DateTime        @default(now()) @db.Timestamptz(6)
   updatedAt DateTime        @updatedAt @db.Timestamptz(6)
 
-  usuarios           Usuario[]
-  tutores            Tutor[]
-  animais            Animal[]
-  servicos           Servico[]
-  solicitacoes       Solicitacao[]
-  tiposOcorrencia    TipoOcorrencia[]
-  ocorrencias        Ocorrencia[]
-  equipes            Equipe[]
-  recursos           Recurso[]
-  agendamentos       Agendamento[]
-  campanhas          Campaign[]
-  indicadoresImpacto ImpactStats?
+  usuarios             Usuario[]
+  tutores              Tutor[]
+  animais              Animal[]
+  servicos             Servico[]
+  solicitacoes         Solicitacao[]
+  contadoresProtocolos ContadorProtocolo[]
+  tiposOcorrencia      TipoOcorrencia[]
+  ocorrencias          Ocorrencia[]
+  equipes              Equipe[]
+  recursos             Recurso[]
+  agendamentos         Agendamento[]
+  campanhas            Campaign[]
+  indicadoresImpacto   ImpactStats?
 
   @@map("organizacoes")
 }
@@ -121,7 +122,7 @@ model Usuario {
   ultimoAcessoEm    DateTime?    @db.Timestamptz(6)
   createdAt         DateTime     @default(now()) @db.Timestamptz(6)
   updatedAt         DateTime     @updatedAt @db.Timestamptz(6)
-  
+
   fotoPerfilUrl      String? @db.VarChar(1000)
   fotoPerfilPublicId String? @db.VarChar(255)
 
@@ -245,6 +246,7 @@ model Solicitacao {
   tutorId            String            @db.Uuid
   animalId           String            @db.Uuid
   servicoId          String            @db.Uuid
+  protocolo          String?           @db.VarChar(30)
   status             StatusSolicitacao @default(PENDENTE)
   observacoes        String?           @db.Text
   observacoesAnalise String?           @db.Text
@@ -261,10 +263,26 @@ model Solicitacao {
   historicos   HistoricoSolicitacao[]
   agendamentos Agendamento[]
 
+  @@unique([organizacaoId, protocolo])
   @@index([organizacaoId, status, createdAt])
   @@index([organizacaoId, tutorId, createdAt])
   @@index([organizacaoId, animalId])
   @@map("solicitacoes")
+}
+
+model ContadorProtocolo {
+  id            String   @id @default(uuid()) @db.Uuid
+  organizacaoId String   @db.Uuid
+  prefixo       String   @db.VarChar(2)
+  ano           Int
+  ultimoNumero  Int      @default(0)
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @db.Timestamptz(6)
+
+  organizacao Organizacao @relation(fields: [organizacaoId], references: [id], onDelete: Restrict)
+
+  @@unique([organizacaoId, prefixo, ano])
+  @@map("contadores_protocolos")
 }
 
 model HistoricoSolicitacao {

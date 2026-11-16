@@ -77,6 +77,11 @@ export type Servico = Prisma.ServicoModel
  */
 export type Solicitacao = Prisma.SolicitacaoModel
 /**
+ * Model ContadorProtocolo
+ * 
+ */
+export type ContadorProtocolo = Prisma.ContadorProtocoloModel
+/**
  * Model HistoricoSolicitacao
  * 
  */

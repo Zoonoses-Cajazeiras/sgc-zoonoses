@@ -30,6 +30,7 @@ export type SolicitacaoMinAggregateOutputType = {
   tutorId: string | null
   animalId: string | null
   servicoId: string | null
+  protocolo: string | null
   status: $Enums.StatusSolicitacao | null
   observacoes: string | null
   observacoesAnalise: string | null
@@ -45,6 +46,7 @@ export type SolicitacaoMaxAggregateOutputType = {
   tutorId: string | null
   animalId: string | null
   servicoId: string | null
+  protocolo: string | null
   status: $Enums.StatusSolicitacao | null
   observacoes: string | null
   observacoesAnalise: string | null
@@ -60,6 +62,7 @@ export type SolicitacaoCountAggregateOutputType = {
   tutorId: number
   animalId: number
   servicoId: number
+  protocolo: number
   status: number
   observacoes: number
   observacoesAnalise: number
@@ -77,6 +80,7 @@ export type SolicitacaoMinAggregateInputType = {
   tutorId?: true
   animalId?: true
   servicoId?: true
+  protocolo?: true
   status?: true
   observacoes?: true
   observacoesAnalise?: true
@@ -92,6 +96,7 @@ export type SolicitacaoMaxAggregateInputType = {
   tutorId?: true
   animalId?: true
   servicoId?: true
+  protocolo?: true
   status?: true
   observacoes?: true
   observacoesAnalise?: true
@@ -107,6 +112,7 @@ export type SolicitacaoCountAggregateInputType = {
   tutorId?: true
   animalId?: true
   servicoId?: true
+  protocolo?: true
   status?: true
   observacoes?: true
   observacoesAnalise?: true
@@ -195,6 +201,7 @@ export type SolicitacaoGroupByOutputType = {
   tutorId: string
   animalId: string
   servicoId: string
+  protocolo: string | null
   status: $Enums.StatusSolicitacao
   observacoes: string | null
   observacoesAnalise: string | null
@@ -231,6 +238,7 @@ export type SolicitacaoWhereInput = {
   tutorId?: Prisma.UuidFilter<"Solicitacao"> | string
   animalId?: Prisma.UuidFilter<"Solicitacao"> | string
   servicoId?: Prisma.UuidFilter<"Solicitacao"> | string
+  protocolo?: Prisma.StringNullableFilter<"Solicitacao"> | string | null
   status?: Prisma.EnumStatusSolicitacaoFilter<"Solicitacao"> | $Enums.StatusSolicitacao
   observacoes?: Prisma.StringNullableFilter<"Solicitacao"> | string | null
   observacoesAnalise?: Prisma.StringNullableFilter<"Solicitacao"> | string | null
@@ -253,6 +261,7 @@ export type SolicitacaoOrderByWithRelationInput = {
   tutorId?: Prisma.SortOrder
   animalId?: Prisma.SortOrder
   servicoId?: Prisma.SortOrder
+  protocolo?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   observacoes?: Prisma.SortOrderInput | Prisma.SortOrder
   observacoesAnalise?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -271,6 +280,7 @@ export type SolicitacaoOrderByWithRelationInput = {
 
 export type SolicitacaoWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  organizacaoId_protocolo?: Prisma.SolicitacaoOrganizacaoIdProtocoloCompoundUniqueInput
   AND?: Prisma.SolicitacaoWhereInput | Prisma.SolicitacaoWhereInput[]
   OR?: Prisma.SolicitacaoWhereInput[]
   NOT?: Prisma.SolicitacaoWhereInput | Prisma.SolicitacaoWhereInput[]
@@ -278,6 +288,7 @@ export type SolicitacaoWhereUniqueInput = Prisma.AtLeast<{
   tutorId?: Prisma.UuidFilter<"Solicitacao"> | string
   animalId?: Prisma.UuidFilter<"Solicitacao"> | string
   servicoId?: Prisma.UuidFilter<"Solicitacao"> | string
+  protocolo?: Prisma.StringNullableFilter<"Solicitacao"> | string | null
   status?: Prisma.EnumStatusSolicitacaoFilter<"Solicitacao"> | $Enums.StatusSolicitacao
   observacoes?: Prisma.StringNullableFilter<"Solicitacao"> | string | null
   observacoesAnalise?: Prisma.StringNullableFilter<"Solicitacao"> | string | null
@@ -292,7 +303,7 @@ export type SolicitacaoWhereUniqueInput = Prisma.AtLeast<{
   analisadoPor?: Prisma.XOR<Prisma.UsuarioNullableScalarRelationFilter, Prisma.UsuarioWhereInput> | null
   historicos?: Prisma.HistoricoSolicitacaoListRelationFilter
   agendamentos?: Prisma.AgendamentoListRelationFilter
-}, "id">
+}, "id" | "organizacaoId_protocolo">
 
 export type SolicitacaoOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -300,6 +311,7 @@ export type SolicitacaoOrderByWithAggregationInput = {
   tutorId?: Prisma.SortOrder
   animalId?: Prisma.SortOrder
   servicoId?: Prisma.SortOrder
+  protocolo?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   observacoes?: Prisma.SortOrderInput | Prisma.SortOrder
   observacoesAnalise?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -321,6 +333,7 @@ export type SolicitacaoScalarWhereWithAggregatesInput = {
   tutorId?: Prisma.UuidWithAggregatesFilter<"Solicitacao"> | string
   animalId?: Prisma.UuidWithAggregatesFilter<"Solicitacao"> | string
   servicoId?: Prisma.UuidWithAggregatesFilter<"Solicitacao"> | string
+  protocolo?: Prisma.StringNullableWithAggregatesFilter<"Solicitacao"> | string | null
   status?: Prisma.EnumStatusSolicitacaoWithAggregatesFilter<"Solicitacao"> | $Enums.StatusSolicitacao
   observacoes?: Prisma.StringNullableWithAggregatesFilter<"Solicitacao"> | string | null
   observacoesAnalise?: Prisma.StringNullableWithAggregatesFilter<"Solicitacao"> | string | null
@@ -332,6 +345,7 @@ export type SolicitacaoScalarWhereWithAggregatesInput = {
 
 export type SolicitacaoCreateInput = {
   id?: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -353,6 +367,7 @@ export type SolicitacaoUncheckedCreateInput = {
   tutorId: string
   animalId: string
   servicoId: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -366,6 +381,7 @@ export type SolicitacaoUncheckedCreateInput = {
 
 export type SolicitacaoUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -387,6 +403,7 @@ export type SolicitacaoUncheckedUpdateInput = {
   tutorId?: Prisma.StringFieldUpdateOperationsInput | string
   animalId?: Prisma.StringFieldUpdateOperationsInput | string
   servicoId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -404,6 +421,7 @@ export type SolicitacaoCreateManyInput = {
   tutorId: string
   animalId: string
   servicoId: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -415,6 +433,7 @@ export type SolicitacaoCreateManyInput = {
 
 export type SolicitacaoUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -429,6 +448,7 @@ export type SolicitacaoUncheckedUpdateManyInput = {
   tutorId?: Prisma.StringFieldUpdateOperationsInput | string
   animalId?: Prisma.StringFieldUpdateOperationsInput | string
   servicoId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -448,12 +468,18 @@ export type SolicitacaoOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type SolicitacaoOrganizacaoIdProtocoloCompoundUniqueInput = {
+  organizacaoId: string
+  protocolo: string
+}
+
 export type SolicitacaoCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   organizacaoId?: Prisma.SortOrder
   tutorId?: Prisma.SortOrder
   animalId?: Prisma.SortOrder
   servicoId?: Prisma.SortOrder
+  protocolo?: Prisma.SortOrder
   status?: Prisma.SortOrder
   observacoes?: Prisma.SortOrder
   observacoesAnalise?: Prisma.SortOrder
@@ -469,6 +495,7 @@ export type SolicitacaoMaxOrderByAggregateInput = {
   tutorId?: Prisma.SortOrder
   animalId?: Prisma.SortOrder
   servicoId?: Prisma.SortOrder
+  protocolo?: Prisma.SortOrder
   status?: Prisma.SortOrder
   observacoes?: Prisma.SortOrder
   observacoesAnalise?: Prisma.SortOrder
@@ -484,6 +511,7 @@ export type SolicitacaoMinOrderByAggregateInput = {
   tutorId?: Prisma.SortOrder
   animalId?: Prisma.SortOrder
   servicoId?: Prisma.SortOrder
+  protocolo?: Prisma.SortOrder
   status?: Prisma.SortOrder
   observacoes?: Prisma.SortOrder
   observacoesAnalise?: Prisma.SortOrder
@@ -742,6 +770,7 @@ export type SolicitacaoUpdateOneRequiredWithoutAgendamentosNestedInput = {
 
 export type SolicitacaoCreateWithoutOrganizacaoInput = {
   id?: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -761,6 +790,7 @@ export type SolicitacaoUncheckedCreateWithoutOrganizacaoInput = {
   tutorId: string
   animalId: string
   servicoId: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -807,6 +837,7 @@ export type SolicitacaoScalarWhereInput = {
   tutorId?: Prisma.UuidFilter<"Solicitacao"> | string
   animalId?: Prisma.UuidFilter<"Solicitacao"> | string
   servicoId?: Prisma.UuidFilter<"Solicitacao"> | string
+  protocolo?: Prisma.StringNullableFilter<"Solicitacao"> | string | null
   status?: Prisma.EnumStatusSolicitacaoFilter<"Solicitacao"> | $Enums.StatusSolicitacao
   observacoes?: Prisma.StringNullableFilter<"Solicitacao"> | string | null
   observacoesAnalise?: Prisma.StringNullableFilter<"Solicitacao"> | string | null
@@ -818,6 +849,7 @@ export type SolicitacaoScalarWhereInput = {
 
 export type SolicitacaoCreateWithoutAnalisadoPorInput = {
   id?: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -838,6 +870,7 @@ export type SolicitacaoUncheckedCreateWithoutAnalisadoPorInput = {
   tutorId: string
   animalId: string
   servicoId: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -876,6 +909,7 @@ export type SolicitacaoUpdateManyWithWhereWithoutAnalisadoPorInput = {
 
 export type SolicitacaoCreateWithoutTutorInput = {
   id?: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -895,6 +929,7 @@ export type SolicitacaoUncheckedCreateWithoutTutorInput = {
   organizacaoId: string
   animalId: string
   servicoId: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -934,6 +969,7 @@ export type SolicitacaoUpdateManyWithWhereWithoutTutorInput = {
 
 export type SolicitacaoCreateWithoutAnimalInput = {
   id?: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -953,6 +989,7 @@ export type SolicitacaoUncheckedCreateWithoutAnimalInput = {
   organizacaoId: string
   tutorId: string
   servicoId: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -992,6 +1029,7 @@ export type SolicitacaoUpdateManyWithWhereWithoutAnimalInput = {
 
 export type SolicitacaoCreateWithoutServicoInput = {
   id?: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -1011,6 +1049,7 @@ export type SolicitacaoUncheckedCreateWithoutServicoInput = {
   organizacaoId: string
   tutorId: string
   animalId: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -1050,6 +1089,7 @@ export type SolicitacaoUpdateManyWithWhereWithoutServicoInput = {
 
 export type SolicitacaoCreateWithoutHistoricosInput = {
   id?: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -1070,6 +1110,7 @@ export type SolicitacaoUncheckedCreateWithoutHistoricosInput = {
   tutorId: string
   animalId: string
   servicoId: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -1098,6 +1139,7 @@ export type SolicitacaoUpdateToOneWithWhereWithoutHistoricosInput = {
 
 export type SolicitacaoUpdateWithoutHistoricosInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1118,6 +1160,7 @@ export type SolicitacaoUncheckedUpdateWithoutHistoricosInput = {
   tutorId?: Prisma.StringFieldUpdateOperationsInput | string
   animalId?: Prisma.StringFieldUpdateOperationsInput | string
   servicoId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1130,6 +1173,7 @@ export type SolicitacaoUncheckedUpdateWithoutHistoricosInput = {
 
 export type SolicitacaoCreateWithoutAgendamentosInput = {
   id?: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -1150,6 +1194,7 @@ export type SolicitacaoUncheckedCreateWithoutAgendamentosInput = {
   tutorId: string
   animalId: string
   servicoId: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -1178,6 +1223,7 @@ export type SolicitacaoUpdateToOneWithWhereWithoutAgendamentosInput = {
 
 export type SolicitacaoUpdateWithoutAgendamentosInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1198,6 +1244,7 @@ export type SolicitacaoUncheckedUpdateWithoutAgendamentosInput = {
   tutorId?: Prisma.StringFieldUpdateOperationsInput | string
   animalId?: Prisma.StringFieldUpdateOperationsInput | string
   servicoId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1213,6 +1260,7 @@ export type SolicitacaoCreateManyOrganizacaoInput = {
   tutorId: string
   animalId: string
   servicoId: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -1224,6 +1272,7 @@ export type SolicitacaoCreateManyOrganizacaoInput = {
 
 export type SolicitacaoUpdateWithoutOrganizacaoInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1243,6 +1292,7 @@ export type SolicitacaoUncheckedUpdateWithoutOrganizacaoInput = {
   tutorId?: Prisma.StringFieldUpdateOperationsInput | string
   animalId?: Prisma.StringFieldUpdateOperationsInput | string
   servicoId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1259,6 +1309,7 @@ export type SolicitacaoUncheckedUpdateManyWithoutOrganizacaoInput = {
   tutorId?: Prisma.StringFieldUpdateOperationsInput | string
   animalId?: Prisma.StringFieldUpdateOperationsInput | string
   servicoId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1274,6 +1325,7 @@ export type SolicitacaoCreateManyAnalisadoPorInput = {
   tutorId: string
   animalId: string
   servicoId: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -1284,6 +1336,7 @@ export type SolicitacaoCreateManyAnalisadoPorInput = {
 
 export type SolicitacaoUpdateWithoutAnalisadoPorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1304,6 +1357,7 @@ export type SolicitacaoUncheckedUpdateWithoutAnalisadoPorInput = {
   tutorId?: Prisma.StringFieldUpdateOperationsInput | string
   animalId?: Prisma.StringFieldUpdateOperationsInput | string
   servicoId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1320,6 +1374,7 @@ export type SolicitacaoUncheckedUpdateManyWithoutAnalisadoPorInput = {
   tutorId?: Prisma.StringFieldUpdateOperationsInput | string
   animalId?: Prisma.StringFieldUpdateOperationsInput | string
   servicoId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1333,6 +1388,7 @@ export type SolicitacaoCreateManyTutorInput = {
   organizacaoId: string
   animalId: string
   servicoId: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -1344,6 +1400,7 @@ export type SolicitacaoCreateManyTutorInput = {
 
 export type SolicitacaoUpdateWithoutTutorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1363,6 +1420,7 @@ export type SolicitacaoUncheckedUpdateWithoutTutorInput = {
   organizacaoId?: Prisma.StringFieldUpdateOperationsInput | string
   animalId?: Prisma.StringFieldUpdateOperationsInput | string
   servicoId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1379,6 +1437,7 @@ export type SolicitacaoUncheckedUpdateManyWithoutTutorInput = {
   organizacaoId?: Prisma.StringFieldUpdateOperationsInput | string
   animalId?: Prisma.StringFieldUpdateOperationsInput | string
   servicoId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1393,6 +1452,7 @@ export type SolicitacaoCreateManyAnimalInput = {
   organizacaoId: string
   tutorId: string
   servicoId: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -1404,6 +1464,7 @@ export type SolicitacaoCreateManyAnimalInput = {
 
 export type SolicitacaoUpdateWithoutAnimalInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1423,6 +1484,7 @@ export type SolicitacaoUncheckedUpdateWithoutAnimalInput = {
   organizacaoId?: Prisma.StringFieldUpdateOperationsInput | string
   tutorId?: Prisma.StringFieldUpdateOperationsInput | string
   servicoId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1439,6 +1501,7 @@ export type SolicitacaoUncheckedUpdateManyWithoutAnimalInput = {
   organizacaoId?: Prisma.StringFieldUpdateOperationsInput | string
   tutorId?: Prisma.StringFieldUpdateOperationsInput | string
   servicoId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1453,6 +1516,7 @@ export type SolicitacaoCreateManyServicoInput = {
   organizacaoId: string
   tutorId: string
   animalId: string
+  protocolo?: string | null
   status?: $Enums.StatusSolicitacao
   observacoes?: string | null
   observacoesAnalise?: string | null
@@ -1464,6 +1528,7 @@ export type SolicitacaoCreateManyServicoInput = {
 
 export type SolicitacaoUpdateWithoutServicoInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1483,6 +1548,7 @@ export type SolicitacaoUncheckedUpdateWithoutServicoInput = {
   organizacaoId?: Prisma.StringFieldUpdateOperationsInput | string
   tutorId?: Prisma.StringFieldUpdateOperationsInput | string
   animalId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1499,6 +1565,7 @@ export type SolicitacaoUncheckedUpdateManyWithoutServicoInput = {
   organizacaoId?: Prisma.StringFieldUpdateOperationsInput | string
   tutorId?: Prisma.StringFieldUpdateOperationsInput | string
   animalId?: Prisma.StringFieldUpdateOperationsInput | string
+  protocolo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumStatusSolicitacaoFieldUpdateOperationsInput | $Enums.StatusSolicitacao
   observacoes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   observacoesAnalise?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1554,6 +1621,7 @@ export type SolicitacaoSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   tutorId?: boolean
   animalId?: boolean
   servicoId?: boolean
+  protocolo?: boolean
   status?: boolean
   observacoes?: boolean
   observacoesAnalise?: boolean
@@ -1577,6 +1645,7 @@ export type SolicitacaoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   tutorId?: boolean
   animalId?: boolean
   servicoId?: boolean
+  protocolo?: boolean
   status?: boolean
   observacoes?: boolean
   observacoesAnalise?: boolean
@@ -1597,6 +1666,7 @@ export type SolicitacaoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   tutorId?: boolean
   animalId?: boolean
   servicoId?: boolean
+  protocolo?: boolean
   status?: boolean
   observacoes?: boolean
   observacoesAnalise?: boolean
@@ -1617,6 +1687,7 @@ export type SolicitacaoSelectScalar = {
   tutorId?: boolean
   animalId?: boolean
   servicoId?: boolean
+  protocolo?: boolean
   status?: boolean
   observacoes?: boolean
   observacoesAnalise?: boolean
@@ -1626,7 +1697,7 @@ export type SolicitacaoSelectScalar = {
   updatedAt?: boolean
 }
 
-export type SolicitacaoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizacaoId" | "tutorId" | "animalId" | "servicoId" | "status" | "observacoes" | "observacoesAnalise" | "analisadoPorId" | "analisadoEm" | "createdAt" | "updatedAt", ExtArgs["result"]["solicitacao"]>
+export type SolicitacaoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizacaoId" | "tutorId" | "animalId" | "servicoId" | "protocolo" | "status" | "observacoes" | "observacoesAnalise" | "analisadoPorId" | "analisadoEm" | "createdAt" | "updatedAt", ExtArgs["result"]["solicitacao"]>
 export type SolicitacaoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organizacao?: boolean | Prisma.OrganizacaoDefaultArgs<ExtArgs>
   tutor?: boolean | Prisma.TutorDefaultArgs<ExtArgs>
@@ -1669,6 +1740,7 @@ export type $SolicitacaoPayload<ExtArgs extends runtime.Types.Extensions.Interna
     tutorId: string
     animalId: string
     servicoId: string
+    protocolo: string | null
     status: $Enums.StatusSolicitacao
     observacoes: string | null
     observacoesAnalise: string | null
@@ -2111,6 +2183,7 @@ export interface SolicitacaoFieldRefs {
   readonly tutorId: Prisma.FieldRef<"Solicitacao", 'String'>
   readonly animalId: Prisma.FieldRef<"Solicitacao", 'String'>
   readonly servicoId: Prisma.FieldRef<"Solicitacao", 'String'>
+  readonly protocolo: Prisma.FieldRef<"Solicitacao", 'String'>
   readonly status: Prisma.FieldRef<"Solicitacao", 'StatusSolicitacao'>
   readonly observacoes: Prisma.FieldRef<"Solicitacao", 'String'>
   readonly observacoesAnalise: Prisma.FieldRef<"Solicitacao", 'String'>

@@ -11,6 +11,8 @@ import {
   FiAlertCircle,
   FiLoader,
   FiFileText,
+  FiCopy,
+  FiCheck,
 } from "react-icons/fi";
 
 import {
@@ -82,6 +84,23 @@ export default function SolicitationDetails() {
 
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
+  const [protocoloCopiado, setProtocoloCopiado] = useState(false);
+
+  async function copiarProtocolo(protocolo: string | null) {
+    if (!protocolo) return;
+
+    try {
+      await navigator.clipboard.writeText(protocolo);
+
+      setProtocoloCopiado(true);
+
+      window.setTimeout(() => {
+        setProtocoloCopiado(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Erro ao copiar protocolo:", error);
+    }
+  }
 
   useEffect(() => {
     async function carregarDetalhes() {
@@ -185,9 +204,34 @@ export default function SolicitationDetails() {
             Detalhes da solicitação
           </h2>
 
-          <p className="text-sm text-gray-500 mt-2">
-            Protocolo: {solicitacao.id.slice(0, 8).toUpperCase()}
-          </p>
+          <div className="flex items-center gap-2 mt-2">
+            <p className="text-sm text-gray-500">
+              Protocolo: {solicitacao.protocolo || "Não disponível"}
+            </p>
+
+            <button
+              type="button"
+              onClick={() => copiarProtocolo(solicitacao.protocolo)}
+              disabled={!solicitacao.protocolo}
+              title={
+                protocoloCopiado
+                  ? "Protocolo copiado!"
+                  : "Copiar protocolo"
+              }
+              aria-label={
+                protocoloCopiado
+                  ? "Protocolo copiado!"
+                  : "Copiar protocolo"
+              }
+              className="inline-flex items-center justify-center w-7 h-7 rounded-md text-[#05ABAD] hover:bg-[#E2F7F7] hover:text-[#026B6D] disabled:text-gray-300 disabled:cursor-not-allowed transition cursor-pointer"
+            >
+              {protocoloCopiado ? (
+                <FiCheck className="text-base" />
+              ) : (
+                <FiCopy className="text-base" />
+              )}
+            </button>
+          </div>
         </div>
 
         <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8 mb-6">
