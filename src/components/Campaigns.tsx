@@ -17,7 +17,7 @@ export default function Campaigns() {
         setCampaigns(data);
       } catch (error) {
         console.error(
-          "Erro ao carregar campanhas do Supabase:",
+          "Erro ao carregar campanhas do API:",
           error
         );
       } finally {

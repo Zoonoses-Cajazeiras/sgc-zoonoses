@@ -14,7 +14,7 @@ export default function Stats() {
         setStats(data);
       } catch (error) {
         console.error(
-          "Erro ao carregar estatísticas do Supabase:",
+          "Erro ao carregar estatísticas do API:",
           error
         );
       }

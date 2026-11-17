@@ -58,3 +58,11 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Arquivos de ambiente
+.env.*
+.env.neon
+!.env.example
+
+# Prisma Client gerado
+src/generated/prisma/
